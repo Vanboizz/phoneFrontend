@@ -1,0 +1,82 @@
+.gridContainer {
+  box-shadow: -1px 1px 8px 0 rgba(0, 0, 0, 0.3);
+  padding: 2.4rem;
+  border-radius: 0.8rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.gridContainer h1 {
+  text-align: center;
+  color: #606060;
+  padding-bottom: 2rem;
+}
+
+.gridContent input {
+  width: 100%;
+  border-radius: 0.4rem;
+  border: 0.05rem solid #ccc;
+  color: #999;
+}
+
+.gridContainer span {
+  color: #ec7532;
+  font-weight: bold;
+}
+
+.gridContainer .link {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.gridContainer a {
+  text-decoration: none;
+  color: #696969;
+  font-weight: bold;
+}
+
+.gridContainer a:hover {
+  text-decoration: underline;
+}
+
+.gridContainer .btnLogin {
+  border-bottom: 0.05rem solid #ccc;
+  padding-bottom: 1rem;
+}
+
+.gridContainer .btnLogin button {
+  background-color: #1a94ff;
+  border: none;
+  width: 100%;
+  padding: 0.8rem;
+  border-radius: 0.4rem;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.gridContainer .icon {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1rem;
+}
+
+.gridContainer .iconFace {
+  color: #0000ff;
+  font-size: 1.5rem;
+}
+
+.gridContainer .iconGoogle {
+  color: #a52a2a;
+  font-size: 1.5rem;
+}
+
+.gridContainer .format {
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 1.2rem;
+  border-radius: 0.4rem;
+  border: 0.05rem solid #ccc;
+}
