@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import "../login/Login.css"
 import { FaFacebook, FaGoogle } from "react-icons/fa"
 import Hiden from '../../components/hiden/Hiden'
+import { Link } from "react-router-dom"
+
 const Login = () => {
 
     const [inputEmail, setInputEmail] = useState("")
@@ -32,7 +34,9 @@ const Login = () => {
                 <a href="/register">Register</a>
             </div>
             <div className='btnLogin'>
-                <button>Login</button>
+                <Link to="/">
+                    <button>Login</button>
+                </Link>
             </div>
             <div className='icon'>
                 <div className='format'>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import "../changepassword/ChangePassword.css"
+import { Link } from "react-router-dom"
 
 const initial = {
   newPassword: "",
@@ -30,7 +31,9 @@ const ChangePassword = () => {
         </form>
       </div>
       <div className='btnChange'>
-        <button>Login</button>
+        <Link to='/login'>
+          <button>Login</button>
+        </Link>
       </div>
     </div>
   )
