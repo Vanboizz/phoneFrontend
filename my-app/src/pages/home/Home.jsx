@@ -6,8 +6,7 @@ import "../home/Home.css"
 const Home = () => {
     const products = useSelector((state) => state.products)
     const dispatch = useDispatch()
-
-    console.log(products)
+    // console.log(products)
 
     useEffect(() => {
         dispatch(getProducts())
@@ -16,8 +15,17 @@ const Home = () => {
     return (
         <div className='content'>
             {
-                products.data ? (products.data.map((value, index) => (
-                    <p key={index}>{value.nameproducts}</p>
+                products.data ? (products.data.map((value) => (
+                    <div key={value.idproducts}>
+                        {
+                            value.image.map((values, index) =>{
+                                console.log(values);
+                                return (
+                                    <img key={index} src={values} alt="" />
+                                );
+                            })
+                        }
+                    </div>
                 ))
                 ) : null
             }
@@ -25,4 +33,4 @@ const Home = () => {
     )
 }
 
-export default Home
+export default Home 
