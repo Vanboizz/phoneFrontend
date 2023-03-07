@@ -6,11 +6,11 @@ h2 {
 }
 
 .gridContent {
-  display: grid;
-  gap: 0.5rem;
+  gap: 1rem;
   padding: 0.4rem;
   margin: 1rem 5rem;
   display: flex;
+  flex-wrap: wrap;
 }
 
 .item {
