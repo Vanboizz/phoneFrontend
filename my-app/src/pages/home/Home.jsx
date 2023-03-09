@@ -47,7 +47,7 @@ const Home = () => {
                                         <h3>{value.nameproducts}</h3>
                                         <div className='format'>
                                             <p>{(value.size[0].pricesize * value.discount) / 100}&nbsp;đ</p>
-                                            <p>{value.size[0].pricesize}<span>đ</span></p>
+                                            <p>{value.size[0].pricesize}&nbsp;đ</p>
                                         </div>
                                         <div className='promotion'>
                                             {value.promotion}
