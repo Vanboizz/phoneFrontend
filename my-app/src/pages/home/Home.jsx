@@ -9,6 +9,7 @@ import "swiper/css/grid";
 import "../home/Home.css"
 import "swiper/css/navigation";
 import { Grid, Navigation } from "swiper"
+import AboutUs from '../../components/aboutus/AboutUs'
 
 const Home = () => {
     const products = useSelector((state) => state.products)
@@ -71,6 +72,8 @@ const Home = () => {
                     </Swiper>
                 </div>
             </div>
+            <AboutUs/>
+
         </>
     )
 }
