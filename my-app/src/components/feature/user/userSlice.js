@@ -1,8 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import userService from "./userService";
 
+const accessToken = localStorage.getItem("accessToken")
+  ? localStorage.getItem("accessToken")
+  : null;
+
 const initialState = {
   user: {},
+  accessToken,
   isError: false,
   success: false,
   isLoading: false,
@@ -14,6 +19,21 @@ export const registerUser = createAsyncThunk(
   async ({ fullname, email, password }, thunkAPI) => {
     try {
       return userService.registerUser({ fullname, email, password });
+    } catch (error) {
+      const message =
+        (error.respone && error.respone.data && error.respone.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const loginUser = createAsyncThunk(
+  "/login",
+  async ({ email, password }, thunkAPI) => {
+    try {
+      return userService.loginUser({ email, password });
     } catch (error) {
       const message =
         (error.respone && error.respone.data && error.respone.data.message) ||
@@ -36,6 +56,7 @@ export const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    //register
     builder
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
@@ -51,6 +72,21 @@ export const userSlice = createSlice({
         state.message = action.payload;
         state.success = false;
         state.message = "Dont register";
+      });
+    //login
+    builder
+      .addCase(loginUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.success = true;
+        state.user = action.payload;
+        state.accessToken = action.payload.accessToken;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
       });
   },
 });
