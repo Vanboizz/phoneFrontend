@@ -16,6 +16,7 @@ const registerUser = async ({ fullname, email, password }) => {
     },
     config
   );
+  console.log(response.data);
   return response.data;
 };
 
@@ -34,6 +35,7 @@ const loginUser = async ({ email, password }) => {
     config
   );
   localStorage.setItem("accessToken", response.data.accessToken);
+  console.log(response.data.accessToken);
   return response.data;
 };
 

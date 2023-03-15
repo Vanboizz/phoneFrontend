@@ -6,7 +6,7 @@ const accessToken = localStorage.getItem("accessToken")
   : null;
 
 const initialState = {
-  user: {},
+  user: null,
   accessToken,
   isError: false,
   success: false,
@@ -64,17 +64,14 @@ export const userSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.success = true;
         state.isLoading = false;
-        state.user = action.payload;
-        state.message = "";
+        state.message = "Register is successfully";
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.isError = true;
-        state.message = action.payload;
-        state.success = false;
-        state.message = "Dont register";
-      });
-    //login
-    builder
+        state.isLoading = false;
+        state.message = "Register is failed";
+      })
+      //login
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
       })
@@ -87,6 +84,7 @@ export const userSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+        state.message = "Occupied Error";
       });
   },
 });

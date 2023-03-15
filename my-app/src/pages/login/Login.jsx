@@ -5,7 +5,7 @@ import Hiden from '../../components/hiden/Hiden'
 import { useNavigate } from "react-router-dom"
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginUser } from '../../components/feature/user/userSlice'
+import { loginUser, reset } from '../../components/feature/user/userSlice'
 import { ToastContainer, toast } from "react-toastify"
 
 
@@ -15,20 +15,21 @@ const Login = () => {
     const [inputPassword, setInputPassword] = useState("")
     const [typePassword, setTypePassword] = useState("password")
     const { register, handleSubmit } = useForm()
-    const { user } = useSelector(state => state.user)
+    const { success, user, isError, message } = useSelector(state => state.user)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if (user.success) {
-            toast(user.message)
-            setTimeout(() => {
-                navigate("/")
-            }, 3000)
+        dispatch(reset())
+    }, [])
+
+    useEffect(() => {
+        if (user) {
+            navigate("/")
         }
-        else {
-            toast(user.message)
+        if (isError) {
+            toast.error(message)
         }
-    }, [user])
+    }, [user, isError])
 
     const submitForm = (data) => {
         dispatch(loginUser(data))
