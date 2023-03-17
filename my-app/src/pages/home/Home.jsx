@@ -10,7 +10,8 @@ import "../home/Home.css"
 import "swiper/css/navigation";
 import { Grid, Navigation } from "swiper"
 import AboutUs from '../../components/aboutus/AboutUs'
-
+import { NavLink } from "react-router-dom"
+import { logout } from '../../components/feature/user/userSlice'
 const Home = () => {
     const products = useSelector((state) => state.products)
 
@@ -19,8 +20,19 @@ const Home = () => {
         dispatch(getProducts())
     }, [])
 
+    const { user } = useSelector(state => state.user)
+
     return (
         <>
+            {
+                user ?
+                    (
+                        <button onClick={() => dispatch(logout())}>LOGOUT</button>
+                    ) :
+                    <NavLink className='button' to='/login'>
+                        Login
+                    </NavLink>
+            }
             <Slider />
             <div style={{ padding: "0 100px" }}>
                 <h2>THE MOST OUTSTANDING PHONE</h2>
@@ -72,7 +84,7 @@ const Home = () => {
                     </Swiper>
                 </div>
             </div>
-            <AboutUs/>
+            <AboutUs />
 
         </>
     )

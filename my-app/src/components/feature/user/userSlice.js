@@ -54,6 +54,13 @@ export const userSlice = createSlice({
       state.isLoading = false;
       state.message = "";
     },
+    logout: (state) => {
+      localStorage.removeItem('accessToken')
+      state.isError = false;
+      state.success = false;
+      state.isLoading = false;
+      state.message = "";
+    }
   },
   extraReducers: (builder) => {
     //register
@@ -89,5 +96,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const { reset } = userSlice.actions;
+export const { reset,logout} = userSlice.actions;
 export default userSlice.reducer;
