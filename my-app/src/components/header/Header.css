@@ -9,9 +9,11 @@ header {
     height: 64px;
     padding: 12px 100px;
     display: flex;
-    /* justify-content: center; */
     align-items: center;
-    z-index: 1000;
+    position: fixed;
+    z-index: 20;
+    right: 0;
+    left: 0;
 }
 
  header .logo {
@@ -22,7 +24,7 @@ header {
     background-size: auto 100%;
 } 
 
-.search {
+header .search {
     display: flex;
     height: 90%;
     background-color: #F2F1F3;
@@ -31,19 +33,19 @@ header {
     margin-right: 5%;
 }
 
-.search .search__icon-search {
+header .search .search__icon-search {
     color: #707070;
     height: 100%;
     width: 10%;
     padding: 10px 0px;
 }
 
-.search .search__icon-search:hover {
+header .search .search__icon-search:hover {
     opacity: 0.5;
 }
 
 
-.search .search__input-search {
+header .search .search__input-search {
     background-color: #F2F1F3;
     width: 85%;
     border: 0;
@@ -53,57 +55,57 @@ header {
     outline: none;
 }
 
-.list-option {
+header .list-option {
     height: 100%;
     display: flex;
     align-items: center;
 }
 
-.list-option__option {
+header .list-option__option {
     display: flex;
     align-items: center;
     height: 100%;
-    padding: 0px 23px;
+    padding: 0px 22px;
     border-radius: 10px;
 }
 
-.list-option__option:hover {
+header .list-option__option:hover {
     background: hsla(0,0%,100%,.2);
     cursor: pointer;
 }
 
-.list-option__option .option__icon-home,
-.list-option__option .option__icon-phone,
-.list-option__option .option__icon-pen,
-.list-option__option .option__icon-cart,
-.list-option__option .option__icon-user {
+header .list-option__option .option__icon-home,
+header .list-option__option .option__icon-phone,
+header .list-option__option .option__icon-pen,
+header .list-option__option .option__icon-cart,
+header .list-option__option .option__icon-user {
     height: 25px;
     width: 25px;
     background-repeat: no-repeat;
     background-size: auto 100%;
 }
 
-.option_contain-circle {
+header .option_contain-circle {
     position: relative;
 }
 
-.option__home {
+header .option__home {
     background-image: url('../../../public/home.png');
 }
-.option__phone {
+header .option__phone {
     background-image: url('../../../public/arrow.png');
 }
-.option__pen {
+header .option__pen {
     background-image: url('../../../public/pen.png');
 }
-.option__cart {
+header .option__cart {
     background-image: url('../../../public/cart.png');
 }
-.option__user {
+header .option__user {
     background-image: url('../../../public/user.png');
 }
 
-.circle-yellow {
+header .circle-yellow {
     position: absolute;
     height: 15px;
     width: 15px;
@@ -117,7 +119,7 @@ header {
     border-radius: 7px;
 }
 
-.list-option__option a {
+header .list-option__option a {
     color: white;
     margin-left: 5px;
     font-size: 17px;

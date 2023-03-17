@@ -7,6 +7,7 @@ import ForgotPassword from "./pages/forgotpassword/ForgotPassword";
 import ChangePassword from "./pages/changepassword/ChangePassword";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
+import Cart from "./pages/cart/Cart";
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/changepassword" element={<ChangePassword />}></Route>
           <Route path="/header" element={<Header />}></Route>
           <Route path="/footer" element={<Footer />}></Route>
+          <Route path="/cart" element={<Cart />}></Route>
         </Routes>
       </div>
     </Router>
