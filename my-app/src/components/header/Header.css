@@ -1,4 +1,4 @@
-* {
+    * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -65,7 +65,7 @@ header .list-option__option {
     display: flex;
     align-items: center;
     height: 100%;
-    padding: 0px 22px;
+    padding: 0px 20px;
     border-radius: 10px;
 }
 
