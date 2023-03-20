@@ -15,7 +15,7 @@ export default function App() {
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
           <Route path="/forgotpassword" element={<ForgotPassword />}></Route>
-          <Route path="/changepassword/:token" element={<ChangePassword />}></Route>
+          <Route path="/changepassword/:accessToken" element={<ChangePassword />}></Route>
         </Routes>
       </div>
     </Router>

@@ -44,6 +44,36 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const forgotPassword = createAsyncThunk(
+  "/forgotpassword",
+  async ({ email }, thunkAPI) => {
+    try {
+      return userService.forgotPassword({ email });
+    } catch (error) {
+      const message =
+        (error.respone && error.respone.data && error.respone.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const changePassword = createAsyncThunk(
+  "/changepassword/:accessToken",
+  async ({ password, retypeNewPassword }, thunkAPI) => {
+    try {
+      return userService.changePassword({ password ,retypeNewPassword });
+    } catch (error) {
+      const message =
+        (error.respone && error.respone.data && error.respone.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const userSlice = createSlice({
   name: "user",
   initialState,
@@ -55,12 +85,12 @@ export const userSlice = createSlice({
       state.message = "";
     },
     logout: (state) => {
-      localStorage.removeItem('accessToken')
+      localStorage.removeItem("accessToken");
       state.isError = false;
       state.success = false;
       state.isLoading = false;
       state.message = "";
-    }
+    },
   },
   extraReducers: (builder) => {
     //register
@@ -92,9 +122,36 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = "Occupied Error";
+      })
+      //forgot password
+      .addCase(forgotPassword.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(forgotPassword.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.success = true;
+        state.user = action.payload;
+        state.message = "Please check your email";
+      })
+      .addCase(forgotPassword.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = "Invalid Email";
+      })
+      //change password
+      .addCase(changePassword.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(changePassword.fulfilled, (state, action) => {
+        state.isLoading = false;
+        // state.success = true;
+      })
+      .addCase(changePassword.rejected, (state, action) => {
+        state.isLoading = false;
+        // state.isError = true;
       });
   },
 });
 
-export const { reset,logout} = userSlice.actions;
+export const { reset, logout } = userSlice.actions;
 export default userSlice.reducer;

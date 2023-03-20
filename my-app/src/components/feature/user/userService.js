@@ -39,9 +39,50 @@ const loginUser = async ({ email, password }) => {
   return response.data;
 };
 
+//forgot password
+const forgotPassword = async ({ email }) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const response = await axios.post(
+    "http://localhost:8000/auth/forgotpassword",
+    {
+      email: email,
+    },
+    config
+  );
+  return response.data;
+};
+
+const changePassword = async ({ password, retypeNewPassword }) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  if (password !== retypeNewPassword) {
+    console.log("Password is not match");
+  } else {
+    const response = await axios.post(
+      `http://localhost:8000/auth/changepassword/${window.location.href.substring(
+        window.location.href.lastIndexOf("/") + 1
+      )}`,
+      {
+        password: password,
+      },
+      config
+    );
+    console.log(response.data);
+    return response.data;
+  }
+};
 const userService = {
   registerUser,
   loginUser,
+  forgotPassword,
+  changePassword,
 };
 
 export default userService;

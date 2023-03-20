@@ -27,7 +27,10 @@ const Home = () => {
             {
                 user ?
                     (
-                        <button onClick={() => dispatch(logout())}>LOGOUT</button>
+                        <button onClick={() => {
+                            dispatch(logout())
+                            window.location.reload()
+                        }}>LOGOUT</button>
                     ) :
                     <NavLink className='button' to='/login'>
                         Login

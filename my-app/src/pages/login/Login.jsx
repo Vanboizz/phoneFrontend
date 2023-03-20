@@ -15,7 +15,7 @@ const Login = () => {
     const [inputPassword, setInputPassword] = useState("")
     const [typePassword, setTypePassword] = useState("password")
     const { register, handleSubmit } = useForm()
-    const { success, user, isError, message } = useSelector(state => state.user)
+    const { user, isError, message } = useSelector(state => state.user)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -28,6 +28,8 @@ const Login = () => {
         }
         if (isError) {
             toast.error(message)
+            setInputEmail("")
+            setInputPassword("")
         }
     }, [user, isError])
 
