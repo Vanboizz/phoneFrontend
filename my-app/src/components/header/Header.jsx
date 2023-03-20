@@ -1,6 +1,6 @@
 import React from 'react'
 import "../header/Header.css"
-import { FaSearch, FaHome, FaChevronDown, FaPen, FaCartArrowDown, FaRegUserCircle } from "react-icons/fa";
+import { FaSearch} from "react-icons/fa";
 // xoa': font awesome
 
 const Header = () => {
@@ -17,33 +17,33 @@ const Header = () => {
 
       <div className="list-option">
 
-        <div className='list-option__option'>
+        <a className='list-option__option' href=''>
           <div className="option__icon-home option__home"></div>
-          <a>Home</a>
-        </div>
+          <p>Home</p>
+        </a>
 
-        <div className='list-option__option'>
+        <a className='list-option__option' href=''>
           <div className="option__icon-phone option__phone"></div>
-          <a>Phone</a>
-        </div>
+          <p>Phone</p>
+        </a>
 
-        <div className='list-option__option'>
+        <a className='list-option__option' href=''>
           <div className="option__icon-pen option__pen"></div>
-          <a>About Us</a>
-        </div>
+          <p>About Us</p>
+        </a>
 
-        <div className='list-option__option'>
+        <a className='list-option__option' href=''>
           <div className="option__icon-cart option__cart option_contain-circle">
             <div className="circle-yellow">0</div>
 
           </div>
-          <a>Cart</a>
-        </div>
+          <p>Cart</p>
+        </a>
 
-        <div className='list-option__option'>
+        <a className='list-option__option' href=''>
           <div className="option__icon-user option__user"></div>
-          <a>Login</a>
-        </div>
+          <p>Login</p>
+        </a>
       </div>
     </header>
     

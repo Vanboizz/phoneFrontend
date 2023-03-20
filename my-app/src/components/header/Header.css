@@ -41,7 +41,8 @@ header .search .search__icon-search {
 }
 
 header .search .search__icon-search:hover {
-    opacity: 0.5;
+    opacity: 0.7;
+    cursor: pointer;
 }
 
 
@@ -67,6 +68,7 @@ header .list-option__option {
     height: 100%;
     padding: 0px 20px;
     border-radius: 10px;
+    text-decoration: none;
 }
 
 header .list-option__option:hover {
@@ -119,7 +121,7 @@ header .circle-yellow {
     border-radius: 7px;
 }
 
-header .list-option__option a {
+header .list-option__option p {
     color: white;
     margin-left: 5px;
     font-size: 17px;
