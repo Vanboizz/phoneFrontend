@@ -1,10 +1,10 @@
-import React, {  useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "../changepassword/ChangePassword.css"
 import { useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { changePassword } from '../../components/feature/user/userSlice'
 import { ToastContainer, toast } from "react-toastify"
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 const initial = {
   password: "",
@@ -20,6 +20,13 @@ const ChangePassword = () => {
     setState({ ...state, [name]: value })
   }
 
+  const {success} = useSelector(state => state.user)
+  
+  useEffect(() => {
+    if(state) {
+      navigate("/login")
+    }
+  },[success]) 
   const navigate = useNavigate()
 
   const { register, handleSubmit } = useForm()
@@ -29,10 +36,8 @@ const ChangePassword = () => {
   const submitForm = (data) => {
     if (data.password !== data.retypeNewPassword) {
       toast("Password is not match")
-      setState("")
-    }
-    else {
-      navigate("/login")
+      setState("");
+      return;
     }
     dispatch(changePassword(data))
   }

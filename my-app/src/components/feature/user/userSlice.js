@@ -144,11 +144,11 @@ export const userSlice = createSlice({
       })
       .addCase(changePassword.fulfilled, (state, action) => {
         state.isLoading = false;
-        // state.success = true;
+        state.success = true;
       })
       .addCase(changePassword.rejected, (state, action) => {
         state.isLoading = false;
-        // state.isError = true;
+        state.isError = true;
       });
   },
 });
