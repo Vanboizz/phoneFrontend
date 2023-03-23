@@ -5,6 +5,7 @@ import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import ForgotPassword from "./pages/forgotpassword/ForgotPassword";
 import ChangePassword from "./pages/changepassword/ChangePassword";
+import ProductsDetail from "./pages/productsdetail/ProductsDetail";
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<Home />}></Route>
+          <Route path="/productsdetail" element={<ProductsDetail/>}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
           <Route path="/forgotpassword" element={<ForgotPassword />}></Route>
