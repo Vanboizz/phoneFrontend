@@ -4,17 +4,17 @@
     box-sizing: border-box;
 }
 
-.wrapper {
+.f-wrapper {
     margin-top: 80px;
 }
 
-.line {
+.f-wrapper__line {
     background: linear-gradient(-90deg, #36a1ff, #7dc3ff);
     height: 7px;
     border-radius: 20px 20px 0px 0px
 }
 
-.content {
+.f-wrapper__content {
     padding: 0px 100px;
     display: flex;
 }

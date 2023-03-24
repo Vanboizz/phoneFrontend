@@ -12,7 +12,7 @@ const Header = () => {
       <div className="search">
         <FaSearch className="search__icon-search" />
 
-        <input className='search__input-search' type="text" placeholder="Tìm gì đó trên Smart Phone..." />
+        <input className='search__input-search' type="text" placeholder="Find what that on Smartphone..." />
       </div>
 
       <div className="list-option">

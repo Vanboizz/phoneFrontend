@@ -2,9 +2,8 @@ import React from 'react'
 import "./Orderinfo.css"
 import Templatecart from '../../components/templatecart/Templatecart';
 import Header from '../../components/header/Header'
-import Totalcart from '../../components/totalcart/Totalcart';
 import Statusorder from '../../components/statusorder/Statusorder'
-import { RiArrowDownSLine } from "react-icons/ri";
+import Totalcart from '../../components/totalcart/Totalcart'
 
 
 const Orderinfo = () => {
@@ -20,15 +19,9 @@ const Orderinfo = () => {
                         <p className='customer__text'>Customer Information</p>
 
                         <div className='customer__personnal'>
-                            <input type="text" className='fullname__input' />
-                        </div>
-
-                        <div className='customer__personnal'>
-                            <input type="text" className='phone__input' />
-                        </div>
-
-                        <div className='customer__personnal'>
-                            <input type="text" className='email__input' />
+                            <input type="text" className='personnal__inp fullname__input' placeholder='Fullname (obligatory)' />
+                            <input type="text" className='personnal__inp phone__input' placeholder='Phone Number (obligatory)' />
+                            <input type="text" className='personnal__inp email__input' placeholder='Email' name="email" />
                         </div>
 
                     </div>
@@ -36,30 +29,42 @@ const Orderinfo = () => {
                     <div className="order-info__delivery-method">
 
                         <p className='delivery-method__text'>Choose a delivery method</p>
-                        
+
                         <div className="delivery-method__choose">
 
                             <div className="choose__pick-up">
-                                <input type="radio" value="HTML" />
-                                <label for="html">Pick up at the store</label>
+                                <input name='method' type="radio" value="xxx" className='pick-up__input' checked />
+                                <label for="html" className='pick-up__text'>Pick up at the store</label>
                             </div>
 
                             <div className="choose__delivery">
-                                <input type="radio" value="HTML"/>
-                                <label for="html">Delivery</label>
-                            </div>  
+                                <input name='method' type="radio" value="yyy" className='delivery__input' />
+                                <label for="html" className='delivery__text'>Delivery</label>
+                            </div>
                         </div>
 
                         <div className="delivery-method__address">
-                            <div className="address__province">
-                                <input type="text" />
-                                <RiArrowDownSLine/>
+
+                            <div className='address__row mg-bt-5'>
+                                <select name="pets" id="pet-select" className='row__province row__common'>
+                                    <option value="">--Province--</option>
+                                </select>
+
+                                <select name="pets" id="pet-select" className='row__district row__common'>
+                                    <option value="">--District--</option>
+                                </select>
                             </div>
 
+                            <div className='address__row'>
+                                <select name="pets" id="pet-select" className='row__wards row__common'>
+                                    <option value="">--Wards--</option>
+                                </select>
+
+                                <input placeholder='Detailed address' type="text" className='detail__input' />
+                            </div>
                         </div>
-
-
                     </div>
+
 
                 </div>
             </Templatecart>
