@@ -9,7 +9,7 @@
 .gallery img {
   border: 1px solid #d1d5db;
   border-radius: 15px;
-  padding: 1rem;
+  padding: 1.4rem;
 }
 
 .swiper {
@@ -28,12 +28,12 @@
 
 .swiper-button-prev {
   border-radius: 0 100px 100px 0;
-  left: 3.5%;
+  left: 1.4%;
 }
 
 .swiper-button-next {
   border-radius: 100px 0 0 100px;
-  right: 3.5%;
+  right: 1.4%;
 }
 
 .swiper-button-next:hover,
@@ -68,11 +68,18 @@
   width: 50px;
 }
 
-.child-gallery .swiper-slide:active {
+.swiper-free-mode > .swiper-wrapper {
+  display: flex;
+  justify-content: space-around;
+}
+
+.mySwiper .swiper-slide-thumb-active {
   border: 1px solid #d70018;
 }
 
-.swiper-free-mode > .swiper-wrapper {
-  display: flex;
-  justify-content: space-evenly;
+.swiper-slide img {
+  display: block;
+  width: 410px;
+  height: 100%;
+  object-fit: cover;
 }

@@ -99,6 +99,7 @@ const ProductsDetail = () => {
                         freeMode={true}
                         watchSlidesProgress={true}
                         modules={[FreeMode, Navigation, Thumbs]}
+                        className="mySwiper"
                     >
                         <SwiperSlide>
                             <img src="https://cdn2.cellphones.com.vn/58x58,webp,q100/media/catalog/product/s/m/sm-s908_galaxys22ultra_front_burgundy_211119.jpg" />
