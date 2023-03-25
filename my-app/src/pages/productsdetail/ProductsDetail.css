@@ -1,24 +1,51 @@
-.flex-container {
-  display: flex;
-  margin-top: 2rem;
-}
-.flex-container > div {
-  width: 50%;
+.product-detail {
+  margin-left: 100px;
 }
 
-.gallery img {
+.product-detail .format {
+  display: flex;
+  align-items: center;
+  padding-bottom: 10px;
+  margin-top: 10px;
+}
+
+.product-detail .icon .star {
+  color: #f59e0b;
+  font-size: 14px;
+  margin: 0 0.2rem;
+}
+
+.product-detail h1 {
+  color: #0a263c;
+  font-size: 18px;
+  font-weight: 700;
+  margin-right: 10px;
+}
+
+.product-detail hr {
+  border: none;
+  display: block;
+  height: 2px;
+  background-color: #f5f5f5;
+}
+.product-detail .flex-container {
+  display: flex;
+  padding-top: 10px;
+}
+
+.product-detail .gallery img {
   border: 1px solid #d1d5db;
   border-radius: 15px;
   padding: 1.4rem;
 }
 
-.swiper {
+.product-detail .swiper {
   height: auto;
   width: 420px;
 }
 
-.swiper-button-next,
-.swiper-button-prev {
+.product-detail .swiper-button-next,
+.product-detail .swiper-button-prev {
   background: rgba(0, 0, 0, 0.3);
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
   height: 60px;
@@ -26,39 +53,32 @@
   opacity: 0;
 }
 
-.swiper-button-prev {
+.product-detail .swiper-button-prev {
   border-radius: 0 100px 100px 0;
   left: 1.4%;
 }
 
-.swiper-button-next {
+.product-detail .swiper-button-next {
   border-radius: 100px 0 0 100px;
   right: 1.4%;
 }
 
-.swiper-button-next:hover,
-.swiper-button-prev:hover {
+.product-detail .swiper-button-next:hover,
+.product-detail .swiper-button-prev:hover {
   opacity: 1;
 }
 
-.swiper-button-next::after,
-.swiper-button-prev:after {
+.product-detail .swiper-button-next::after,
+.product-detail .swiper-button-prev:after {
   color: #fff;
   font-size: 14px;
 }
 
-.child-gallery {
+.product-detail .child-gallery {
   margin-top: 1.4rem;
 }
 
-.child-gallery
-  .thumbnail-slide.swiper-container
-  .swiper-wrapper
-  .swiper-slide.swiper-slide-thumb-active {
-  border: 1px solid #d70018;
-}
-
-.child-gallery .swiper-slide {
+.product-detail .child-gallery .swiper-slide {
   background: #fff;
   border: 1px solid #d1d5db;
   border-radius: 0.5rem;
@@ -68,18 +88,119 @@
   width: 50px;
 }
 
-.swiper-free-mode > .swiper-wrapper {
+.product-detail .swiper-free-mode > .swiper-wrapper {
   display: flex;
   justify-content: space-around;
 }
 
-.mySwiper .swiper-slide-thumb-active {
-  border: 1px solid #d70018;
+.product-detail .mySwiper .swiper-slide-thumb-active {
+  border: 1px solid #1a94ff;
 }
 
-.swiper-slide img {
+.product-detail .swiper-slide img {
   display: block;
   width: 410px;
   height: 100%;
   object-fit: cover;
+}
+
+.right-container {
+  padding: 0 1.8rem;
+}
+
+.product-detail .box-price {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.product-detail .box-price .price-show {
+  color: #d70018;
+  display: inline-block;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 10px !important;
+}
+
+.product-detail .box-price .price-through {
+  color: #707070;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 10px 10px;
+  text-decoration: line-through;
+}
+
+.product-detail .status {
+  padding: 1rem 0;
+}
+
+.product-detail .status p {
+  font-weight: bold;
+}
+.product-detail .choose-color {
+  padding-bottom: 1rem;
+}
+
+.product-detail .choose-color p {
+  padding-top: 10px;
+  font-weight: bold;
+}
+
+.product-detail .status span {
+  color: #1a94ff;
+}
+
+.product-detail .formart-button {
+  padding-top: 10px;
+  display: flex;
+}
+
+.product-detail .formart-button button:first-child {
+  color: #fff;
+  background-color: #1a94ff;
+  border: none;
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 1.2rem 3rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.product-detail .relative h3,
+.product-detail .description h3 {
+  font-size: 20px;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-style: normal;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+.product-detail .description p {
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  padding-top: 10px;
+}
+
+.product-detail .btn-show {
+  display: flex;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.product-detail .description button {
+  margin: 0 auto;
+  background: #fff;
+  box-shadow: 0px 4px 10px 2px rgba(0, 0, 0, 0.2);
+  border: none;
+  padding: 0.8rem 2.2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
 }
