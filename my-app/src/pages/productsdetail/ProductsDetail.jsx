@@ -26,9 +26,7 @@ const ProductsDetail = () => {
     const [selectedWard, setSelectedWard] = useState()
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     const [isMore, setIsMore] = useState(false)
-    const [arrayColor, setArrayColor] = useState([])
 
-    console.log(arrayColor);
     const location = useLocation()
     const product = location.state.product
 
@@ -39,15 +37,16 @@ const ProductsDetail = () => {
         color: value.color
     }))
 
+    console.log(result);
+
     const colorItem = result.map((value) => value.color.map((item) => ({
         idcolor: item.idcolor,
         namecolor: item.namecolor
     })))
 
     const colorLength = colorItem.map(value => value.map((item) => {
-        return item;
+        return item
     }))
-
 
     useEffect(() => {
         axios.get("https://provinces.open-api.vn/api/p/")
@@ -85,6 +84,17 @@ const ProductsDetail = () => {
 
     const btnSeeMore = () => {
         setIsMore(!isMore)
+    }
+
+    // const [color, setColor] = useState([])
+    // console.log(color);
+
+    const handleBtn = (e) => {
+        const id = e.target.id;
+        result[id].color.map((value) => {
+            // setColor(value.namecolor)
+            // console.log(value.namecolor);
+        })
     }
 
     return (
@@ -174,15 +184,12 @@ const ProductsDetail = () => {
                         <p>STATUS <span>IN STOCK</span></p>
                     </div>
                     <div>
-                        <form action="">
+                        <form>
                             {
-                                result.map((value) => (
-                                    <label htmlFor="" key={value.idsize}>
+                                result.map((value, i) => (
+                                    <label key={i}>
                                         {value.namesize}
-                                        <input type="radio" value={value.namesize} id={value.idsize} onClick={(e) => {
-                                            const id = e.target.id;
-                                            setArrayColor(result[id].color)
-                                        }} />
+                                        <input type="radio" name="size" id={i} value={value.namesize} onClick={(e) => handleBtn(e)} />
                                     </label>
                                 ))
                             }
@@ -193,24 +200,27 @@ const ProductsDetail = () => {
                         <p>Choose color to see price</p>
                     </div>
                     <div>
+
                         {
                             colorLength.length ? (
                                 <>
                                     {
-                                        colorItem.map(value => value.map((item) => (
-                                            <label key={item.idcolor}>
+                                        colorItem.map(value => value.map((item, i) => (
+                                            <label key={i}>
                                                 {item.namecolor}
                                                 <input
                                                     type="radio"
-                                                    id={item.idcolor}
+                                                    id={i}
+                                                    name="color"
                                                     value={item.namecolor}
                                                 />
                                             </label>
                                         )))
                                     }
                                 </>
-                            ) : null
-
+                            ) : (
+                                "Click button to see color"
+                            )
                         }
                     </div>
                     <div className='formart-button'>
