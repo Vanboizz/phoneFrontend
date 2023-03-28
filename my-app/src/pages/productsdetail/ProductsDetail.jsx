@@ -14,20 +14,39 @@ import "swiper/css/thumbs";
 
 // import required modules
 import { FreeMode, Navigation, Thumbs } from "swiper";
+import { useLocation } from 'react-router-dom';
 
 const ProductsDetail = () => {
 
     const [province, setProvince] = useState([])
     const [district, setDistrict] = useState([])
     const [wards, setWards] = useState([])
-
     const [selectedProvince, setSelectedProvince] = useState()
     const [selectedDistrict, setSelectedDistrict] = useState()
     const [selectedWard, setSelectedWard] = useState()
-
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
-
     const [isMore, setIsMore] = useState(false)
+    const [arrayColor, setArrayColor] = useState([])
+
+    console.log(arrayColor);
+    const location = useLocation()
+    const product = location.state.product
+
+    const result = product.size.map((value) => ({
+        idsize: value.idsize,
+        namesize: value.namesize,
+        pricesize: value.pricesize,
+        color: value.color
+    }))
+
+    const colorItem = result.map((value) => value.color.map((item) => ({
+        idcolor: item.idcolor,
+        namecolor: item.namecolor
+    })))
+
+    const colorLength = colorItem.map(value => value.map((item) => {
+        return item;
+    }))
 
 
     useEffect(() => {
@@ -68,12 +87,11 @@ const ProductsDetail = () => {
         setIsMore(!isMore)
     }
 
-
     return (
         <div className='product-detail'>
             <div className='format'>
                 <div>
-                    <h1>Samsung Galaxy S23 8GB 256GB</h1>
+                    <h1>{product.nameproducts}</h1>
                 </div>
                 <div className='icon'>
                     <FaStar className='star' />
@@ -92,24 +110,13 @@ const ProductsDetail = () => {
                             thumbs={{ swiper: thumbsSwiper }}
                             modules={[FreeMode, Navigation, Thumbs]}
                         >
-                            <SwiperSlide>
-                                <img src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/s/m/sm-s908_galaxys22ultra_front_burgundy_211119.jpg" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/s/m/sm-s908_galaxys22ultra_front_phantomwhite_211119.jpg" alt="" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/s/m/sm-s908_galaxys22ultra_front_green_211119.jpg" alt="" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/s/m/sm-s908_galaxys22ultra_devicepenbackr30_burgundy_211119.jpg" alt="" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/s/m/sm-s908_galaxys22ultra_front_green_211119.jpg" alt="" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product/s/m/sm-s908_galaxys22ultra_devicepenbackr30_burgundy_211119.jpg" alt="" />
-                            </SwiperSlide>
+                            {
+                                product.image.map((value, index) => (
+                                    <SwiperSlide key={index}>
+                                        <img src={value} />
+                                    </SwiperSlide>
+                                ))
+                            }
                         </Swiper>
                     </div>
                     <div className='child-gallery'>
@@ -122,24 +129,13 @@ const ProductsDetail = () => {
                             modules={[FreeMode, Navigation, Thumbs]}
                             className="mySwiper"
                         >
-                            <SwiperSlide>
-                                <img src="https://cdn2.cellphones.com.vn/58x58,webp,q100/media/catalog/product/s/m/sm-s908_galaxys22ultra_front_burgundy_211119.jpg" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://cdn2.cellphones.com.vn/58x58,webp,q100/media/catalog/product/s/m/sm-s908_galaxys22ultra_front_phantomwhite_211119.jpg" alt="" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://cdn2.cellphones.com.vn/58x58,webp,q100/media/catalog/product/s/m/sm-s908_galaxys22ultra_front_green_211119.jpg" alt="" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://cdn2.cellphones.com.vn/58x58,webp,q100/media/catalog/product/s/m/sm-s908_galaxys22ultra_devicepenbackr30_burgundy_211119.jpg" alt="" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://cdn2.cellphones.com.vn/58x58,webp,q100/media/catalog/product/s/m/sm-s908_galaxys22ultra_front_green_211119.jpg" alt="" />
-                            </SwiperSlide>
-                            <SwiperSlide>
-                                <img src="https://cdn2.cellphones.com.vn/58x58,webp,q100/media/catalog/product/s/m/sm-s908_galaxys22ultra_devicepenbackr30_burgundy_211119.jpg" alt="" />
-                            </SwiperSlide>
+                            {
+                                product.image.map((value, index) => (
+                                    <SwiperSlide key={index}>
+                                        <img style={{ width: "100%", height: "100%" }} src={value} />
+                                    </SwiperSlide>
+                                ))
+                            }
                         </Swiper>
                     </div>
                 </div>
@@ -171,17 +167,52 @@ const ProductsDetail = () => {
                         </select>
                     </form>
                     <div className='box-price'>
-                        <p className='price-show'>3.900.000&nbsp;đ</p>
-                        <p className='price-through'>4.900.000&nbsp;đ</p>
+                        <p className='price-show'>{(result[0].pricesize * product.discount) / 100}&nbsp;đ</p>
+                        <p className='price-through'>{result[0].pricesize}&nbsp;đ</p>
                     </div>
                     <div className='status'>
                         <p>STATUS <span>IN STOCK</span></p>
                     </div>
-                    <div></div>
+                    <div>
+                        <form action="">
+                            {
+                                result.map((value) => (
+                                    <label htmlFor="" key={value.idsize}>
+                                        {value.namesize}
+                                        <input type="radio" value={value.namesize} id={value.idsize} onClick={(e) => {
+                                            const id = e.target.id;
+                                            setArrayColor(result[id].color)
+                                        }} />
+                                    </label>
+                                ))
+                            }
+
+                        </form>
+                    </div>
                     <div className='choose-color'>
                         <p>Choose color to see price</p>
                     </div>
-                    <div></div>
+                    <div>
+                        {
+                            colorLength.length ? (
+                                <>
+                                    {
+                                        colorItem.map(value => value.map((item) => (
+                                            <label key={item.idcolor}>
+                                                {item.namecolor}
+                                                <input
+                                                    type="radio"
+                                                    id={item.idcolor}
+                                                    value={item.namecolor}
+                                                />
+                                            </label>
+                                        )))
+                                    }
+                                </>
+                            ) : null
+
+                        }
+                    </div>
                     <div className='formart-button'>
                         <div style={{ marginRight: "1rem" }}>
                             <button>BUY NOW</button>
@@ -197,7 +228,10 @@ const ProductsDetail = () => {
                 <h3>Description</h3>
                 <hr />
                 <div style={{ maxHeight: isMore ? undefined : "200px", overflow: 'hidden' }}>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, voluptas iste tenetur vero nihil corporis vel quae ipsam sunt repellat quod deserunt fuga saepe magni, hic consectetur iusto cupiditate ex officiis. Voluptas corporis quae sed nihil voluptatibus possimus? Vel odio eos fugit, provident, at atque eaque ullam facilis odit eum, ratione nesciunt dignissimos illo fugiat. Aspernatur reiciendis molestias nisi optio, accusantium corporis quo quae hic a earum. Pariatur, dolores expedita. Delectus ad doloribus magni explicabo recusandae, omnis ea enim dolorum deleniti corrupti? Nam ab eius id quidem excepturi quam cum, voluptatem itaque necessitatibus aspernatur earum reprehenderit, dolorem at! Impedit quam, molestias, odit doloremque facere non in nam veritatis alias rerum reiciendis dolorem qui inventore nihil, maiores ex ipsa repellendus sequi quo numquam voluptas? Magni quidem corporis dolor, perferendis voluptas voluptate eligendi illo. Suscipit eos alias explicabo fugiat nobis aut illum, natus optio quasi omnis voluptatem! Nisi nihil, deleniti quisquam temporibus, tenetur et vero eligendi molestiae suscipit reprehenderit dicta, in illum officiis consectetur aspernatur unde nemo ratione fugiat illo vitae nulla doloremque laboriosam quia asperiores. Recusandae explicabo rem neque rerum. Repellat nihil illum sequi eligendi libero minus molestiae assumenda similique, ea earum corporis nisi laudantium. Assumenda quisquam voluptatum nesciunt ipsam adipisci consectetur deleniti debitis, sint, quibusdam nemo impedit incidunt aperiam amet sit magni aliquam voluptas modi nostrum ducimus. Laudantium nam accusantium voluptate nobis eaque, maxime ipsam dolorum nemo asperiores. Facere, possimus culpa sit ipsum assumenda id rerum expedita itaque cupiditate sequi numquam ut, recusandae illum, corrupti ducimus quasi laboriosam aliquid? Possimus numquam dolorem rem aperiam deserunt est ipsa eligendi excepturi. Rerum molestias deserunt id soluta aliquam? Delectus molestias eligendi odit soluta natus facilis magnam temporibus modi tempora aliquam assumenda tempore quia quidem exercitationem eveniet sequi nulla voluptate illo praesentium provident, minus doloribus aliquid. Illum sunt, praesentium quod voluptate delectus et labore!
+                    <p>
+                        {
+                            product.description
+                        }
                     </p>
                 </div>
                 <div className='btn-show'>
@@ -219,7 +253,9 @@ const ProductsDetail = () => {
             <div className='relative'>
                 <h3>Relative</h3>
             </div>
+
         </div>
+
     )
 }
 

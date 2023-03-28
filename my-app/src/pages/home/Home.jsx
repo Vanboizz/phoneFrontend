@@ -10,7 +10,7 @@ import "../home/Home.css"
 import "swiper/css/navigation";
 import { Grid, Navigation } from "swiper"
 import AboutUs from '../../components/aboutus/AboutUs'
-import { NavLink } from "react-router-dom"
+import { NavLink, Link } from "react-router-dom"
 import { logout } from '../../components/feature/user/userSlice'
 const Home = () => {
     const products = useSelector((state) => state.products)
@@ -51,38 +51,43 @@ const Home = () => {
                         className="mySwiper"
                     >
                         {
-                            products.data ? products.data.map((value, index) => (
-                                <SwiperSlide key={index}>
-                                    <div className='item' key={index} >
-                                        <div className='discount'>
-                                            <p >Giảm <span>{value.discount}%</span></p>
-                                        </div>
-                                        <div className='url'>
-                                            <img key={index} src={value.image[0]} alt="" />
-                                        </div>
-                                        <h3>{value.nameproducts}</h3>
-                                        <div className='format'>
-                                            <p>{(value.size[0].pricesize * value.discount) / 100}&nbsp;đ</p>
-                                            <p>{value.size[0].pricesize}&nbsp;đ</p>
-                                        </div>
-                                        <div className='promotion'>
-                                            {value.promotion}
-                                        </div>
-                                        <div className='icon'>
-                                            <div>
-                                                <FaStar className='star' />
-                                                <FaStar className='star' />
-                                                <FaStar className='star' />
-                                                <FaStar className='star' />
-                                                <FaStar className='star' />
+                            products.data ? products.data.map((value, index) => {
+                                return (
+                                    <SwiperSlide >
+                                        <Link to={`/productsdetail/${value.idproducts}`} state={{ product: value }}>
+                                            <div className='item' key={index} >
+                                                <div className='discount'>
+                                                    <p >Giảm <span>{value.discount}%</span></p>
+                                                </div>
+                                                <div className='url'>
+                                                    <img key={index} src={value.image[0]} alt="" />
+                                                </div>
+                                                <h3 style={{ color: "#000" }}>{value.nameproducts}</h3>
+                                                <div className='format'>
+                                                    <p>{(value.size[0].pricesize * value.discount) / 100}&nbsp;đ</p>
+                                                    <p>{value.size[0].pricesize}&nbsp;đ</p>
+                                                </div>
+                                                <div className='promotion' style={{ color: "#000" }}>
+                                                    {value.promotion}
+                                                </div>
+                                                <div className='icon'>
+                                                    <div>
+                                                        <FaStar className='star' />
+                                                        <FaStar className='star' />
+                                                        <FaStar className='star' />
+                                                        <FaStar className='star' />
+                                                        <FaStar className='star' />
+                                                    </div>
+                                                    <button>
+                                                        <FaPlusCircle className='circle' />
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <button>
-                                                <FaPlusCircle className='circle' />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </SwiperSlide>
-                            )) : null
+                                        </Link>
+
+                                    </SwiperSlide>
+                                )
+                            }) : null
                         }
                     </Swiper>
                 </div>
