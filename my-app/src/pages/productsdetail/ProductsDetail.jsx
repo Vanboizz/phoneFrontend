@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import "../productsdetail/ProductsDetail.css"
 import { FaStar, FaAngleDown, FaAngleUp, FaCartPlus } from 'react-icons/fa'
 
-import axios from 'axios'
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -18,84 +17,13 @@ import { useLocation } from 'react-router-dom';
 
 const ProductsDetail = () => {
 
-    const [province, setProvince] = useState([])
-    const [district, setDistrict] = useState([])
-    const [wards, setWards] = useState([])
-    const [selectedProvince, setSelectedProvince] = useState()
-    const [selectedDistrict, setSelectedDistrict] = useState()
-    const [selectedWard, setSelectedWard] = useState()
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     const [isMore, setIsMore] = useState(false)
-
     const location = useLocation()
     const product = location.state.product
-
-    const result = product.size.map((value) => ({
-        idsize: value.idsize,
-        namesize: value.namesize,
-        pricesize: value.pricesize,
-        color: value.color
-    }))
-
-    console.log(result);
-
-    const colorItem = result.map((value) => value.color.map((item) => ({
-        idcolor: item.idcolor,
-        namecolor: item.namecolor
-    })))
-
-    const colorLength = colorItem.map(value => value.map((item) => {
-        return item
-    }))
-
-    useEffect(() => {
-        axios.get("https://provinces.open-api.vn/api/p/")
-            .then((response) => {
-                setProvince(response.data)
-            })
-            .catch(error => {
-                console.log(error);
-            })
-    }, [])
-
-    useEffect(() => {
-        if (selectedProvince) {
-            axios.get(`https://provinces.open-api.vn/api/p/${selectedProvince}?depth=2`)
-                .then((response) => {
-                    setDistrict(response.data.districts)
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        }
-    }, [selectedProvince])
-
-    useEffect(() => {
-        if (selectedDistrict) {
-            axios.get(`https://provinces.open-api.vn/api/d/${selectedDistrict}?depth=2`)
-                .then((response) => {
-                    setWards(response.data.wards)
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        }
-    }, [selectedDistrict])
-
-    const btnSeeMore = () => {
-        setIsMore(!isMore)
-    }
-
-    // const [color, setColor] = useState([])
-    // console.log(color);
-
-    const handleBtn = (e) => {
-        const id = e.target.id;
-        result[id].color.map((value) => {
-            // setColor(value.namecolor)
-            // console.log(value.namecolor);
-        })
-    }
+    const [data, setData] = useState(product.size[0].color)
+    const [idSize, setIdSize] = useState(product.size[0].idsize);
+    const [idColor, setIdColor] = useState(product.size[0].color[0].idcolor);
 
     return (
         <div className='product-detail'>
@@ -150,78 +78,76 @@ const ProductsDetail = () => {
                     </div>
                 </div>
                 <div className='right-container'>
-                    <form action=''>
-                        <select value={selectedProvince} onChange={(e) => setSelectedProvince(e.target.value)}>
-                            <option value="" >Chọn Tỉnh-Thành phố</option>
-                            {
-                                province.map((value) => (
-                                    <option key={value.code} value={value.code}>{value.name}</option>
-                                ))
-                            }
-                        </select>
-                        <select value={selectedDistrict} onChange={(e) => setSelectedDistrict(e.target.value)}>
-                            <option value="">Chọn Quận-Huyện</option>
-                            {
-                                district.map((value) => (
-                                    <option key={value.code} value={value.code}>{value.name}</option>
-                                ))
-                            }
-                        </select>
-                        <select value={selectedWard} onChange={(e) => setSelectedWard(e.target.value)}>
-                            <option value="">Chọn Phường-Xã</option>
-                            {
-                                wards.map((value) => (
-                                    <option key={value.code} value={value.code}>{value.name}</option>
-                                ))
-                            }
-                        </select>
-                    </form>
                     <div className='box-price'>
-                        <p className='price-show'>{(result[0].pricesize * product.discount) / 100}&nbsp;đ</p>
-                        <p className='price-through'>{result[0].pricesize}&nbsp;đ</p>
-                    </div>
-                    <div className='status'>
-                        <p>STATUS <span>IN STOCK</span></p>
+                        <p className='price-show'>{(product.size[0].pricesize * product.discount) / 100}&nbsp;đ</p>
+                        <p className='price-through'>{product.size[0].pricesize}&nbsp;đ</p>
                     </div>
                     <div>
-                        <form>
+                        <form >
                             {
-                                result.map((value, i) => (
-                                    <label key={i}>
-                                        {value.namesize}
-                                        <input type="radio" name="size" id={i} value={value.namesize} onClick={(e) => handleBtn(e)} />
+                                product.size.map((value) => (
+                                    <label className='item-linked' key={value.idsize} htmlFor={value.idsize} style={
+                                        {
+                                            border: value.idsize === idSize ? "1.4px solid #1a94ff" : "",
+                                        }
+                                    }>
+                                        <div className='content'>
+                                            <p className='name'>
+                                                {value.namesize}
+                                            </p>
+                                            <p className="price">
+                                                {(value.pricesize * product.discount) / 100}&nbsp;đ
+                                            </p>
+                                        </div>
+                                        <input type="radio" name="size" id={value.idsize} value={value.idsize}
+                                            onChange={(e) => {
+                                                setIdSize(value.idsize)
+                                                if (e.target.checked) {
+                                                    setData(value.color)
+                                                }
+                                            }}
+
+                                        />
                                     </label>
                                 ))
                             }
-
                         </form>
                     </div>
                     <div className='choose-color'>
                         <p>Choose color to see price</p>
                     </div>
                     <div>
-
-                        {
-                            colorLength.length ? (
-                                <>
-                                    {
-                                        colorItem.map(value => value.map((item, i) => (
-                                            <label key={i}>
-                                                {item.namecolor}
-                                                <input
-                                                    type="radio"
-                                                    id={i}
-                                                    name="color"
-                                                    value={item.namecolor}
-                                                />
-                                            </label>
-                                        )))
+                        <form>
+                            {
+                                data ? data.map((item) => (
+                                    <label key={item.idcolor} className='item-linked' style={
+                                        {
+                                            border: item.idcolor === idColor ? "1.4px solid #1a94ff" : "",
+                                        }
                                     }
-                                </>
-                            ) : (
-                                "Click button to see color"
-                            )
-                        }
+                                    >
+                                        <div className='content'>
+                                            <p className='name'>
+                                                {item.namecolor}
+                                            </p>
+                                            <p className='price'>
+                                                {(7490000 * product.discount) / 100}&nbsp;đ
+                                            </p>
+                                        </div>
+                                        <input
+                                            type="radio"
+                                            id={item.idcolor}
+                                            name="color"
+                                            value={item.namecolor}
+                                            checked={item.idcolor === idColor}
+                                            onChange={(e) => {
+                                                setIdColor(item.idcolor)
+                                            }}
+                                        />
+                                    </label>
+                                )) : null
+                            }
+                        </form>
                     </div>
                     <div className='formart-button'>
                         <div style={{ marginRight: "1rem" }}>
@@ -245,7 +171,7 @@ const ProductsDetail = () => {
                     </p>
                 </div>
                 <div className='btn-show'>
-                    <button onClick={btnSeeMore}>
+                    <button onClick={() => setIsMore(!isMore)}>
                         <span>
                             {
                                 isMore ? 'Collagse' : 'See More'
