@@ -1,5 +1,5 @@
 .product-detail {
-  margin-left: 100px;
+  margin: 0 100px;
 }
 
 .product-detail .format {
@@ -28,11 +28,15 @@
   height: 2px;
   background-color: #f5f5f5;
 }
+
 .product-detail .flex-container {
   display: flex;
   padding-top: 10px;
 }
 
+.product-detail .left-container {
+  width: calc(100%/3);
+}
 .product-detail .gallery img {
   border: 1px solid #d1d5db;
   border-radius: 15px;
@@ -104,8 +108,14 @@
   object-fit: cover;
 }
 
-.right-container {
+.middle-container {
   padding: 0 1.8rem;
+  width: calc(100% /3);
+}
+
+.right-container {
+  width: calc(100% /3);
+
 }
 
 .product-detail .box-price {
@@ -115,7 +125,7 @@
 }
 
 .product-detail .box-price .price-show {
-  color: #1a94ff;
+  color: #E12323;
   display: inline-block;
   font-size: 18px;
   font-weight: 700;
@@ -148,19 +158,20 @@
   color: #1a94ff;
 }
 
-.product-detail .formart-button {
-  padding-top: 10px;
+.product-detail .format-button {
+  padding-top: 20px;
   display: flex;
+  justify-content: space-between;
 }
 
-.product-detail .formart-button button:first-child {
+.product-detail .format-button button:first-child {
   color: #fff;
   background-color: #1a94ff;
   border: none;
   font-weight: bold;
   font-size: 1rem;
-  padding: 1.2rem 3rem;
-  border-radius: 5px;
+  padding: 1rem 6.5rem;
+  border-radius: 10px;
   cursor: pointer;
 }
 
@@ -203,18 +214,17 @@
 
 .product-detail form {
   display: flex;
-  gap: 1rem;
+  gap: 2rem;
   position: relative;
 }
 
 .product-detail .item-linked {
   border: 1px solid #d1d5db;
   border-radius: 5px;
-  padding: 7px 0;
   cursor: pointer;
-  display: flex;
-  width: 50%;
+  width: calc(100%/2.5);
   justify-content: center;
+  height: 45px;
 }
 
 .product-detail label:active {
@@ -223,7 +233,8 @@
 
 .product-detail .content {
   color: "#444";
-  font-size: 12px;
+  font-size: 13.5px;
+  position: relative;
 }
 
 .product-detail .name {
@@ -236,20 +247,25 @@
   text-align: center;
 }
 
-.product-detail .price::after {
-  position: absolute;
-  background-color: #1a94ff;
-  content: "✓";
-  color: #fff;
-  top: 0;
-  left: 0;
-  font-size: 10px;
-  height: 13px;
-  padding-left: 4px;
-  border-radius: 0 0 10px 0;
-  width: 18px;
-}
-
 .product-detail input {
   appearance: none;
+}
+
+.product-detail .cart {
+  color: #1a94ff;
+  background-color: transparent;
+  border: 2px solid #1a94ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  cursor: pointer;
+  border-radius: 15px;
+  padding: 0 0.4rem;
+}
+
+.product-detail .cart span {
+  font-weight: bold;
+  font-size: 10px;
+  padding-top: 10px;
 }

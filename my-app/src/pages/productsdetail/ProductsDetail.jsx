@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "../productsdetail/ProductsDetail.css"
 import { FaStar, FaAngleDown, FaAngleUp, FaCartPlus } from 'react-icons/fa'
+import { AiOutlineCheck } from "react-icons/ai";
+import { Link } from "react-router-dom"
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -10,10 +12,13 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
+import "swiper/css/grid";
 
 // import required modules
-import { FreeMode, Navigation, Thumbs } from "swiper";
+import { FreeMode, Navigation, Thumbs, Grid } from "swiper";
 import { useLocation } from 'react-router-dom';
+import { getProducts } from '../../components/feature/products/productsSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const ProductsDetail = () => {
 
@@ -24,6 +29,13 @@ const ProductsDetail = () => {
     const [data, setData] = useState(product.size[0].color)
     const [idSize, setIdSize] = useState(product.size[0].idsize);
     const [idColor, setIdColor] = useState(product.size[0].color[0].idcolor);
+
+    const products = useSelector((state) => state.products)
+    console.log(products);
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(getProducts())
+    }, [])
 
     return (
         <div className='product-detail'>
@@ -41,7 +53,7 @@ const ProductsDetail = () => {
             </div>
             <hr />
             <div className='flex-container'>
-                <div>
+                <div className='left-container'>
                     <div className='gallery'>
                         <Swiper
                             navigation={true}
@@ -77,7 +89,7 @@ const ProductsDetail = () => {
                         </Swiper>
                     </div>
                 </div>
-                <div className='right-container'>
+                <div className='middle-container'>
                     <div className='box-price'>
                         <p className='price-show'>{(product.size[0].pricesize * product.discount) / 100}&nbsp;đ</p>
                         <p className='price-through'>{product.size[0].pricesize}&nbsp;đ</p>
@@ -93,6 +105,12 @@ const ProductsDetail = () => {
                                     }>
                                         <div className='content'>
                                             <p className='name'>
+                                                {
+                                                    value.idsize === idSize ? (
+                                                        <AiOutlineCheck style={{ color: "#fff", backgroundColor: "#1a94ff", fontWeight: "bold", position: "absolute", left: "0", top: "0" }} />
+                                                    ) :
+                                                        null
+                                                }
                                                 {value.namesize}
                                             </p>
                                             <p className="price">
@@ -128,6 +146,12 @@ const ProductsDetail = () => {
                                     >
                                         <div className='content'>
                                             <p className='name'>
+                                                {
+                                                    item.idcolor === idColor ? (
+                                                        <AiOutlineCheck style={{ color: "#fff", backgroundColor: "#1a94ff", fontWeight: "bold", position: "absolute", left: "0", top: "0" }} />
+                                                    ) :
+                                                        null
+                                                }
                                                 {item.namecolor}
                                             </p>
                                             <p className='price'>
@@ -149,15 +173,19 @@ const ProductsDetail = () => {
                             }
                         </form>
                     </div>
-                    <div className='formart-button'>
-                        <div style={{ marginRight: "1rem" }}>
+                    <div>
+                    </div>
+                    <div className='format-button'>
+                        <div >
                             <button>BUY NOW</button>
                         </div>
-                        <button style={{ color: "#1A94FF", backgroundColor: "transparent", border: "1px solid #1A94FF", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", cursor: "pointer", borderRadius: "15px", padding: "0 0.8rem" }}>
-                            <FaCartPlus style={{ fontSize: "1.8rem" }} />
-                            <span style={{ fontWeight: "bold", fontSize: "10px", paddingTop: "10px" }}>ADD TO CART</span>
+                        <button className='cart'>
+                            <FaCartPlus style={{ fontSize: "1.2rem" }} />
+                            <span className='btnadd'>ADD TO CART</span>
                         </button>
                     </div>
+                </div>
+                <div className='left-container'>
                 </div>
             </div>
             <div className='description'>
@@ -189,7 +217,6 @@ const ProductsDetail = () => {
             <div className='relative'>
                 <h3>Relative</h3>
             </div>
-
         </div>
 
     )
