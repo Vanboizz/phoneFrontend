@@ -34,7 +34,7 @@
   padding-top: 10px;
 }
 
-.product-detail .left-container {
+.product-detail .right-container {
   width: calc(100% / 3);
   padding-right: 70px;
 }
@@ -110,7 +110,7 @@
 }
 
 .middle-container {
-  padding-right: 20px;
+  padding: 0 10px;
   width: calc(100% / 3);
 }
 
@@ -173,6 +173,40 @@
   padding: 1rem 7.8rem;
   border-radius: 10px;
   cursor: pointer;
+}
+
+.product-detail .promotion {
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.product-detail .promotion .promotion-title {
+  background-color: #d1d5db;
+  font-size: 12px;
+  color: #0a0a0a !important;
+  padding: 10px;
+  width: 1005;
+  font-weight: bold;
+}
+
+.product-detail .promotion .render-promotion li {
+  font-size: 12px;
+  margin: 10px 5px;
+}
+
+.product-detail .promotion .render-promotion li::before {
+  content: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48' width='15' height='15'%3E%3Cpath fill='%234caf50' d='M44 24c0 11.045-8.955 20-20 20S4 35.045 4 24 12.955 4 24 4s20 8.955 20 20z'/%3E%3Cpath fill='%23ccff90' d='M34.602 14.602 21 28.199l-5.602-5.598-2.797 2.797L21 33.801l16.398-16.402-2.796-2.797z'/%3E%3C/svg%3E");
+  position: relative;
+  top: 2px;
+  margin-right: 4px;
+}
+
+.product-detail .promotion .render-promotion a {
+  text-decoration: none;
+  color: #000;
+  font-size: 12px;
 }
 
 .product-detail .relative h3,
@@ -302,7 +336,7 @@
   max-height: 200px;
   min-height: 140px;
   overflow-y: scroll;
-  width: 100%;
+  width: 94%;
   font-size: 12px;
   padding: 0 0 20px 0;
 }
@@ -348,7 +382,7 @@
   border-radius: 10px;
   display: inline-block;
   padding: 10px 10px 0;
-  width: 100%;
+  width: 94%;
   margin-top: 0.8rem;
 }
 

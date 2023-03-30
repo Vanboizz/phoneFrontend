@@ -57,6 +57,17 @@ const addressData = [
     },
 ]
 
+const promotion = [
+    "Up to 1% more discount for Smember members (applicable depending on products)",
+    "Comprehensive product protection with extended warranty service",
+    "Extra 5% off up to 500,000 VND when paying via Kredivo",
+    "Additional discount up to 300,000 VND for orders of 5 million VND or more when paying via VNPAY",
+    "Additional discount of VND 600,000 via JCB credit card for orders from VND 10,000,000",
+    "Extra 4% off (up to 250,000 VND) via Moca wallet for orders from 500,000 VND",
+    "Open UOB card - Get Evoucher up to 3 million purchases at CellphoneS",
+    "Open a VIB credit card - Receive a voucher of VND 200,000 for purchases at CellphoneS",
+    "New old collection: High price - Quick procedure - Best subsidy"
+]
 
 const ProductsDetail = () => {
     const [selectedProvince, setSelectedProvince] = useState()
@@ -246,8 +257,28 @@ const ProductsDetail = () => {
                             <span className='btnadd'>ADD TO CART</span>
                         </button>
                     </div>
+                    <div className='promotion'>
+                        <div className='promotion-title'>
+                            EXTRA OFFER
+                        </div>
+                        <div className='render-promotion'>
+                            <ul style={{ listStyle: "none" }}>
+                                {
+                                    promotion.map((item, index) => (
+                                        <li key={index}>
+                                            <a href="" >
+                                                {item}
+                                            </a>
+                                        </li>
+                                    ))
+                                }
+
+
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <div className='left-container'>
+                <div className='right-container'>
                     <div className='is-flex'>
                         <select value={selectedProvince} onChange={(e) => setSelectedProvince(e.target.value)} className="box-on-stock-option"
                         >
@@ -312,7 +343,7 @@ const ProductsDetail = () => {
                                     <FaRegHandPointRight />
                                 </div>
                                 <div className='item-warranty-description'>
-                                    12 months warranty at Genuine service center. 1 to 1 exchange in 30 days if there is a hardware defect from the manufacturer. <a href="">(
+                                    12 months warranty at Genuine service center. 1 to 1 exchange in 30 days if there is a hardware defect from the manufacturer. <a style={{ color: "red" }} href="">(
                                         See details)</a>
                                 </div>
                             </div>
