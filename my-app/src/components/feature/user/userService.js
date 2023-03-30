@@ -8,7 +8,7 @@ const registerUser = async ({ fullname, email, password }) => {
     },
   };
   const response = await axios.post(
-    "http://localhost:8000/auth/register",
+    "http://localhost:8000/auth/user/register",
     {
       fullname: fullname,
       email: email,
@@ -27,7 +27,7 @@ const loginUser = async ({ email, password }) => {
     },
   };
   const response = await axios.post(
-    "http://localhost:8000/auth/login",
+    "http://localhost:8000/auth/user/login",
     {
       email: email,
       password: password,
@@ -47,7 +47,7 @@ const forgotPassword = async ({ email }) => {
     },
   };
   const response = await axios.post(
-    "http://localhost:8000/auth/forgotpassword",
+    "http://localhost:8000/auth/user/forgotpassword",
     {
       email: email,
     },
@@ -66,7 +66,7 @@ const changePassword = async ({ password, retypeNewPassword }) => {
     console.log("Password is not match");
   } else {
     const response = await axios.post(
-      `http://localhost:8000/auth/changepassword/${window.location.href.substring(
+      `http://localhost:8000/auth/user/changepassword/${window.location.href.substring(
         window.location.href.lastIndexOf("/") + 1
       )}`,
       {
