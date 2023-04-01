@@ -53,9 +53,9 @@ const Home = () => {
                         {
                             products.data ? products.data.map((value, index) => {
                                 return (
-                                    <SwiperSlide >
+                                    <SwiperSlide key={index}>
                                         <Link to={`/productsdetail/${value.idproducts}`} state={{ product: value }}>
-                                            <div className='item' key={index} >
+                                            <div className='item' key={index} onClick={() => window.location.replace(`/productsdetail/${value.idproducts}`)}>
                                                 <div className='discount'>
                                                     <p >Giảm <span>{value.discount}%</span></p>
                                                 </div>

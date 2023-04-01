@@ -370,7 +370,7 @@ const ProductsDetail = () => {
                 </div>
                 <hr />
             </div>
-            <Relative />
+            <Relative/>
         </div>
 
     )

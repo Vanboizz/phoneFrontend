@@ -5,9 +5,11 @@ import { Link } from "react-router-dom"
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
+import "swiper/css/navigation";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from '../feature/products/productsSlice';
+import { Grid, Navigation } from 'swiper';
 
 
 
@@ -25,17 +27,14 @@ const Relative = () => {
                 <Swiper
                     slidesPerView={5}
                     navigation={true}
-                    // grid={{
-                    //     rows: 1,
-                    // }}
                     spaceBetween={30}
-                    // modules={[Grid, Navigation]}
+                    modules={[Grid, Navigation]}
                     className="mySwiper"
                 >
                     {
                         products.data ? products.data.map((value, index) => {
                             return (
-                                <SwiperSlide>
+                                <SwiperSlide key={index}>
                                     <Link to={`/productsdetail/${value.idproducts}`} state={{ product: value }}>
                                         <div className='item' key={index} onClick={() => window.location.replace(`/productsdetail/${value.idproducts}`)}>
                                             <div className='discount'>

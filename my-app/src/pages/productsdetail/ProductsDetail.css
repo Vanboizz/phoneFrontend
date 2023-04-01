@@ -60,12 +60,12 @@
 
 .product-detail .swiper-button-prev {
   border-radius: 0 100px 100px 0;
-  left: 1.4%;
+  left: 0%;
 }
 
 .product-detail .swiper-button-next {
   border-radius: 100px 0 0 100px;
-  right: 1.4%;
+  right: 2.2%;
 }
 
 .product-detail .swiper-button-next:hover,
