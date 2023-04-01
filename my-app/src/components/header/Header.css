@@ -62,6 +62,12 @@ header .list-option__item:hover .option__subnav {
     display: block;
 }
 
+header .list-option__item-phone {
+    display: flex;
+    flex-direction: column;
+    max-width: 120px;
+}
+
 header .list-option__item-login {
     display: flex;
     flex-direction: column;
@@ -162,18 +168,25 @@ header .option__subnav {
     background: white;
     border-radius: 3px;
     box-shadow: 0 0 3px rgba(0,0,0,0.3);
-    display: block;
+    display: none;
 }
 
 header .option__subnav a {
-    padding: 0px 20px;
     text-decoration: none;
     color: black;
-    font-size: 16px;
+    font-size: 14px;
+    padding-left: 10px;
+    display: inline-block;
+    line-height: 20px;
+    padding: 10px 0px 10px 20px;
+    width: 100%;
 }
 
 header .option__subnav > li {
-    
+}
+
+header .option__subnav > li:not(:first-child) {
+    border-top: 1px solid rgb(124, 124, 124);
 }
 
 header .option__subnav > li:hover {

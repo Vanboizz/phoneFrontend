@@ -22,11 +22,18 @@ const Header = () => {
           </a>
         </li>
 
-        <li className='list-option__item'>
+        <li className='list-option__item list-option__item-phone'>
           <a className='list-option__option' href=''>
             <div className="option__icon-phone option__phone"></div>
             <p>Phone</p>
           </a>
+
+          <ul className='option__subnav'>
+              <li><a href="">IPhone 13 Promax</a></li>
+              <li><a href="">Samsung Galaxy A71</a></li>
+              <li><a href="">Lenovo</a></li>
+              <li><a href="">Oppo New 3</a></li>
+          </ul>
         </li>
 
         <li className='list-option__item'>
@@ -57,7 +64,6 @@ const Header = () => {
               <li><a href="">My profile</a></li>
               <li><a href="">Logout</a></li>
           </ul>
-
         </li>
 
       </ul>
