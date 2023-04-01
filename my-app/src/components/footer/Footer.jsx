@@ -4,12 +4,12 @@ import { FaGithub, FaFacebook, FaInstagram, FaYoutube } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <div className='wrapper'>
+    <div className='f-wrapper'>
 
-      <div className="line">
+      <div className="f-wrapper__line">
       </div>
 
-      <div className="content">
+      <div className="f-wrapper__content">
         <div className="list-1">
 
           <div className="list-1__tspblack"></div>
@@ -68,6 +68,8 @@ const Footer = () => {
         </div>
       </div>
     </div>
+
+   
   )
 }
 

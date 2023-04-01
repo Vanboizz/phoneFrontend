@@ -1,7 +1,6 @@
 import React from 'react'
 import "../header/Header.css"
-import { FaSearch, FaHome, FaChevronDown, FaPen, FaCartArrowDown, FaRegUserCircle } from "react-icons/fa";
-// xoa': font awesome
+import { FaSearch } from "react-icons/fa";
 
 const Header = () => {
   return (
@@ -12,40 +11,58 @@ const Header = () => {
       <div className="search">
         <FaSearch className="search__icon-search" />
 
-        <input className='search__input-search' type="text" placeholder="Tìm gì đó trên Smart Phone..." />
+        <input className='search__input-search' type="text" placeholder="Find what that on Smartphone..." />
       </div>
 
-      <div className="list-option">
+      <ul className="list-option">
+        <li className='list-option__item'>
+          <a className='list-option__option' href=''>
+            <div className="option__icon-home option__home"></div>
+            <p>Home</p>
+          </a>
+        </li>
 
-        <div className='list-option__option'>
-          <div className="option__icon-home option__home"></div>
-          <a>Home</a>
-        </div>
+        <li className='list-option__item'>
+          <a className='list-option__option' href=''>
+            <div className="option__icon-phone option__phone"></div>
+            <p>Phone</p>
+          </a>
+        </li>
 
-        <div className='list-option__option'>
-          <div className="option__icon-phone option__phone"></div>
-          <a>Phone</a>
-        </div>
+        <li className='list-option__item'>
+          <a className='list-option__option' href=''>
+            <div className="option__icon-pen option__pen"></div>
+            <p>About Us</p>
+          </a>
+        </li>
 
-        <div className='list-option__option'>
-          <div className="option__icon-pen option__pen"></div>
-          <a>About Us</a>
-        </div>
+        <li className='list-option__item'>
+          <a className='list-option__option' href=''>
+            <div className="option__icon-cart option__cart option_contain-circle">
+              <div className="circle-yellow">0</div>
+            </div>
+            <p>Cart</p>
+          </a>
+        </li>
 
-        <div className='list-option__option'>
-          <div className="option__icon-cart option__cart option_contain-circle">
-            <div className="circle-yellow">0</div>
+        <li className='list-option__item list-option__item-login'>
 
-          </div>
-          <a>Cart</a>
-        </div>
+          <a className='list-option__option list-option__login' href=''>
+            <span className="option__icon-user option__user"></span>
+            <p>Login</p>
+            <div className="option__icon-arrow-user option__phone"></div>
+          </a>
 
-        <div className='list-option__option'>
-          <div className="option__icon-user option__user"></div>
-          <a>Login</a>
-        </div>
-      </div>
+          <ul className='option__subnav'>
+              <li><a href="">My profile</a></li>
+              <li><a href="">Logout</a></li>
+          </ul>
+
+        </li>
+
+      </ul>
     </header>
+
   )
 }
 
