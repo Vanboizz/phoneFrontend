@@ -2,7 +2,6 @@ import React, { useEffect, useState, } from 'react'
 import "../productsdetail/ProductsDetail.css"
 import { FaStar, FaAngleDown, FaAngleUp, FaCartPlus, FaMobileAlt, FaRegHandPointRight } from 'react-icons/fa'
 import { AiOutlineCheck } from "react-icons/ai";
-import { Link } from "react-router-dom"
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -12,15 +11,13 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
-import "swiper/css/grid";
 
 // import required modules
-import { FreeMode, Navigation, Thumbs, Grid } from "swiper";
+import { FreeMode, Navigation, Thumbs } from "swiper";
 import { useLocation } from 'react-router-dom';
-import { getProducts } from '../../components/feature/products/productsSlice';
-import { useDispatch, useSelector } from 'react-redux';
 
 import axios from 'axios'
+import Relative from '../../components/relative/Relative';
 
 const addressData = [
     {
@@ -81,12 +78,7 @@ const ProductsDetail = () => {
     const [data, setData] = useState(product.size[0].color)
     const [idSize, setIdSize] = useState(product.size[0].idsize);
     const [idColor, setIdColor] = useState(product.size[0].color[0].idcolor);
-
-    const products = useSelector((state) => state.products)
-    const dispatch = useDispatch()
-    useEffect(() => {
-        dispatch(getProducts())
-    }, [])
+    const [priceSize, setPriceSize] = useState(product.size[0].pricesize)
 
     useEffect(() => {
         axios.get("https://provinces.open-api.vn/api/p/")
@@ -112,7 +104,7 @@ const ProductsDetail = () => {
 
     return (
         <div className='product-detail'>
-            <div className='format'>
+            <div className='format-child'>
                 <div>
                     <h1>{product.nameproducts}</h1>
                 </div>
@@ -134,11 +126,11 @@ const ProductsDetail = () => {
                             modules={[FreeMode, Navigation, Thumbs]}
                         >
                             {
-                                product.image.map((value, index) => (
+                                product ? (product.image.map((value, index) => (
                                     <SwiperSlide key={index}>
                                         <img src={value} />
                                     </SwiperSlide>
-                                ))
+                                ))) : null
                             }
                         </Swiper>
                     </div>
@@ -153,24 +145,24 @@ const ProductsDetail = () => {
                             className="mySwiper"
                         >
                             {
-                                product.image.map((value, index) => (
+                                product ? (product.image.map((value, index) => (
                                     <SwiperSlide key={index}>
                                         <img style={{ width: "100%", height: "100%" }} src={value} />
                                     </SwiperSlide>
-                                ))
+                                ))) : null
                             }
                         </Swiper>
                     </div>
                 </div>
                 <div className='middle-container'>
                     <div className='box-price'>
-                        <p className='price-show'>{(product.size[0].pricesize * product.discount) / 100}&nbsp;đ</p>
-                        <p className='price-through'>{product.size[0].pricesize}&nbsp;đ</p>
+                        <p className='price-show'>{(priceSize * product.discount) / 100}&nbsp;đ</p>
+                        <p className='price-through'>{priceSize}&nbsp;đ</p>
                     </div>
                     <div>
                         <form >
                             {
-                                product.size.map((value) => (
+                                product ? (product.size.map((value) => (
                                     <label className='item-linked' key={value.idsize} htmlFor={value.idsize} style={
                                         {
                                             border: value.idsize === idSize ? "1.4px solid #1a94ff" : "",
@@ -195,12 +187,13 @@ const ProductsDetail = () => {
                                                 setIdSize(value.idsize)
                                                 if (e.target.checked) {
                                                     setData(value.color)
+                                                    setPriceSize(value.pricesize)
                                                 }
                                             }}
 
                                         />
                                     </label>
-                                ))
+                                ))) : null
                             }
                         </form>
                     </div>
@@ -377,9 +370,7 @@ const ProductsDetail = () => {
                 </div>
                 <hr />
             </div>
-            <div className='relative'>
-                <h3>Relative</h3>
-            </div>
+            <Relative />
         </div>
 
     )

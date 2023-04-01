@@ -37,7 +37,7 @@ const Home = () => {
                     </NavLink>
             }
             <Slider />
-            <div style={{ padding: "0 100px" }}>
+            <div style={{ padding: "0 100px" }} className='home'>
                 <h2>THE MOST OUTSTANDING PHONE</h2>
                 <div className="product-list">
                     <Swiper
