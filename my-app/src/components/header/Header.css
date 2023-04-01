@@ -162,7 +162,7 @@ header .option__subnav {
     background: white;
     border-radius: 3px;
     box-shadow: 0 0 3px rgba(0,0,0,0.3);
-    display: block;
+    display: none;
 }
 
 header .option__subnav a {
