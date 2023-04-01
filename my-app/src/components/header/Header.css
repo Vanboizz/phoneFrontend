@@ -31,7 +31,7 @@ header .search {
     background-color: #F2F1F3;
     width: 40%;
     border-radius: 7px;
-    margin-right: 5%;
+    margin-right: 3.9%;
 }
 
 header .search .search__icon-search {
@@ -53,14 +53,24 @@ header .search .search__input-search {
     border: 0;
 }
 
+header .list-option__item {
+    line-height: 36px;
+    border-radius: 10px;
+}
+
+header .list-option__item-login {
+    display: flex;
+    flex-direction: column;
+}
+
 :focus-visible {
     outline: none;
 }
 
 header .list-option {
-    height: 100%;
+    list-style-type: none;
     display: flex;
-    align-items: center;
+    height: 36px;
 }
 
 header .list-option__option {
@@ -72,7 +82,7 @@ header .list-option__option {
     text-decoration: none;
 }
 
-header .list-option__option:hover {
+header .list-option__item:hover {
     background: hsla(0,0%,100%,.2);
     cursor: pointer;
 }
@@ -86,6 +96,15 @@ header .list-option__option .option__icon-user {
     width: 25px;
     background-repeat: no-repeat;
     background-size: auto 100%;
+    display: inline-block;
+}
+
+header .list-option__option .option__icon-arrow-user {
+    height: 20px;
+    width: 20px;
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+    display: inline-block;
 }
 
 header .option_contain-circle {
@@ -126,6 +145,33 @@ header .list-option__option p {
     color: white;
     margin-left: 5px;
     font-size: 17px;
+    display: inline-block;
+    margin-top: 2px;
+}
+
+header .list-option__login {
+    position: relative;
+}
+
+header .option__subnav {
+    list-style-type: none;
+    background: white;
+    border-radius: 3px;
+    box-shadow: 0 0 3px #888888;
+}
+
+header .option__subnav a {
+    padding: 0px 10px;
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+}
+
+header .option__subnav > li:hover {
+    
+    /* 
+    background: hsla(0,0%,100%,.2); */
+
 }
 
 

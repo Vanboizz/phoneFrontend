@@ -8,33 +8,33 @@
     margin-top: 80px;
 }
 
-.f-wrapper__line {
+.f-wrapper .f-wrapper__line {
     background: linear-gradient(-90deg, #36a1ff, #7dc3ff);
     height: 7px;
     border-radius: 20px 20px 0px 0px
 }
 
-.f-wrapper__content {
+.f-wrapper .f-wrapper__content {
     padding: 0px 100px;
     display: flex;
 }
 
-.list-1,
-.list-2,
-.list-3 {
+.f-wrapper .list-1,
+.f-wrapper .list-2,
+.f-wrapper .list-3 {
     height: 100%;
     width: calc(100%/3);
     padding-top: 30px;
 }
 
-.list-1__tspblack {
+.f-wrapper .list-1__tspblack {
     height: 36px;
     background-image: url('../../../public/tspblack.png');
     background-repeat: no-repeat;
     background-size: auto 100%;
 } 
 
-.list-1__component {
+.f-wrapper .list-1__component {
     margin-top: 15px;
     display: inline-flex;
     align-items: center;
@@ -42,48 +42,48 @@
     color: black;
 }
 
-.component__logo {
+.f-wrapper .component__logo {
     font-size: 26px;
     margin-right: 5px;
 }
 
-.list-1__component p {
+.f-wrapper .list-1__component p {
     font-size: 18px;
     font-weight: 600;
 }
 
-.list-1__component:hover {
+.f-wrapper .list-1__component:hover {
     opacity: 0.6;
 }
 
-.list-2__title,
-.list-3__title {
+.f-wrapper .list-2__title,
+.f-wrapper .list-3__title {
     height: 36px;
     font-size: 30px;
 }
 
-.list-2__title__item {
+.f-wrapper .list-2__title__item {
     margin-top: 10px;
     display: inline-block;
     text-decoration: none;
     color: black;
 }
 
-.list-2__title__item:hover {
+.f-wrapper .list-2__title__item:hover {
     opacity: 0.6;
 }
 
-.list-3__title__item {
+.f-wrapper .list-3__title__item {
     margin-top: 10px;
     display: inline-block;
 }
 
-.list-3__title__email {
+.f-wrapper .list-3__title__email {
     text-decoration: none;
     color: black;
 }
 
-.list-3__title__email:hover {
+.f-wrapper .list-3__title__email:hover {
     opacity: 0.6;
 }
 
