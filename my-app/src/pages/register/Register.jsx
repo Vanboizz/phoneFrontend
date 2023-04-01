@@ -3,7 +3,7 @@ import "../register/Register.css"
 import { FaFacebook, FaGoogle } from "react-icons/fa"
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from "react-redux"
-import { registerUser } from '../../components/feature/user/userSlice'
+import { registerUser, reset } from '../../components/feature/user/userSlice'
 import { useNavigate } from "react-router-dom"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,20 +24,25 @@ const Register = () => {
         setState({ ...state, [name]: value })
     }
 
-    const { user } = useSelector((state) => state.user)
+    const { success, message, isError } = useSelector((state) => state.user)
+
     useEffect(() => {
-        if (user.success) {
-            toast(user.message)
+        dispatch(reset())
+    }, [])
+
+    useEffect(() => {
+        if (success) {
+            toast(message)
             setTimeout(() => {
                 navigate("/login")
-            }, 5000)
+            }, 3000)
             setState("")
         }
-        else {
-            toast(user.message)
+        if (isError) {
+            toast(message)
             setState("")
         }
-    }, [user])
+    }, [success, isError])
 
     const dispatch = useDispatch()
     const { register, handleSubmit } = useForm()

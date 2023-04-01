@@ -5,6 +5,7 @@ import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import ForgotPassword from "./pages/forgotpassword/ForgotPassword";
 import ChangePassword from "./pages/changepassword/ChangePassword";
+import ProductsDetail from "./pages/productsdetail/ProductsDetail";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 import Detailbill from "./pages/detailbill/Detailbill";
@@ -21,6 +22,7 @@ export default function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<Home />}></Route>
+          <Route path="/productsdetail/:id" element={<ProductsDetail/>}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
           <Route path="/forgotpassword" element={<ForgotPassword />}></Route>
@@ -33,6 +35,7 @@ export default function App() {
           <Route path="/statusorder" element={<Statusorder />}></Route>
           <Route path="/totalcart" element={<Totalcart />}></Route>
           <Route path="/cartthanks" element={<Cartthanks />}></Route>
+          <Route path="/changepassword/:accessToken" element={<ChangePassword />}></Route>
         </Routes>
       </div>
     </Router>
