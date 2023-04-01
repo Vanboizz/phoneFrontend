@@ -6,6 +6,8 @@ import Register from "./pages/register/Register";
 import ForgotPassword from "./pages/forgotpassword/ForgotPassword";
 import ChangePassword from "./pages/changepassword/ChangePassword";
 import ProductsDetail from "./pages/productsdetail/ProductsDetail";
+import Header from "./components/header/Header";
+import Footer from "./components/footer/Footer";
 
 export default function App() {
   return (
@@ -18,6 +20,9 @@ export default function App() {
           <Route path="/register" element={<Register />}></Route>
           <Route path="/forgotpassword" element={<ForgotPassword />}></Route>
           <Route path="/changepassword/:accessToken" element={<ChangePassword />}></Route>
+
+          <Route path="/header" element={<Header />}></Route>
+          <Route path="/footer" element={<Footer />}></Route>
         </Routes>
       </div>
     </Router>

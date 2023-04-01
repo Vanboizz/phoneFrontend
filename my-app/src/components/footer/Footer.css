@@ -1,0 +1,88 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.wrapper {
+    margin-top: 80px;
+}
+
+.line {
+    background: linear-gradient(-90deg, #36a1ff, #7dc3ff);
+    height: 7px;
+    border-radius: 20px 20px 0px 0px
+}
+
+.content {
+    padding: 0px 100px;
+    display: flex;
+}
+
+.list-1,
+.list-2,
+.list-3 {
+    height: 100%;
+    width: calc(100%/3);
+    padding-top: 30px;
+}
+
+.list-1__tspblack {
+    height: 36px;
+    background-image: url('../../../public/tspblack.png');
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+} 
+
+.list-1__component {
+    margin-top: 15px;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+}
+
+.component__logo {
+    font-size: 26px;
+    margin-right: 5px;
+}
+
+.list-1__component p {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.list-1__component:hover {
+    opacity: 0.6;
+}
+
+.list-2__title,
+.list-3__title {
+    height: 36px;
+    font-size: 30px;
+}
+
+.list-2__title__item {
+    margin-top: 10px;
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+}
+
+.list-2__title__item:hover {
+    opacity: 0.6;
+}
+
+.list-3__title__item {
+    margin-top: 10px;
+    display: inline-block;
+}
+
+.list-3__title__email {
+    text-decoration: none;
+    color: black;
+}
+
+.list-3__title__email:hover {
+    opacity: 0.6;
+}
