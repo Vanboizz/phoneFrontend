@@ -1,7 +1,6 @@
 import React from 'react'
 import "../header/Header.css"
 import { FaSearch } from "react-icons/fa";
-// xoa': font awesome
 
 const Header = () => {
   return (

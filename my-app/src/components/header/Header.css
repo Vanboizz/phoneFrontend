@@ -58,6 +58,10 @@ header .list-option__item {
     border-radius: 10px;
 }
 
+header .list-option__item:hover .option__subnav {
+    display: block;
+}
+
 header .list-option__item-login {
     display: flex;
     flex-direction: column;
@@ -157,21 +161,23 @@ header .option__subnav {
     list-style-type: none;
     background: white;
     border-radius: 3px;
-    box-shadow: 0 0 3px #888888;
+    box-shadow: 0 0 3px rgba(0,0,0,0.3);
+    display: block;
 }
 
 header .option__subnav a {
-    padding: 0px 10px;
+    padding: 0px 20px;
     text-decoration: none;
     color: black;
     font-size: 16px;
 }
 
-header .option__subnav > li:hover {
+header .option__subnav > li {
     
-    /* 
-    background: hsla(0,0%,100%,.2); */
+}
 
+header .option__subnav > li:hover {
+    background-color: rgba(26, 148, 255, 0.4)
 }
 
 
