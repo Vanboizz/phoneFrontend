@@ -1,6 +1,7 @@
 import React from 'react'
 import "../header/Header.css"
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaUserCircle  } from "react-icons/fa";
+import { FiLogOut  } from "react-icons/fi";
 
 const Header = () => {
   return (
@@ -61,8 +62,14 @@ const Header = () => {
           </a>
 
           <ul className='option__subnav'>
-              <li><a href="">My profile</a></li>
-              <li><a href="">Logout</a></li>
+              <li>
+                <FaUserCircle className='subnav-icon-profile'/>
+                <a href="">My profile</a>
+              </li>
+              <li>
+              <FiLogOut className='subnav-icon-logout'/>
+                <a href="">Logout</a>
+                </li>
           </ul>
         </li>
 
