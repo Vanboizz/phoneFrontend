@@ -1,8 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import "../header/Header.css"
 import { FaSearch } from "react-icons/fa";
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from "../feature/user/userSlice"
 
 const Header = () => {
+  const { quantityCart } = useSelector((state) => state.cart);
+  const { accessToken } = useSelector((state) => state.user)
+  const [isShow, setIsShow] = useState(false)
+  const dispatch = useDispatch()
+
+
   return (
     <header>
       <div className="logo">
@@ -39,24 +47,42 @@ const Header = () => {
         <li className='list-option__item'>
           <a className='list-option__option' href=''>
             <div className="option__icon-cart option__cart option_contain-circle">
-              <div className="circle-yellow">0</div>
+              <div className="circle-yellow">{quantityCart}</div>
             </div>
             <p>Cart</p>
           </a>
         </li>
 
         <li className='list-option__item list-option__item-login'>
-
-          <a className='list-option__option list-option__login' href=''>
-            <span className="option__icon-user option__user"></span>
-            <p>Login</p>
-            <div className="option__icon-arrow-user option__phone"></div>
-          </a>
-
-          <ul className='option__subnav'>
-              <li><a href="">My profile</a></li>
-              <li><a href="">Logout</a></li>
-          </ul>
+          {
+            accessToken
+              ?
+              <div>
+                {
+                  <div>
+                    <a className='list-option__option list-option__login' onClick={() => {
+                      setIsShow(!isShow)
+                    }} >
+                      <span className="option__icon-user option__user"></span>
+                      <p>Login</p>
+                      <div className="option__icon-arrow-user option__phone">
+                      </div>
+                    </a>
+                    {
+                      isShow && <ul className='option__subnav'>
+                        <li><a href="">My profile</a></li>
+                        <li><a href="" onClick={() => dispatch(logout())}>Logout</a></li>
+                      </ul>
+                    }
+                  </div>
+                }
+              </div>
+              :
+              <a className='list-option__option list-option__login' href='/login'>
+                <span className="option__icon-user option__user"></span>
+                <p>Login</p>
+              </a>
+          }
 
         </li>
 

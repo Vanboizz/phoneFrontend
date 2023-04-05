@@ -35,7 +35,6 @@ const loginUser = async ({ email, password }) => {
     config
   );
   localStorage.setItem("accessToken", response.data.accessToken);
-  console.log(response.data.accessToken);
   return response.data;
 };
 

@@ -80,7 +80,6 @@ header .list-option {
 header .list-option__option {
     display: flex;
     align-items: center;
-    height: 100%;
     padding: 0px 20px;
     border-radius: 10px;
     text-decoration: none;

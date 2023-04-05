@@ -1,13 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import userService from "./userService";
 
-const accessToken = localStorage.getItem("accessToken")
-  ? localStorage.getItem("accessToken")
-  : null;
+const accessToken = localStorage.getItem("accessToken");
 
 const initialState = {
   user: null,
-  accessToken,
+  accessToken: accessToken ? accessToken : null,
   isError: false,
   success: false,
   isLoading: false,
@@ -63,7 +61,7 @@ export const changePassword = createAsyncThunk(
   "/changepassword/:accessToken",
   async ({ password, retypeNewPassword }, thunkAPI) => {
     try {
-      return userService.changePassword({ password ,retypeNewPassword });
+      return userService.changePassword({ password, retypeNewPassword });
     } catch (error) {
       const message =
         (error.respone && error.respone.data && error.respone.data.message) ||
