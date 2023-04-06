@@ -65,7 +65,7 @@ header .list-option__item:hover .option__subnav {
 header .list-option__item-phone {
     display: flex;
     flex-direction: column;
-    max-width: 120px;
+    max-width: 119px;
 }
 
 header .list-option__item-login {
