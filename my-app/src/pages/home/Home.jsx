@@ -21,7 +21,6 @@ const Home = () => {
         dispatch(getProducts())
     }, [])
 
- 
 
     return (
         <div style={{ marginTop: "32px" }}>

@@ -12,9 +12,9 @@ const initialState = {
 
 export const addCart = createAsyncThunk(
   "/addcart",
-  async ({ idproducts, accessToken }, thunkAPI) => {
+  async ({ idproducts, idsize, idcolor, accessToken }, thunkAPI) => {
     try {
-      return cartService.addCart(idproducts, accessToken);
+      return cartService.addCart(idproducts, idsize, idcolor, accessToken);
     } catch (error) {
       const message =
         (error.respone && error.respone.data && error.respone.data.message) ||

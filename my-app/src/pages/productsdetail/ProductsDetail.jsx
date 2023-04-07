@@ -83,10 +83,14 @@ const ProductsDetail = () => {
     const [data, setData] = useState(product.size[0].color)
     const [idSize, setIdSize] = useState(product.size[0].idsize);
     const [idColor, setIdColor] = useState(product.size[0].color[0].idcolor);
+
     const [priceSize, setPriceSize] = useState(product.size[0].pricesize)
     const [nameSize, setNameSize] = useState(product.size[0].namesize)
+    const [idProducts, setIdProducts] = useState(product.idproducts)
 
     const { accessToken } = useSelector((state) => state.user)
+    const { cart } = useSelector(state => state.cart)
+    console.log(cart);
 
     const dispatch = useDispatch()
 
@@ -113,7 +117,7 @@ const ProductsDetail = () => {
     }, [selectedProvince])
 
     const handleClick = () => {
-        dispatch(addCart({ idproducts: product.idproducts, accessToken }))
+        dispatch(addCart({ idproducts: idProducts, idcolor: idColor, idsize: idSize, accessToken }))
     }
 
 

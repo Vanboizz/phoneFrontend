@@ -1,10 +1,12 @@
 import axios from "axios";
 
-const addCart = async (idproducts, accessToken) => {
+const addCart = async (idproducts, idsize, idcolor, accessToken) => {
   const response = await axios.post(
     "http://localhost:8000/cart/addcart",
     {
       idproducts,
+      idsize,
+      idcolor,
     },
     {
       headers: {
