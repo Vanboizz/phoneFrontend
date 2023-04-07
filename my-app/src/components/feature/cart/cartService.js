@@ -27,9 +27,22 @@ const getCart = async (accessToken) => {
   return response.data;
 };
 
+const deleteCart = async (idsize, idcolor, accessToken) => {
+  const respone = await axios.delete(
+    `http://localhost:8000/cart/deletecart/${idsize}/${idcolor}`,
+    {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    }
+  );
+  return respone.data;
+};
+
 const cartService = {
   addCart,
   getCart,
+  deleteCart,
 };
 
 export default cartService;

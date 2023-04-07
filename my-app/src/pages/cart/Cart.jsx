@@ -7,13 +7,18 @@ import { useState } from 'react';
 import Templatecart from '../../components/templatecart/Templatecart';
 import Header from '../../../src/components/header/Header'
 import Totalcart from '../../components/totalcart/Totalcart';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteCart } from '../../components/feature/cart/cartSlice';
+
 
 
 const Cart = () => {
     const [count, setQuantity] = useState(1)
-    const { cart } = useSelector(state => state.cart)
-    console.log(cart);
+    const { cart, success } = useSelector(state => state.cart)
+    const { accessToken } = useSelector((state) => state.user)
+
+    const dispatch = useDispatch()
+
     return (
         <>
             <Header></Header>
@@ -21,6 +26,7 @@ const Cart = () => {
                 <div className="product">
                     {
                         cart ? cart.map((value, index) => (
+
                             <div className='product__item' key={index}>
                                 <img src={value.image[0]} alt="" className='item__img' />
                                 <div className='item__info'>
@@ -28,13 +34,17 @@ const Cart = () => {
                                     <div className='info__line-2'>
                                         <p className='info__sale-price'>{(value.size[0].pricesize * value.discount) / 100}</p>
                                         <div className='change-quantity'>
-                                            <button onClick={() => {
-                                                if (count > 1) setQuantity(count - 1)
+                                            <button onChange={(e) => {
+                                                setQuantity(e.target.value)
+                                            }} onClick={() => {
+                                                if (count > 1) setQuantity(value.quantity - 1)
                                             }} className='contain-minus'>
                                                 <AiOutlineMinus className='minus' />
                                             </button>
-                                            <input type="text" readonly="readonly" value={value.quantity} />
-                                            <button onClick={() => setQuantity(count + 1)} className='contain-plus'>
+                                            <input type="text" value={value.quantity} onChange={() => { }} />
+                                            <button onChange={(e) => {
+                                                setQuantity(e.target.value)
+                                            }} onClick={() => setQuantity(value.quantity + 1)} className='contain-plus'>
                                                 <AiOutlinePlus className='plus' />
                                             </button>
                                         </div>
@@ -43,9 +53,13 @@ const Cart = () => {
                                         <p className='info__sale-regular'>{value.size[0].pricesize}₫</p>
                                         <p className='sales'> {value.discount}%</p>
                                     </div>
-                                    <GrFormClose className='info__icon' />
+                                    <GrFormClose className='info__icon' onClick={() => {
+                                        dispatch(deleteCart({ idsize: value.size[0].idsize, idcolor: value.size[0].color[0].idcolor, accessToken }))
+                                        window.location.reload()
+                                    }} />
                                 </div>
                             </div>
+
                         ))
                             : null
                     }

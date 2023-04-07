@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from "../feature/user/userSlice"
 
 const Header = () => {
-  const { quantityCart } = useSelector((state) => state.cart);
+  const { cart, quantityCart } = useSelector((state) => state.cart);
   const { accessToken } = useSelector((state) => state.user)
   const [isShow, setIsShow] = useState(false)
   const dispatch = useDispatch()
@@ -13,7 +13,7 @@ const Header = () => {
 
   return (
     <header>
-      <div className="logo">
+      <div className="logo" onClick={() => window.location.href = "/"}>
       </div>
 
       <div className="search">
@@ -24,7 +24,7 @@ const Header = () => {
 
       <ul className="list-option">
         <li className='list-option__item'>
-          <a className='list-option__option' href=''>
+          <a className='list-option__option' href='/'>
             <div className="option__icon-home option__home"></div>
             <p>Home</p>
           </a>

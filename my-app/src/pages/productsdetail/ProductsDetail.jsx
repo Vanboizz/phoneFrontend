@@ -14,15 +14,15 @@ import "swiper/css/thumbs";
 
 // import required modules
 import { FreeMode, Navigation, Thumbs } from "swiper";
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 import axios from 'axios'
 import Relative from '../../components/relative/Relative';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCart } from "../../components/feature/cart/cartSlice"
 import Header from "../../components/header/Header"
-import jwt from "jwt-decode"
-
+import { ToastContainer, toast } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
 
 const addressData = [
     {
@@ -83,15 +83,10 @@ const ProductsDetail = () => {
     const [data, setData] = useState(product.size[0].color)
     const [idSize, setIdSize] = useState(product.size[0].idsize);
     const [idColor, setIdColor] = useState(product.size[0].color[0].idcolor);
-
     const [priceSize, setPriceSize] = useState(product.size[0].pricesize)
     const [nameSize, setNameSize] = useState(product.size[0].namesize)
     const [idProducts, setIdProducts] = useState(product.idproducts)
-
     const { accessToken } = useSelector((state) => state.user)
-    const { cart } = useSelector(state => state.cart)
-    console.log(cart);
-
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -118,8 +113,8 @@ const ProductsDetail = () => {
 
     const handleClick = () => {
         dispatch(addCart({ idproducts: idProducts, idcolor: idColor, idsize: idSize, accessToken }))
+        toast("Add to cart successfully")
     }
-
 
     return (
         <>
@@ -395,7 +390,10 @@ const ProductsDetail = () => {
                     <hr />
                 </div>
                 <Relative />
-            </div></>
+            </div>
+            <ToastContainer />
+
+        </>
 
     )
 }
