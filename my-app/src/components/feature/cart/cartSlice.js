@@ -55,6 +55,36 @@ export const deleteCart = createAsyncThunk(
   }
 );
 
+export const increaseQuantity = createAsyncThunk(
+  "/increasequantity",
+  async ({ idsize, idcolor, accessToken }, thunkAPI) => {
+    try {
+      return cartService.increaseQuantity(idsize, idcolor, accessToken);
+    } catch (error) {
+      const message =
+        (error.respone && error.respone.data && error.respone.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const decreaseQuantity = createAsyncThunk(
+  "/decreasequantity",
+  async ({ idsize, idcolor, accessToken }, thunkAPI) => {
+    try {
+      return cartService.decreaseQuantity(idsize, idcolor, accessToken);
+    } catch (error) {
+      const message =
+        (error.respone && error.respone.data && error.respone.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
@@ -63,6 +93,50 @@ export const cartSlice = createSlice({
       state.success = false;
       state.error = false;
       state.message = "";
+    },
+    increaseItemQuantity: (state, action) => {
+      state.cart = state.cart.map((item) => {
+        if (item.size[0].color[0].idcolor === action.payload) {
+          return {
+            ...item,
+            quantity: item.quantity + 1,
+          };
+        } else {
+          return item;
+        }
+      });
+      state.totalPriceCart = state.cart.reduce(
+        (prev, curr) =>
+          prev +
+          curr.quantity * ((curr.size[0].pricesize * curr.discount) / 100),
+        0
+      );
+      state.quantityCart = state.cart.reduce(
+        (prev, curr) => prev + curr.quantity,
+        0
+      );
+    },
+    decreaseItemQuantity: (state, action) => {
+      state.cart = state.cart.map((item) => {
+        if (item.size[0].color[0].idcolor === action.payload) {
+          return {
+            ...item,
+            quantity: item.quantity - 1,
+          };
+        } else {
+          return item;
+        }
+      });
+      state.totalPriceCart = state.cart.reduce(
+        (prev, curr) =>
+          prev +
+          curr.quantity * ((curr.size[0].pricesize * curr.discount) / 100),
+        0
+      );
+      state.quantityCart = state.cart.reduce(
+        (prev, curr) => prev + curr.quantity,
+        0
+      );
     },
   },
   extraReducers: (builder) => {
@@ -126,9 +200,34 @@ export const cartSlice = createSlice({
       })
       .addCase(deleteCart.rejected, (state) => {
         state.error = true;
+      })
+      //increase quantity
+      .addCase(increaseQuantity.pending, (state) => {
+        state.success = false;
+        state.error = false;
+        state.message = "";
+      })
+      .addCase(increaseQuantity.fulfilled, (state, action) => {
+        state.success = true;
+      })
+      .addCase(increaseQuantity, (state, action) => {
+        state.error = true;
+      })
+      //decrease quantity
+      .addCase(decreaseQuantity.pending, (state) => {
+        state.success = false;
+        state.error = false;
+        state.message = "";
+      })
+      .addCase(decreaseQuantity.fulfilled, (state, action) => {
+        state.success = true;
+      })
+      .addCase(decreaseQuantity.rejected, (state, action) => {
+        state.error = true;
       });
   },
 });
 
-export const { reset } = cartSlice.actions;
+export const { reset, increaseItemQuantity, decreaseItemQuantity } =
+  cartSlice.actions;
 export default cartSlice.reducer;

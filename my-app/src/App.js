@@ -17,6 +17,7 @@ import { getCart } from "./components/feature/cart/cartSlice";
 
 export default function App() {
   const { accessToken } = useSelector((state) => state.user);
+  const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   useEffect(() => {
     if (accessToken) {

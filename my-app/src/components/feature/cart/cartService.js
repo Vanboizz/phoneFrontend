@@ -39,10 +39,43 @@ const deleteCart = async (idsize, idcolor, accessToken) => {
   return respone.data;
 };
 
+const increaseQuantity = async (idsize, idcolor, accessToken) => {
+  const respone = await axios.post(
+    "http://localhost:8000/cart/increasequantity",
+    {
+      idsize,
+      idcolor,
+    },
+    {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    }
+  );
+  return respone.data;
+};
+
+const decreaseQuantity = async (idsize, idcolor, accessToken) => {
+  const respone = await axios.post(
+    "http://localhost:8000/cart/decreasequantity",
+    {
+      idsize,
+      idcolor,
+    },
+    {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    }
+  );
+  return respone.data;
+};
 const cartService = {
   addCart,
   getCart,
   deleteCart,
+  increaseQuantity,
+  decreaseQuantity,
 };
 
 export default cartService;
