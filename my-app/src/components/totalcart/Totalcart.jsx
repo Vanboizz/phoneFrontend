@@ -2,11 +2,9 @@ import React from 'react'
 import "../totalcart/Totalcart.css"
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 
 const Totalcart = ({ text__btn }) => {
     const { totalPriceCart } = useSelector(state => state.cart)
-    const navigate = useNavigate()
 
     return (
         <div className='total-cart'>
@@ -15,10 +13,8 @@ const Totalcart = ({ text__btn }) => {
                 <p className='title__price'>{totalPriceCart} ₫</p>
             </div>
 
-            <div className='total-cart__btn-submit'>
-                <button className='btn-submit__order' onClick={() => {
-                    navigate("/orderinfo")
-                }}>
+            <div className='total-cart__btn-submit' >
+                <button className='btn-submit__order' type='submit'>
                     {text__btn}
                 </button>
 
@@ -31,7 +27,7 @@ const Totalcart = ({ text__btn }) => {
 }
 
 Totalcart.propTypes = {
-    text__btn: PropTypes.string
+    text__btn: PropTypes.string,
 };
 
 export default Totalcart

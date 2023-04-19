@@ -17,13 +17,13 @@ import { getCart } from "./components/feature/cart/cartSlice";
 
 export default function App() {
   const { accessToken } = useSelector((state) => state.user);
-  const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   useEffect(() => {
     if (accessToken) {
       dispatch(getCart({ accessToken }));
     }
   }, [accessToken]);
+
   return (
     <Router>
       <div className="App">
@@ -40,7 +40,6 @@ export default function App() {
             path="/changepassword/:accessToken"
             element={<ChangePassword />}
           ></Route>
-          <Route path="/templatecart" element={<Templatecart />}></Route>
           <Route path="/orderinfo" element={<Orderinfo />}></Route>
           <Route path="/detailbill" element={<Detailbill />}></Route>
           <Route path="/cart" element={<Cart />}></Route>

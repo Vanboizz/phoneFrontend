@@ -87,7 +87,9 @@ const ProductsDetail = () => {
     const [nameSize, setNameSize] = useState(product.size[0].namesize)
     const [idProducts, setIdProducts] = useState(product.idproducts)
     const { accessToken } = useSelector((state) => state.user)
+    const { success } = useSelector((state) => state.cart)
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     useEffect(() => {
         axios.get("https://provinces.open-api.vn/api/p/")
@@ -114,6 +116,14 @@ const ProductsDetail = () => {
     const handleClick = () => {
         dispatch(addCart({ idproducts: idProducts, idcolor: idColor, idsize: idSize, accessToken }))
         toast("Add to cart successfully")
+    }
+
+    const handleBuyNow = () => {
+        dispatch(addCart({ idproducts: idProducts, idcolor: idColor, idsize: idSize, accessToken }))
+        if (success) {
+            navigate("/cart")
+            window.location.reload()
+        }
     }
 
     return (
@@ -260,7 +270,7 @@ const ProductsDetail = () => {
                         </div>
                         <div className='format-button'>
                             <div >
-                                <button>BUY NOW</button>
+                                <button onClick={handleBuyNow}>BUY NOW</button>
                             </div>
                             <button className='cart' onClick={handleClick}>
                                 <FaCartPlus style={{ fontSize: "1.2rem" }} />

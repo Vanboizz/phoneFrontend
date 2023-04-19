@@ -14,9 +14,14 @@ const initialState = {
 
 export const registerUser = createAsyncThunk(
   "/register",
-  async ({ fullname, email, password }, thunkAPI) => {
+  async ({ fullname, phonenumber, email, password }, thunkAPI) => {
     try {
-      return userService.registerUser({ fullname, email, password });
+      return userService.registerUser({
+        fullname,
+        phonenumber,
+        email,
+        password,
+      });
     } catch (error) {
       const message =
         (error.respone && error.respone.data && error.respone.data.message) ||
@@ -62,6 +67,46 @@ export const changePassword = createAsyncThunk(
   async ({ password, retypeNewPassword }, thunkAPI) => {
     try {
       return userService.changePassword({ password, retypeNewPassword });
+    } catch (error) {
+      const message =
+        (error.respone && error.respone.data && error.respone.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getUser = createAsyncThunk(
+  "/getuser",
+  async ({ accessToken }, thunkAPI) => {
+    try {
+      return userService.getUser({ accessToken });
+    } catch (error) {
+      const message =
+        (error.respone && error.respone.data && error.respone.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  "/updateuser",
+  async (
+    { phonenumber, province, district, wards, address, accessToken },
+    thunkAPI
+  ) => {
+    try {
+      // return userService.updateUser({
+      //   phonenumber,
+      //   province,
+      //   district,
+      //   wards,
+      //   address,
+      //   accessToken,
+      // });
     } catch (error) {
       const message =
         (error.respone && error.respone.data && error.respone.data.message) ||
@@ -146,6 +191,27 @@ export const userSlice = createSlice({
       })
       .addCase(changePassword.rejected, (state, action) => {
         state.isLoading = false;
+        state.isError = true;
+      })
+      //get user
+      .addCase(getUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.success = true;
+        state.user = action.payload;
+      })
+      .addCase(getUser.rejected, (state, action) => {
+        state.isError = true;
+      })
+      //update user
+      .addCase(updateUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.success = true;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
         state.isError = true;
       });
   },

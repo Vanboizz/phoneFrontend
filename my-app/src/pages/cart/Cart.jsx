@@ -8,6 +8,7 @@ import Header from '../../../src/components/header/Header'
 import Totalcart from '../../components/totalcart/Totalcart';
 import { useDispatch, useSelector } from 'react-redux';
 import { decreaseItemQuantity, decreaseQuantity, deleteCart, increaseItemQuantity, increaseQuantity } from '../../components/feature/cart/cartSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -15,7 +16,10 @@ const Cart = () => {
     const { cart } = useSelector(state => state.cart)
     const { accessToken } = useSelector((state) => state.user)
     const dispatch = useDispatch()
-
+    const navigate = useNavigate()
+    const handle_order = () => {
+        navigate("/orderinfo")
+    }
     return (
         <>
             <Header></Header>
@@ -65,7 +69,7 @@ const Cart = () => {
 
                 </div>
             </Templatecart >
-            <Totalcart text__btn='PROCEED TO ORDER' />
+            <Totalcart text__btn='PROCEED TO ORDER' handle_order={handle_order} />
         </>
     )
 }

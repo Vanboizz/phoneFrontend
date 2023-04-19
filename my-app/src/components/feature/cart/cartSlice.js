@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import cartService from "./cartService";
-
+const dataOrder = localStorage.getItem("dataOrder");
 const initialState = {
   cart: [],
+  dataOrder: dataOrder ? dataOrder : null,
   quantityCart: 0,
   totalPriceCart: 0,
   success: false,
@@ -138,6 +139,9 @@ export const cartSlice = createSlice({
         0
       );
     },
+    setDataOrder: (state, action) => {
+      state.dataOrder = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -228,6 +232,10 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { reset, increaseItemQuantity, decreaseItemQuantity } =
-  cartSlice.actions;
+export const {
+  reset,
+  increaseItemQuantity,
+  decreaseItemQuantity,
+  setDataOrder,
+} = cartSlice.actions;
 export default cartSlice.reducer;
