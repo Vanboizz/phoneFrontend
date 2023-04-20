@@ -86,6 +86,22 @@ export const decreaseQuantity = createAsyncThunk(
   }
 );
 
+export const deleteAllCart = createAsyncThunk(
+  "/deleteallcart",
+  async ({ accessToken }, thunkAPI) => {
+    try {
+      console.log(accessToken);
+      return cartService.deleteAllCart(accessToken);
+    } catch (error) {
+      const message =
+        (error.respone && error.respone.data && error.respone.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
@@ -227,6 +243,18 @@ export const cartSlice = createSlice({
         state.success = true;
       })
       .addCase(decreaseQuantity.rejected, (state, action) => {
+        state.error = true;
+      })
+      //delete all cart
+      .addCase(deleteAllCart.pending, (state) => {
+        state.success = false;
+        state.error = false;
+        state.message = "";
+      })
+      .addCase(deleteAllCart.fulfilled, (state, action) => {
+        state.success = true;
+      })
+      .addCase(deleteAllCart.rejected, (state, action) => {
         state.error = true;
       });
   },

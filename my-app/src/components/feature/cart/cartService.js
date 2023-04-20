@@ -70,12 +70,26 @@ const decreaseQuantity = async (idsize, idcolor, accessToken) => {
   );
   return respone.data;
 };
+
+const deleteAllCart = async (accessToken) => {
+  const respone = await axios.delete(
+    "http://localhost:8000/cart/deleteallcart",
+    {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    }
+  );
+  return respone.data;
+};
+
 const cartService = {
   addCart,
   getCart,
   deleteCart,
   increaseQuantity,
   decreaseQuantity,
+  deleteAllCart,
 };
 
 export default cartService;

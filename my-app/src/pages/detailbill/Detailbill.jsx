@@ -6,15 +6,41 @@ import Statusorder from '../../components/statusorder/Statusorder'
 import Totalcart from '../../components/totalcart/Totalcart'
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../../components/feature/user/userSlice';
+import axios from 'axios';
+import { useNavigate } from "react-router-dom"
+import { deleteAllCart } from '../../components/feature/cart/cartSlice';
 const Detailbill = () => {
     const { accessToken } = useSelector(state => state.user)
     const { totalPriceCart } = useSelector(state => state.cart)
-
+    const navigate = useNavigate()
     const data = JSON.parse(localStorage.getItem("dataOrder"))
     const dispatch = useDispatch()
+
     useEffect(() => {
         dispatch(getUser({ accessToken }))
     }, [])
+
+    const handle_checkout = () => {
+        axios.post("http://localhost:8000/invoice/checkout", {
+            fullname: data.fullname,
+            email: data.email,
+            address: data.detailaddress + " " + data.wards + " " + data.district + " " + data.province,
+            phonenumber: data.phonenumber,
+            totalprice: totalPriceCart
+
+        }, {
+            headers: {
+                Authorization: "Bearer " + accessToken,
+            }
+        })
+            .then(response => console.log(response.data))
+            .then(() => dispatch(deleteAllCart({ accessToken })))
+            .then(() => {
+                navigate("/")
+                window.location.reload()
+            })
+            .catch(error => console.log(error))
+    }
 
     return (
         <>
@@ -58,8 +84,8 @@ const Detailbill = () => {
                         </div>
                     </div>
                 </div>
+                <Totalcart text__btn='CONTINUES' handle__checkout={handle_checkout} />
             </Templatecart>
-            <Totalcart text__btn='CONTINUES' />
         </>
     )
 }

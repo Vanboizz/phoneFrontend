@@ -92,31 +92,6 @@ export const getUser = createAsyncThunk(
   }
 );
 
-export const updateUser = createAsyncThunk(
-  "/updateuser",
-  async (
-    { phonenumber, province, district, wards, address, accessToken },
-    thunkAPI
-  ) => {
-    try {
-      // return userService.updateUser({
-      //   phonenumber,
-      //   province,
-      //   district,
-      //   wards,
-      //   address,
-      //   accessToken,
-      // });
-    } catch (error) {
-      const message =
-        (error.respone && error.respone.data && error.respone.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
 export const userSlice = createSlice({
   name: "user",
   initialState,
@@ -202,16 +177,6 @@ export const userSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(getUser.rejected, (state, action) => {
-        state.isError = true;
-      })
-      //update user
-      .addCase(updateUser.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(updateUser.fulfilled, (state, action) => {
-        state.success = true;
-      })
-      .addCase(updateUser.rejected, (state, action) => {
         state.isError = true;
       });
   },

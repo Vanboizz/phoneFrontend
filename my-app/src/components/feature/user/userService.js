@@ -90,34 +90,12 @@ const getUser = async ({ accessToken }) => {
   return response.data;
 };
 
-const updateUser = async ({
-  phonenumber,
-  province,
-  district,
-  wards,
-  address,
-  accessToken,
-}) => {
-  // const respone = await axios.post(
-  //   "http://localhost:8000/invoice/checkout",
-  //   { phonenumber, province, district, wards, address },
-  //   {
-  //     headers: {
-  //       Authorization: "Bearer " + accessToken,
-  //     },
-  //   }
-  // );
-  // console.log(respone.data);
-  // return respone.data;
-};
-
 const userService = {
   registerUser,
   loginUser,
   forgotPassword,
   changePassword,
   getUser,
-  updateUser,
 };
 
 export default userService;

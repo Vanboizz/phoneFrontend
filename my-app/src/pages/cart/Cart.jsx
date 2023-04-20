@@ -69,7 +69,7 @@ const Cart = () => {
 
                 </div>
             </Templatecart >
-            <Totalcart text__btn='PROCEED TO ORDER' handle_order={handle_order} />
+            <Totalcart text__btn='PROCEED TO ORDER' handle__checkout={handle_order} />
         </>
     )
 }
