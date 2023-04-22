@@ -88,7 +88,7 @@ const Orderinfo = () => {
                         <div className="delivery-method__address">
 
                             <div className='address__row mg-bt-5'>
-                                <select name="pets" id="pet-select" className='row__province row__common' 
+                                <select name="pets" id="row__province" className=' row__common' 
                                         value={selectedProvince} onChange={(e) => setSelectedProvince(e.target.value)}>
                                     <option value="">--Province--</option>
                                     {
@@ -98,7 +98,7 @@ const Orderinfo = () => {
                                     }
                                 </select>
 
-                                <select name="pets" id="pet-select" className='row__district row__common' 
+                                <select name="pets" id="row__district" className=' row__common' 
                                         value={selectedDistrict} onChange={(e) => setSelectedDistrict(e.target.value)}>
                                     <option value="">--District--</option>
                                     {
@@ -110,7 +110,7 @@ const Orderinfo = () => {
                             </div>
 
                             <div className='address__row'>
-                                <select name="pets" id="pet-select" className='row__wards row__common' 
+                                <select name="pets" id="row__wards" className=' row__common' 
                                         value={selectedWard} onChange={(e) => setSelectedWard(e.target.value)}>
                                     <option value="">--Wards--</option>
                                     {

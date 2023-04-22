@@ -33,7 +33,7 @@ const Cart = () => {
                                         <AiOutlineMinus className='minus' />
                                     </button>
 
-                                    <input type="text" readonly="readonly" value={count} />
+                                    <input type="text" readOnly="readonly" value={count} />
 
                                     <button onClick={() => setQuantity(count + 1)} className='contain-plus'>
                                         <AiOutlinePlus className='plus' />
@@ -69,7 +69,7 @@ const Cart = () => {
                                     }} className='contain-minus'>
                                         <AiOutlineMinus className='minus' />
                                     </button>
-                                    <input type="text" readonly="readonly" value={count} />
+                                    <input type="text" readOnly="readonly" value={count} />
                                     <button onClick={() => setQuantity(count + 1)} className='contain-plus'>
                                         <AiOutlinePlus className='plus' />
                                     </button>
@@ -102,7 +102,7 @@ const Cart = () => {
                                     }} className='contain-minus'>
                                         <AiOutlineMinus className='minus' />
                                     </button>
-                                    <input type="text" readonly="readonly" value={count} />
+                                    <input type="text" readOnly="readonly" value={count} />
                                     <button onClick={() => setQuantity(count + 1)} className='contain-plus'>
                                         <AiOutlinePlus className='plus' />
                                     </button>

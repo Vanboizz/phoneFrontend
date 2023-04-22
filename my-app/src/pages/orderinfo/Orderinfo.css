@@ -93,11 +93,12 @@
     height: 20px;
 }
 
-.row__province {
+#row__province,
+#row__wards {
     margin-right: 8px;
 }
 
-.row__district {
+#row__district {
     margin-left: 8px;
 }
 
@@ -108,10 +109,6 @@
     font-size: 17px;
 }
 
-.row__wards {
-    margin-right: 8px;
-}
-
 .detail__input {
     margin-left: 8px;
     width: 50%;
@@ -119,14 +116,14 @@
     background-color: white;
     padding: 0px 15px;
     border-radius: 10px;
-    font-size: 17px;
+    font-size: 16px;
 }
 
 .mg-bt-5 {
     margin-bottom: 7px;
 }
 
-input[type='radio']:checked:before {
+.delivery-method__choose input[type='radio']:checked:before {
     width: 14px;
     height: 14px;
     border-radius: 15px;
@@ -141,7 +138,7 @@ input[type='radio']:checked:before {
 }
 
 
-input[type='radio']:checked:after {
+.delivery-method__choose input[type='radio']:checked:after {
     width: 10px;
     height: 10px;
     border-radius: 15px;
@@ -189,11 +186,12 @@ select.row__common:focus {
     outline: 0;
 }
 
-select {
+.address__row select {
     /* styling */
     font-size: 16px;
     line-height: 1.5em;
     padding: 0.5em 3.5em 0.5em 1em;
+    color: #808080;
     /* reset */
     margin: 0;
     -webkit-box-sizing: border-box;

@@ -14,6 +14,7 @@ import Templatecart from "./components/templatecart/Templatecart";
 import Totalcart from "./components/totalcart/Totalcart";
 import Orderinfo from "./pages/orderinfo/Orderinfo";
 import Cartthanks from "./pages/cartthanks/Cartthanks";
+import Profile from "./pages/profile/Profile";
 
 export default function App() {
   return (
@@ -33,6 +34,8 @@ export default function App() {
           <Route path="/statusorder" element={<Statusorder />}></Route>
           <Route path="/totalcart" element={<Totalcart />}></Route>
           <Route path="/cartthanks" element={<Cartthanks />}></Route>
+
+          <Route path="/profile" element={<Profile />}></Route>
         </Routes>
       </div>
     </Router>
