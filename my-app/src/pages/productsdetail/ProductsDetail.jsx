@@ -80,9 +80,11 @@ const ProductsDetail = () => {
     const [isMore, setIsMore] = useState(false)
     const location = useLocation()
     const product = location.state.product
+    // console.log(product);
     const [data, setData] = useState(product.size[0].color)
     const [idSize, setIdSize] = useState(product.size[0].idsize);
     const [idColor, setIdColor] = useState(product.size[0].color[0].idcolor);
+    const [idImage, setIdImage] = useState(product.image[0].idimage)
     const [priceSize, setPriceSize] = useState(product.size[0].pricesize)
     const [nameSize, setNameSize] = useState(product.size[0].namesize)
     const [idProducts, setIdProducts] = useState(product.idproducts)
@@ -114,12 +116,12 @@ const ProductsDetail = () => {
     }, [selectedProvince])
 
     const handleClick = () => {
-        dispatch(addCart({ idproducts: idProducts, idcolor: idColor, idsize: idSize, accessToken }))
+        dispatch(addCart({ idproducts: idProducts, idsize: idSize, idcolor: idColor, idimage: idImage, accessToken }))
         toast("Add to cart successfully")
     }
 
     const handleBuyNow = () => {
-        dispatch(addCart({ idproducts: idProducts, idcolor: idColor, idsize: idSize, accessToken }))
+        dispatch(addCart({ idproducts: idProducts, idsize: idSize, idcolor: idColor, idimage: idImage, accessToken }))
         if (success) {
             navigate("/cart")
             window.location.reload()
@@ -154,7 +156,7 @@ const ProductsDetail = () => {
                                 {
                                     product ? (product.image.map((value, index) => (
                                         <SwiperSlide key={index}>
-                                            <img src={value} />
+                                            <img src={value.avt} />
                                         </SwiperSlide>
                                     ))) : null
                                 }
@@ -173,7 +175,7 @@ const ProductsDetail = () => {
                                 {
                                     product ? (product.image.map((value, index) => (
                                         <SwiperSlide key={index}>
-                                            <img style={{ width: "100%", height: "100%" }} src={value} />
+                                            <img style={{ width: "100%", height: "100%" }} src={value.avt} />
                                         </SwiperSlide>
                                     ))) : null
                                 }
@@ -247,9 +249,13 @@ const ProductsDetail = () => {
                                                     }
                                                     {item.namecolor}
                                                 </p>
-                                                <p className='price'>
-                                                    {(7490000 * product.discount) / 100}&nbsp;đ
-                                                </p>
+                                                {
+                                                    product ? product.size.map((value, index) => (
+                                                        <p className='price' key={index}>
+                                                            {(value.pricesize * product.discount) / 100}&nbsp;đ
+                                                        </p>
+                                                    )) : null
+                                                }
                                             </div>
                                             <input
                                                 type="radio"

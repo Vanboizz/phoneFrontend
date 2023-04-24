@@ -243,13 +243,14 @@
   display: flex;
   gap: 0.8rem;
   position: relative;
+  flex-wrap: wrap;
 }
 
 .product-detail .item-linked {
   border: 1px solid #d1d5db;
   border-radius: 5px;
   cursor: pointer;
-  width: calc(100% / 3);
+  width: calc(93% / 3);
   justify-content: center;
   height: 50px;
 }

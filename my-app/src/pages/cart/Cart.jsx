@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
     const { cart } = useSelector(state => state.cart)
+    console.log(cart);
     const { accessToken } = useSelector((state) => state.user)
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -29,7 +30,7 @@ const Cart = () => {
                         cart ? cart.map((value, index) => (
 
                             <div className='product__item' key={index}>
-                                <img src={value.image[0]} alt="" className='item__img' />
+                                <img src={value.image[0].avt} alt="" className='item__img' />
                                 <div className='item__info'>
                                     <a className='info__name-pro'>{value.nameproducts}<span>{value.size[0].namesize}({value.size[0].color[0].namecolor})</span></a>
                                     <div className='info__line-2'>
