@@ -1,7 +1,7 @@
 import axios from "axios";
 
 //Register
-const registerUser = async ({ fullname, email, password }) => {
+const registerUser = async ({ fullname, phonenumber, email, password }) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -11,6 +11,7 @@ const registerUser = async ({ fullname, email, password }) => {
     "http://localhost:8000/auth/user/register",
     {
       fullname: fullname,
+      phonenumber: phonenumber,
       email: email,
       password: password,
     },
@@ -35,7 +36,6 @@ const loginUser = async ({ email, password }) => {
     config
   );
   localStorage.setItem("accessToken", response.data.accessToken);
-  console.log(response.data.accessToken);
   return response.data;
 };
 
@@ -56,6 +56,7 @@ const forgotPassword = async ({ email }) => {
   return response.data;
 };
 
+//change password
 const changePassword = async ({ password, retypeNewPassword }) => {
   const config = {
     headers: {
@@ -78,11 +79,23 @@ const changePassword = async ({ password, retypeNewPassword }) => {
     return response.data;
   }
 };
+
+//get user
+const getUser = async ({ accessToken }) => {
+  const response = await axios.get("http://localhost:8000/auth/user/getuser", {
+    headers: {
+      Authorization: "Bearer " + accessToken,
+    },
+  });
+  return response.data;
+};
+
 const userService = {
   registerUser,
   loginUser,
   forgotPassword,
   changePassword,
+  getUser,
 };
 
 export default userService;

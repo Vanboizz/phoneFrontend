@@ -5,19 +5,19 @@ import PropTypes from 'prop-types'
 
 const Templatecart = ({ text__my, children }) => {
 
-    return (  
-            <div className='template-cart'>
-                <h1 className='template-cart__title'>
-                    {text__my}
-                    <a className='title__back' href=''>
-                        <IoIosArrowBack className='title__icon' />
-                        <p>Back</p>
-                    </a>
-                </h1>
+    return (
+        <div className='template-cart'>
+            <h1 className='template-cart__title'>
+                {text__my}
+                <a className='title__back' onClick={() => window.location.replace("/")}>
+                    <IoIosArrowBack className='title__icon' />
+                    <p>Back</p>
+                </a>
+            </h1>
 
-                {children}
+            {children}
 
-            </div>             
+        </div>
     )
 }
 

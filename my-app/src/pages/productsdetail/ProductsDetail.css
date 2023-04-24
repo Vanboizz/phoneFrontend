@@ -1,5 +1,5 @@
 .product-detail {
-  margin: 0 100px;
+  margin: 80px 100px;
 }
 
 .product-detail .format-child {
@@ -88,14 +88,8 @@
   border: 1px solid #d1d5db;
   border-radius: 0.5rem;
   cursor: pointer;
-  height: 50px;
   overflow: hidden;
   width: 50px;
-}
-
-.product-detail .swiper-free-mode > .swiper-wrapper {
-  display: flex;
-  justify-content: space-around;
 }
 
 .product-detail .mySwiper .swiper-slide-thumb-active {
@@ -249,13 +243,14 @@
   display: flex;
   gap: 0.8rem;
   position: relative;
+  flex-wrap: wrap;
 }
 
 .product-detail .item-linked {
   border: 1px solid #d1d5db;
   border-radius: 5px;
   cursor: pointer;
-  width: calc(100% / 3);
+  width: calc(93% / 3);
   justify-content: center;
   height: 50px;
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getProducts } from '../../components/feature/products/productsSlice'
 import Slider from '../../components/slider/Slider'
@@ -10,32 +10,39 @@ import "../home/Home.css"
 import "swiper/css/navigation";
 import { Grid, Navigation } from "swiper"
 import AboutUs from '../../components/aboutus/AboutUs'
-import { NavLink, Link } from "react-router-dom"
-import { logout } from '../../components/feature/user/userSlice'
+import { Link } from "react-router-dom"
+import Header from "../../components/header/Header"
+import Footer from "../../components/footer/Footer"
+import axios from 'axios'
 const Home = () => {
     const products = useSelector((state) => state.products)
+    const [arrray, setArrray] = useState([])
+    console.log(arrray);
+    const { accessToken } = useSelector(state => state.user)
 
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(getProducts())
     }, [])
 
-    const { user } = useSelector(state => state.user)
+
+    const getCheckOut = () => {
+        axios.get("http://localhost:8000/invoice/getcheckout", {
+            headers: {
+                Authorization: "Bearer " + accessToken,
+            }
+        })
+            .then(response => setArrray(response.data.result))
+            .catch(error => console.log(error))
+    }
+
+    useEffect(() => {
+        getCheckOut()
+    }, [])
 
     return (
-        <>
-            {
-                user ?
-                    (
-                        <button onClick={() => {
-                            dispatch(logout())
-                            window.location.reload()
-                        }}>LOGOUT</button>
-                    ) :
-                    <NavLink className='button' to='/login'>
-                        Login
-                    </NavLink>
-            }
+        <div style={{ marginTop: "32px" }}>
+            <Header />
             <Slider />
             <div style={{ padding: "0 100px" }} className='home'>
                 <h2>THE MOST OUTSTANDING PHONE</h2>
@@ -60,7 +67,7 @@ const Home = () => {
                                                     <p >Giảm <span>{value.discount}%</span></p>
                                                 </div>
                                                 <div className='url'>
-                                                    <img key={index} src={value.image[0]} alt="" />
+                                                    <img key={index} src={value.image[0].avt} alt="" />
                                                 </div>
                                                 <h3 style={{ color: "#000" }}>{value.nameproducts}</h3>
                                                 <div className='format'>
@@ -93,8 +100,9 @@ const Home = () => {
                 </div>
             </div>
             <AboutUs />
+            <Footer />
 
-        </>
+        </div>
     )
 }
 

@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const initial = {
     fullname: "",
+    phonenumber: "",
     email: "",
     password: "",
     retypepassword: ""
@@ -18,7 +19,7 @@ const initial = {
 const Register = () => {
     const navigate = useNavigate()
     const [state, setState] = useState(initial)
-    const { fullname, email, password, retypepassword } = state
+    const { fullname, phonenumber, email, password, retypepassword } = state
     const handleInputChange = (e) => {
         const { name, value } = e.target
         setState({ ...state, [name]: value })
@@ -63,7 +64,9 @@ const Register = () => {
                 <div className='gridContent'>
                     <form onSubmit={handleSubmit(submitForm)}>
                         <div style={{ marginBottom: "1rem", width: "350px" }}>
-                            <input {...register('fullname')} type="text" placeholder='Name' name='fullname' value={fullname || ""} onChange={handleInputChange} required />
+                            <input {...register('fullname')} type="text" placeholder='Full Name' name='fullname' value={fullname || ""} onChange={handleInputChange} required />
+                        </div> <div style={{ marginBottom: "1rem", width: "350px" }}>
+                            <input {...register('phonenumber')} type="text" placeholder='Phone Number' name='phonenumber' value={phonenumber || ""} onChange={handleInputChange} required />
                         </div>
                         <div style={{ marginBottom: "1rem", position: "relative" }}>
                             <input {...register('email')} type="email" placeholder='Email' name='email' value={email || ""} onChange={handleInputChange} required />
