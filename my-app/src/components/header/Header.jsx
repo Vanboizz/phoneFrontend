@@ -24,7 +24,7 @@ const Header = () => {
         </li>
 
         <li className='list-option__item list-option__item-phone'>
-          <a className='list-option__option' >
+          <a className='list-option__option'>
             <div className="option__icon-phone option__phone"></div>
             <p>Phone</p>
           </a>

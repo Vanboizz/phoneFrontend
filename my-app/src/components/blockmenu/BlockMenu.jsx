@@ -11,6 +11,7 @@ import CreateDelivery from '../createdelivery/CreateDelivery';
 import CreateNewPassword from '../createnewpassword/CreateNewPassword';
 import Purchase from '../purchase/Purchase';
 import Orderdetail from '../orderdetail/Orderdetail';
+import Logout from '../logout/Logout';
 
 
 const BlockMenu = () => {
@@ -20,6 +21,11 @@ const BlockMenu = () => {
         setToggleState(index);
     }
 
+    const [modal, setModal] = useState(false);
+
+    const toggleModal = () => {
+        setModal(!modal)
+    }
     return (
         <>
             <div className='block-menu'>
@@ -49,19 +55,20 @@ const BlockMenu = () => {
                     <p className='block-menu__item-text'>Purchase</p>
                 </div>
 
-                <div onClick={() => toggleTab(5)}
-                    className={toggleState === 5 ? "block-menu__item block-menu-active" : "block-menu__item"}>
+                <div onClick={() => {
+                    toggleModal()
+                }}
+                    className={modal === true ? "block-menu__item block-menu-active" : "block-menu__item"}>
                     <FiLogOut className='block-menu__item-icon' />
                     <p className='block-menu__item-text'>Log out</p>
                 </div>
             </div>
 
-            {toggleState == 1 ? (<UserProfile />) : null}
-            {toggleState == 2 ? (<CreateNewPassword />) : null}
-            {toggleState == 3 ? (<CreateDelivery />) : null}
-            {toggleState == 4 ? (<Purchase/>) : null}
-            {/* {toggleState == 4 ? (<Orderdetail/>) : null} */}
-            {/* {toggleState == 5 ? (<UserProfile />) : null} */}
+            {toggleState === 1 ? (<UserProfile />) : null}
+            {toggleState === 2 ? (<CreateNewPassword />) : null}
+            {toggleState === 3 ? (<CreateDelivery />) : null}
+            {toggleState === 4 ? (<Purchase/>) : null}
+            {modal === true ? (<Logout  callbackparent = {toggleModal}/>) : null}
         </>
     )
 }
