@@ -10,7 +10,6 @@ import UserProfile from '../../components/userprofile/UserProfile'
 import CreateDelivery from '../createdelivery/CreateDelivery';
 import CreateNewPassword from '../createnewpassword/CreateNewPassword';
 import Purchase from '../purchase/Purchase';
-import Orderdetail from '../orderdetail/Orderdetail';
 import Logout from '../logout/Logout';
 
 

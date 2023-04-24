@@ -7,26 +7,26 @@ import Orderdetail from '../orderdetail/Orderdetail';
 
 
 const datas = [
-    // {
-    //     id: 1,
-    //     img: "./iphone.webp",
-    //     name: "iPhone 14 Pro Max 128GB | Chính hãng VN/A",
-    //     color: "Xanh Lam",
-    //     quantity: 1,
-    //     datetime: "21-10-2022 15:27",
-    //     price: 4000000,
-    //     status: "cancel"
-    // },
-    // {
-    //     id: 2,
-    //     img: "./iphone.webp",
-    //     name: "iPhone 12 Pro 64GB | Chính hãng VN/A",
-    //     color: "Đen",
-    //     quantity: 3,
-    //     datetime: "23-05-2022 01:42",
-    //     price: 8000000,
-    //     status: "cancel"
-    // },
+    {
+        id: 1,
+        img: "./iphone.webp",
+        name: "iPhone 14 Pro Max 128GB | Chính hãng VN/A",
+        color: "Xanh Lam",
+        quantity: 1,
+        datetime: "21-10-2022 15:27",
+        price: 4000000,
+        status: "cancel"
+    },
+    {
+        id: 2,
+        img: "./iphone.webp",
+        name: "iPhone 12 Pro 64GB | Chính hãng VN/A",
+        color: "Đen",
+        quantity: 3,
+        datetime: "23-05-2022 01:42",
+        price: 8000000,
+        status: "cancel"
+    },
     {
         id: 3,
         img: "./iphone.webp",
@@ -164,10 +164,15 @@ const Purchase = () => {
     const getStatusSee = (index) => {
         setStatusSee(index);
     }
+
+    const handleCancel = (data) => {
+        datas[data.id-1].status = 'cancel';
+        console.log(datas[data.id-1].status);
+    }
     return (
         <>
             {
-                datas.length >= 1 ?
+                dataapi.length >= 1 ?
                     (statusSee === 1 ?
                         (<div className='purchase'>
                             <p className='purchase__name'>ORDER MANAGEMENT</p>
@@ -249,7 +254,8 @@ const Purchase = () => {
                                                         onClick={() => getStatusSee(2)}
                                                         className='purchase__list-item-btn-detail'>See detail</button>
                                                 </div>
-                                                {data.status !== 'cancel' ? <GrFormClose className='purchase__list-item-icon' /> : null}
+                                                {data.status !== 'cancel' ? <GrFormClose className='purchase__list-item-icon' onClick={() => handleCancel(data)}/> : null}
+                                                
                                             </div>
                                         ))
                                         :
@@ -279,7 +285,7 @@ const Purchase = () => {
                                 nextClassName='purchase__next'
                                 previousClassName='purchase__prev'
                             />
-                        </div>) : <Orderdetail parentCallback={getStatusSee} />)
+                        </div>) : <Orderdetail parentCallback={getStatusSee}/>)
                     :
                     (<div className="empty">
                         <img src="https://media.itsnicethat.com/original_images/giphy-2021-gifs-and-clips-animation-itsnicethat-02.gif" alt="" className='empty-image' />
