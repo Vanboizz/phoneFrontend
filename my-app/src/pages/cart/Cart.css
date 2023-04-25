@@ -135,3 +135,36 @@
     border-radius: 7px;
     margin-left: 10px;
 }
+
+.product-empty {
+    text-align: center;
+}
+
+.product-empty__title {
+    font-size: 26px;
+    text-align: center;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.product-empty__gif {
+    height: 300px;
+    width: 300px;
+}
+
+.product-empty__btnback {
+    padding: 10px 20px;
+    font-size: 17px;
+    background-color: #1A94FF;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    text-transform: uppercase;
+    transition: background-color 0.2s ease, cursor 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+.product-empty__btnback:hover {
+    cursor: pointer;
+    color: white;
+    opacity: 0.8;
+}

@@ -14,7 +14,8 @@ const Cart = () => {
         <>
             <Header></Header>
             <Templatecart text__my='My Cart' text__btn='PROCEED TO ORDER' >
-                <div className="product">
+                {/* have item */}
+                {/* <div className="product">
                     <div className='product__item'>
 
                         <img src="./iphone.webp" alt="" className='item__img' />
@@ -49,8 +50,6 @@ const Cart = () => {
 
                             <GrFormClose className='info__icon' />
                         </div>
-
-
                     </div>
 
                     <div className='product__item'>
@@ -118,9 +117,19 @@ const Cart = () => {
                         </div>
 
                     </div>  
+                </div> */}
+
+                {/* empty */}
+                <div className='product-empty'>
+                    <img src="https://media.itsnicethat.com/original_images/giphy-2021-gifs-and-clips-animation-itsnicethat-02.gif" alt="" className='product-empty__gif' />
+
+                    <h2 className='product-empty__title'>There are no products in the cart, please return</h2>
+                    <button className='product-empty__btnback' >
+                        back the main page
+                    </button>
                 </div>
             </Templatecart>
-            <Totalcart text__btn='PROCEED TO ORDER'/>
+            {/* <Totalcart text__btn='PROCEED TO ORDER' /> */}
         </>
     )
 }
