@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import "../header/Header.css"
-import { FaSearch } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from "../feature/user/userSlice"
 import { FaSearch, FaUserCircle  } from "react-icons/fa";
