@@ -3,6 +3,8 @@ import "../header/Header.css"
 import { FaSearch } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from "../feature/user/userSlice"
+import { FaSearch, FaUserCircle  } from "react-icons/fa";
+import { FiLogOut  } from "react-icons/fi";
 
 const Header = () => {
   const { cart, quantityCart } = useSelector((state) => state.cart);
@@ -30,22 +32,29 @@ const Header = () => {
           </a>
         </li>
 
-        <li className='list-option__item'>
-          <a className='list-option__option' href=''>
+        <li className='list-option__item list-option__item-phone'>
+          <a className='list-option__option'>
             <div className="option__icon-phone option__phone"></div>
             <p>Phone</p>
           </a>
+
+          <ul className='option__subnav'>
+              <li><a href=''>IPhone 13 Promax</a></li>
+              <li><a href=''>Samsung Galaxy A71</a></li>
+              <li><a href=''>Lenovo</a></li>
+              <li><a href=''>Oppo New 3</a></li>
+          </ul>
         </li>
 
         <li className='list-option__item'>
-          <a className='list-option__option' href=''>
+          <a className='list-option__option' >
             <div className="option__icon-pen option__pen"></div>
             <p>About Us</p>
           </a>
         </li>
 
         <li className='list-option__item'>
-          <a className='list-option__option' href=''>
+          <a className='list-option__option'>
             <div className="option__icon-cart option__cart option_contain-circle">
               <div className="circle-yellow">{quantityCart}</div>
             </div>

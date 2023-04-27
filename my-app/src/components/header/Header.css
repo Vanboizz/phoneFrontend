@@ -62,6 +62,12 @@ header .list-option__item:hover .option__subnav {
   display: block;
 }
 
+header .list-option__item-phone {
+    display: flex;
+    flex-direction: column;
+    max-width: 119px;
+}
+
 header .list-option__item-login {
   display: flex;
   flex-direction: column;
@@ -172,8 +178,54 @@ header .option__subnav a {
 }
 
 header .option__subnav > li {
+    list-style-type: none;
+    background: white;
+    border-radius: 3px;
+    box-shadow: 0 0 3px rgba(0,0,0,0.3);
+    display: none;
+}
+
+header .list-option__item-phone .option__subnav a {
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    padding-left: 10px;
+    display: inline-block;
+    line-height: 20px;
+    padding: 10px 0px 10px 20px;
+    width: 100%;
+}
+
+header .list-option__item-login .option__subnav a {
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    padding-left: 5px;
+    line-height: 20px;
+    width: 100%;
+}
+
+header .list-option__item-login .option__subnav > li {
+    display: flex;
+    padding-left: 20px;
+    padding: 10px 0px 10px 20px;
+    align-items: center;
+}
+
+header .option__subnav > li:not(:first-child) {
+    border-top: 1px solid rgb(222, 222, 222);
 }
 
 header .option__subnav > li:hover {
   background-color: rgba(26, 148, 255, 0.4);
 }
+
+.subnav-icon-profile,
+.subnav-icon-logout {
+    height: 23px;
+    width: 23px;
+    display: inline-block;
+}
+
+
+

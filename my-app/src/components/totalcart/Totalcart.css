@@ -60,7 +60,7 @@
     border-radius: 7px;
     text-align: center;
     border: 1px solid;
-    text-decoration: none;
+    text-decoration: none;  
     transition: background-color 0.2s ease, cursor 0.2s ease, color 0.2s ease;
 }
 

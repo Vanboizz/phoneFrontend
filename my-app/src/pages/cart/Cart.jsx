@@ -25,6 +25,7 @@ const Cart = () => {
         <>
             <Header></Header>
             <Templatecart text__my='My Cart' text__btn='PROCEED TO ORDER' >
+                {/* have item */}
                 <div className="product">
                     {
                         cart ? cart.map((value, index) => (

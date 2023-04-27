@@ -16,6 +16,7 @@ import Cartthanks from "./pages/cartthanks/Cartthanks";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getCart } from "./components/feature/cart/cartSlice";
+import Profile from "./pages/profile/Profile";
 
 export default function App() {
   const { accessToken } = useSelector((state) => state.user);
@@ -53,6 +54,8 @@ export default function App() {
             path="/changepassword/:accessToken"
             element={<ChangePassword />}
           ></Route>
+
+          <Route path="/profile" element={<Profile />}></Route>
         </Routes>
       </div>
     </Router>
