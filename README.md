@@ -39,7 +39,7 @@ gõ lệnh:
 3. React.js
 4. Redux
 
-## 👊 Ủng hộ Clothnest
+## 👊 Ủng hộ  Website selling Mobile phones
 - Bằng cách ⭐️ repo này nhé! ❤️
 
 ## 📝 Giấy phép
