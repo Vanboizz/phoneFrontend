@@ -21,6 +21,23 @@ export const getProducts = createAsyncThunk("/", async (_, thunkApi) => {
   }
 });
 
+export const addProducts = createAsyncThunk(
+  "/addproducts",
+  async (_, thunkApi) => {
+    try {
+      return productsService.addProducts();
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkApi.rejectWithValue(message);
+    }
+  }
+);
+
 export const productsSlice = createSlice({
   name: "products",
   initialState,

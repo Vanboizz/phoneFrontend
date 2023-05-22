@@ -1,4 +1,4 @@
-.grid-container {
+.admin-register {
   box-shadow: -1px 1px 8px 0 rgba(0, 0, 0, 0.3);
   padding: 2.4rem;
   border-radius: 0.8rem;
@@ -7,59 +7,53 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
-
-.grid-container h1 {
+.admin-register h1 {
   text-align: center;
   color: #606060;
   padding-bottom: 2rem;
 }
 
-.grid-container .row-one {
+.admin-register .row-one {
   margin-bottom: 1rem;
-  position: relative;
   width: 350px;
 }
 
-.grid-container .row-one svg {
-  position: absolute;
-  right: 4%;
-  top: 30%;
-}
-
-.grid-container input {
+.admin-register input {
   width: 100%;
+  padding: 0.8rem;
   border-radius: 0.4rem;
   border: 0.05rem solid #ccc;
   color: #999;
 }
 
-.grid-container span {
+.admin-register .row-two {
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.admin-register .row-two svg {
+  position: absolute;
+  right: 5%;
+  top: 30%;
+}
+
+.admin-register .row-five,
+.admin-register .row-four,
+.admin-register .row-three {
+  margin-bottom: 1rem;
+}
+
+.admin-register span {
   color: #ec7532;
   font-weight: bold;
 }
 
-.grid-container .link {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-
-.grid-container a {
-  text-decoration: none;
-  color: #696969;
-  font-weight: bold;
-}
-
-.grid-container a:hover {
-  text-decoration: underline;
-}
-
-.grid-container .btn-login {
+.admin-register .btn-confirm {
   border-bottom: 0.05rem solid #ccc;
   padding-bottom: 1rem;
 }
 
-.grid-container .btn-login button {
+.admin-register .btn-confirm button {
   background-color: #1a94ff;
   border: none;
   width: 100%;
@@ -70,13 +64,13 @@
   cursor: pointer;
 }
 
-.grid-container .icon {
+.admin-register .icon {
   display: flex;
   justify-content: space-between;
   padding-top: 1rem;
 }
 
-.grid-container .icon .format {
+.admin-register .icon .format {
   display: flex;
   align-items: center;
   padding: 0.4rem 1.2rem;
@@ -84,16 +78,16 @@
   border: 0.05rem solid #ccc;
 }
 
-.grid-container .icon-face {
+.admin-register .icon p {
+  margin-left: 0.4rem;
+}
+
+.admin-register .icon-face {
   color: #0000ff;
   font-size: 1.5rem;
 }
 
-.grid-container .icon-google {
+.admin-register .icon-google {
   color: #a52a2a;
   font-size: 1.5rem;
-}
-
-.grid-container .icon p {
-  margin-left: 4rem;
 }

@@ -17,13 +17,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getCart } from "./components/feature/cart/cartSlice";
 import Profile from "./pages/profile/Profile";
+import ProductsModifier from "./pages/productsmodifier/ProductsModifier";
+import AdminRegister from "./pages/adminregister/AdminRegister";
+import { getUser } from "./components/feature/user/userSlice";
 
 export default function App() {
-  const { accessToken } = useSelector((state) => state.user);
+  const { user, accessToken } = useSelector((state) => state.user);
+
   const dispatch = useDispatch();
   useEffect(() => {
     if (accessToken) {
       dispatch(getCart({ accessToken }));
+    }
+  }, [accessToken]);
+
+  useEffect(() => {
+    if (accessToken) {
+      dispatch(getUser({ accessToken }));
     }
   }, [accessToken]);
 
@@ -54,8 +64,9 @@ export default function App() {
             path="/changepassword/:accessToken"
             element={<ChangePassword />}
           ></Route>
-
           <Route path="/profile" element={<Profile />}></Route>
+          <Route path="/productsmodifier" element={<ProductsModifier />} />
+          <Route path="/admin/register" element={<AdminRegister />} />
         </Routes>
       </div>
     </Router>

@@ -1,0 +1,116 @@
+h1 {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.product-modifier {
+  margin: 0 100px;
+}
+
+.product-modifier .form {
+  display: flex;
+}
+
+.product-modifier .row-one {
+  display: flex;
+  justify-content: space-between;
+}
+
+.product-modifier .row-one .products-name {
+  width: 600px;
+  padding: 0.8rem 1.2rem;
+}
+
+.product-modifier .row-one .discount {
+  padding: 0.8rem 1.2rem;
+  margin: 0 0.8rem;
+}
+
+.product-modifier .row-two .promotion {
+  width: 816px;
+  padding: 0.8rem 1.2rem;
+  margin: 1.2rem 0;
+}
+
+.product-modifier textarea {
+  width: 816px;
+  height: 200px;
+  padding: 0.8rem 1.2rem;
+}
+
+.product-modifier h2 {
+  margin: 1rem 0;
+}
+
+.product-modifier .sizes {
+  display: grid;
+  grid-template-columns: 1.2fr 1.2fr 1.2fr 3.2fr;
+}
+
+.product-modifier .sizes .quantity {
+  margin: 0.6rem 0;
+}
+
+.product-modifier .sizes button {
+  border-color: #d3d3d3;
+  border-radius: 4px;
+  padding: 0.3rem;
+  cursor: pointer;
+}
+
+.product-modifier .size input {
+  padding: 0.4rem 0.4rem;
+}
+
+.product-modifier .rl {
+  margin-left: 1.2rem;
+}
+
+.product-modifier .rl .link {
+  text-decoration: none;
+}
+
+.product-modifier .rl .icon {
+  font-size: 40px;
+}
+
+.product-modifier .add-size {
+  background: #1a94ff;
+  border-radius: 3px;
+  color: #fff;
+  font-weight: bold;
+  padding: 0.8rem 1.2rem;
+  cursor: pointer;
+  border: none;
+}
+
+.product-modifier input,
+.product-modifier textarea {
+  border: 1px solid rgba(153, 153, 153, 0.5);
+  border-radius: 5px;
+}
+
+.product-modifier .rl .plus {
+  border: 1px dashed rgba(153, 153, 153, 0.5);
+  border-radius: 4px;
+  padding: 5rem;
+}
+
+.product-modifier .format {
+  margin-top: 1.2rem;
+}
+
+.product-modifier .rl .save {
+  background: #1a94ff;
+  border-radius: 3px;
+  color: #fff;
+  font-weight: bold;
+  padding: 0.8rem 2.2rem;
+  cursor: pointer;
+  border: none;
+}
+
+.product-modifier .rl img {
+  height: 200px;
+  width: 200px;
+}
