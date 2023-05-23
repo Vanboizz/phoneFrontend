@@ -67,7 +67,6 @@ const ProductsModifier = () => {
             images: preview,
         }
         dispatch(addProducts({ product: product }))
-
     }
 
     return (

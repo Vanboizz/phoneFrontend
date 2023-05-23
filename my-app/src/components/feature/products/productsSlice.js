@@ -65,6 +65,15 @@ export const productsSlice = createSlice({
         state.message = action.payload;
         state.isSuccess = false;
         state.message = "Dont get data";
+      })
+      .addCase(addProducts.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(addProducts.fulfilled, (state, action) => {
+        state.isSuccess = true;
+      })
+      .addCase(addProducts.rejected, (state, action) => {
+        state.isError = true;
       });
   },
 });

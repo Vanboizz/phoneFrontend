@@ -116,15 +116,25 @@ const ProductsDetail = () => {
     }, [selectedProvince])
 
     const handleClick = () => {
-        dispatch(addCart({ idproducts: idProducts, idsize: idSize, idcolor: idColor, idimage: idImage, accessToken }))
-        toast("Add to cart successfully")
+        if (accessToken) {
+            dispatch(addCart({ idproducts: idProducts, idsize: idSize, idcolor: idColor, idimage: idImage, accessToken }))
+            navigate("/cart")
+            toast("Add to cart successfully")
+            window.location.reload()
+        }
+        if (!accessToken) {
+            navigate("/login")
+        }
     }
 
     const handleBuyNow = () => {
-        dispatch(addCart({ idproducts: idProducts, idsize: idSize, idcolor: idColor, idimage: idImage, accessToken }))
-        if (success) {
+        if (accessToken) {
+            dispatch(addCart({ idproducts: idProducts, idsize: idSize, idcolor: idColor, idimage: idImage, accessToken }))
             navigate("/cart")
             window.location.reload()
+        }
+        if (!accessToken) {
+            navigate("/login")
         }
     }
 

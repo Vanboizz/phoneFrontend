@@ -2,15 +2,17 @@ import React, { useEffect, useState } from 'react'
 import "../header/Header.css"
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from "../feature/user/userSlice"
-import { FaSearch, FaUserCircle } from "react-icons/fa";
-import { FiLogOut } from "react-icons/fi";
+import { FaSearch } from "react-icons/fa";
 
 const Header = () => {
-  const { cart, quantityCart } = useSelector((state) => state.cart);
+  const { quantityCart } = useSelector((state) => state.cart);
   const { accessToken } = useSelector((state) => state.user)
   const [isShow, setIsShow] = useState(false)
   const dispatch = useDispatch()
 
+  const navigate = () => {
+    window.location.href = "/cart"
+  }
 
   return (
     <header>
@@ -53,7 +55,7 @@ const Header = () => {
         </li>
 
         <li className='list-option__item'>
-          <a className='list-option__option'>
+          <a className='list-option__option' onClick={navigate}>
             <div className="option__icon-cart option__cart option_contain-circle">
               <div className="circle-yellow">{quantityCart}</div>
             </div>
