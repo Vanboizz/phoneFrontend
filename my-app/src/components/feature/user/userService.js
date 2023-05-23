@@ -81,7 +81,7 @@ const changePassword = async ({ password, retypeNewPassword }) => {
 };
 
 //get user
-const getUser = async (accessToken) => {
+const getUser = async ({ accessToken }) => {
   const response = await axios.get("http://localhost:8000/auth/user/getuser", {
     headers: {
       Authorization: "Bearer " + accessToken,

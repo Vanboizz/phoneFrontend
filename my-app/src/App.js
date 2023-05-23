@@ -19,21 +19,14 @@ import { getCart } from "./components/feature/cart/cartSlice";
 import Profile from "./pages/profile/Profile";
 import ProductsModifier from "./pages/productsmodifier/ProductsModifier";
 import AdminRegister from "./pages/adminregister/AdminRegister";
-import { getUser } from "./components/feature/user/userSlice";
 
 export default function App() {
-  const { user, accessToken } = useSelector((state) => state.user);
+  const { accessToken } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
   useEffect(() => {
     if (accessToken) {
       dispatch(getCart({ accessToken }));
-    }
-  }, [accessToken]);
-
-  useEffect(() => {
-    if (accessToken) {
-      dispatch(getUser({ accessToken }));
     }
   }, [accessToken]);
 

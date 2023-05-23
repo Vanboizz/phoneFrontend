@@ -13,34 +13,12 @@ import AboutUs from '../../components/aboutus/AboutUs'
 import { Link } from "react-router-dom"
 import Header from "../../components/header/Header"
 import Footer from "../../components/footer/Footer"
-import axios from 'axios'
-import { getUser } from '../../components/feature/user/userSlice'
 const Home = () => {
     const products = useSelector((state) => state.products)
-    const [arrray, setArrray] = useState([])
-    const { user, accessToken } = useSelector(state => state.user)
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(getProducts())
-    }, [])
-
-    useEffect(() => {
-        dispatch(getUser(accessToken))
-    }, [])
-
-    const getCheckOut = () => {
-        axios.get("http://localhost:8000/invoice/getcheckout", {
-            headers: {
-                Authorization: "Bearer " + accessToken,
-            }
-        })
-            .then(response => setArrray(response.data.result))
-            .catch(error => console.log(error))
-    }
-
-    useEffect(() => {
-        getCheckOut()
     }, [])
 
     return (

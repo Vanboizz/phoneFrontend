@@ -52,14 +52,14 @@ const objToArray = (obj, fn) => {
     return res;
 }
 
-const Modal = ({ setOpenModal, onSubmit }) => {
+const Modal = ({ size, setOpenModal, onSubmit }) => {
     // dispatch
     // Object.assign({}, [] => Initial State
-    const [array, dispatch] = useReducer(reducer, Object.assign({}, []))
-    // console.log(array);
+    const [array, dispatch] = useReducer(reducer, Object.assign({}, size ? size.colors : []))
+
     const [data, setData] = useState({
-        namesize: "",
-        pricesize: ""
+        namesize: size ? size.namesize : "",
+        pricesize: size ? size.pricesize : ""
     })
     const { namesize, pricesize } = data
 

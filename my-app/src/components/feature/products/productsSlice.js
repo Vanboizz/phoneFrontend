@@ -23,9 +23,9 @@ export const getProducts = createAsyncThunk("/", async (_, thunkApi) => {
 
 export const addProducts = createAsyncThunk(
   "/addproducts",
-  async (_, thunkApi) => {
+  async ({ product }, thunkApi) => {
     try {
-      return productsService.addProducts();
+      return productsService.addProducts({ product });
     } catch (error) {
       const message =
         (error.response &&

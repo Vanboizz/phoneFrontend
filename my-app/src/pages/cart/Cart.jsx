@@ -10,11 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { decreaseItemQuantity, decreaseQuantity, deleteCart, increaseItemQuantity, increaseQuantity } from '../../components/feature/cart/cartSlice';
 import { useNavigate } from 'react-router-dom';
 
-
-
 const Cart = () => {
     const { cart } = useSelector(state => state.cart)
-    console.log(cart);
     const { accessToken } = useSelector((state) => state.user)
     const dispatch = useDispatch()
     const navigate = useNavigate()

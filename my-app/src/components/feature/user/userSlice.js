@@ -79,9 +79,9 @@ export const changePassword = createAsyncThunk(
 
 export const getUser = createAsyncThunk(
   "/getuser",
-  async (accessToken, thunkAPI) => {
+  async ({ accessToken }, thunkAPI) => {
     try {
-      return userService.getUser(accessToken);
+      return userService.getUser({ accessToken });
     } catch (error) {
       const message =
         (error.respone && error.respone.data && error.respone.data.message) ||
