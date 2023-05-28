@@ -5,7 +5,7 @@ import Hiden from '../../components/hiden/Hiden'
 import { useNavigate } from "react-router-dom"
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginUser, reset } from '../../components/feature/user/userSlice'
+import { getUser, loginUser, reset } from '../../components/feature/user/userSlice'
 import { ToastContainer, toast } from "react-toastify"
 
 
@@ -17,21 +17,21 @@ const Login = () => {
     const { register, handleSubmit } = useForm()
     const { user, isError, message } = useSelector(state => state.user)
     const dispatch = useDispatch()
+    const accessToken = localStorage.getItem("accessToken")
 
     useEffect(() => {
-        dispatch(reset())
-    }, [])
-
-    useEffect(() => {
-        if (user) {
-            navigate("/")
-        }
+        // if (user && user.length > 0 ? user[0].role === "admin" : null) {
+        //     navigate("/productsmodifier")
+        // }
+        // if (user[0]?.role === "user") {
+        //     navigate("/home")
+        // }
         if (isError) {
             toast.error(message)
             setInputEmail("")
             setInputPassword("")
         }
-    }, [user, isError])
+    }, [isError])
 
     const submitForm = (data) => {
         dispatch(loginUser(data))

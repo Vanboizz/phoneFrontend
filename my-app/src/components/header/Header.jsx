@@ -3,16 +3,15 @@ import "../header/Header.css"
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from "../feature/user/userSlice"
 import { FaSearch } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const { quantityCart } = useSelector((state) => state.cart);
-  const { accessToken } = useSelector((state) => state.user)
+  const { accessToken, user } = useSelector((state) => state.user)
   const [isShow, setIsShow] = useState(false)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  const navigate = () => {
-    window.location.href = "/cart"
-  }
 
   return (
     <header>
@@ -55,7 +54,7 @@ const Header = () => {
         </li>
 
         <li className='list-option__item'>
-          <a className='list-option__option' onClick={navigate}>
+          <a className='list-option__option' onClick={() => navigate("/cart")}>
             <div className="option__icon-cart option__cart option_contain-circle">
               <div className="circle-yellow">{quantityCart}</div>
             </div>
@@ -74,7 +73,7 @@ const Header = () => {
                       setIsShow(!isShow)
                     }} >
                       <span className="option__icon-user option__user"></span>
-                      <p>Login</p>
+                      <p>{user && user.length > 0 ? user[0].fullname : "Login"}</p>
                       <div className="option__icon-arrow-user option__phone">
                       </div>
                     </a>

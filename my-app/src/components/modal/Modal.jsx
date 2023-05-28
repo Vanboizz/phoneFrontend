@@ -8,7 +8,6 @@ const NEW_ITEM = "new_item"
 const DELETE_ITEM = "delete_item"
 const CHANGE_NAME_COLOR = "change_name_color"
 const CHANGE_QUANTITY_COLOR = "change_quantity_color"
-const UPDATE_ITEM = "update_item"
 
 // Reducer
 const reducer = (state, action) => {

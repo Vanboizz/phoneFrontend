@@ -118,6 +118,11 @@
   gap: 1.2rem;
 }
 
+.home .swiper-grid-column > .swiper-wrapper {
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
 .home .product-list .swiper-button-next,
 .home .product-list .swiper-button-prev {
   align-items: center;

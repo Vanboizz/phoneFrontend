@@ -13,12 +13,16 @@ import AboutUs from '../../components/aboutus/AboutUs'
 import { Link } from "react-router-dom"
 import Header from "../../components/header/Header"
 import Footer from "../../components/footer/Footer"
+import { getUser } from '../../components/feature/user/userSlice'
 const Home = () => {
     const products = useSelector((state) => state.products)
     const dispatch = useDispatch()
 
+    const accessToken = localStorage.getItem("accessToken")
+
     useEffect(() => {
         dispatch(getProducts())
+        dispatch(getUser({ accessToken }))
     }, [])
 
     return (
