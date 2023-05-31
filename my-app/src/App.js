@@ -21,8 +21,6 @@ import PrivateRouteAdmin from "./components/hook/PrivateRouteAdmin";
 
 import ProductList from "./pages/productlist/ProductList";
 
-
-
 export default function App() {
   const { accessToken } = useSelector((state) => state.user);
 
@@ -45,10 +43,6 @@ export default function App() {
             path="/changepassword/:accessToken"
             element={<ChangePassword />}
           ></Route>
-
-          <Route path="/profile" element={<Profile />}></Route>
-          <Route path="/productlist" element={< ProductList/>}></Route>
-
           {/* user */}
           <Route path="/home" element={<Home />}></Route>
           <Route path="/" element={<PrivateRoute />}>
@@ -56,6 +50,7 @@ export default function App() {
               path="/productsdetail/:id"
               element={<ProductsDetail />}
             ></Route>
+            <Route path="/profile" element={<Profile />}></Route>
             <Route path="/orderinfo" element={<Orderinfo />}></Route>
             <Route path="/detailbill" element={<Detailbill />}></Route>
             <Route path="/cart" element={<Cart />}></Route>
@@ -70,6 +65,7 @@ export default function App() {
               element={<ProductsModifier />}
             />
           </Route>
+          <Route path="/admin/productlist" element={<ProductList />}></Route>
         </Routes>
       </div>
     </Router>

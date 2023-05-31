@@ -92,20 +92,33 @@ const getUser = async (accessToken) => {
 
 // Updateuser
 
-const updateUser = async ({ fullname, email, phonenumber, gender, days, months, years, accessToken }) => {
-  const response = await axios.post("http://localhost:8000/auth/user/updateUser", {
-    fullname, 
-    email, 
-    phonenumber, 
-    gender, 
-    days, 
-    months, 
-    years
-  }, {
-    headers: {
-      Authorization: "Bearer " + accessToken,
+const updateUser = async ({
+  fullname,
+  email,
+  phonenumber,
+  gender,
+  days,
+  months,
+  years,
+  accessToken,
+}) => {
+  const response = await axios.post(
+    "http://localhost:8000/auth/user/updateUser",
+    {
+      fullname,
+      email,
+      phonenumber,
+      gender,
+      days,
+      months,
+      years,
     },
-  });
+    {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    }
+  );
   return response.data;
 };
 

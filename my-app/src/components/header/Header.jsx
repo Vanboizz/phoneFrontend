@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import "../header/Header.css"
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from "../feature/user/userSlice"
+import { getUser, logout } from "../feature/user/userSlice"
 import { FaSearch, FaUserCircle } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const { quantityCart } = useSelector((state) => state.cart);
-  const { accessToken, user } = useSelector((state) => state.user)
+  const { user } = useSelector((state) => state.user)
+  const accessToken = localStorage.getItem("accessToken")
   const [isShow, setIsShow] = useState(false)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (accessToken) {
+      dispatch(getUser(accessToken))
+    }
+  }, [])
 
 
   return (
