@@ -18,6 +18,10 @@ import { useEffect } from "react";
 import { getCart } from "./components/feature/cart/cartSlice";
 import Profile from "./pages/profile/Profile";
 
+import ProductList from "./pages/productlist/ProductList";
+
+
+
 export default function App() {
   const { accessToken } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -56,6 +60,8 @@ export default function App() {
           ></Route>
 
           <Route path="/profile" element={<Profile />}></Route>
+          <Route path="/productlist" element={< ProductList/>}></Route>
+
         </Routes>
       </div>
     </Router>

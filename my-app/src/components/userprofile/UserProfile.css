@@ -150,6 +150,7 @@ select.userprofile__form-birth-input {
 
 .userprofile__form-update:hover {
     opacity: 0.7;
+    cursor: pointer;
 }
 
 

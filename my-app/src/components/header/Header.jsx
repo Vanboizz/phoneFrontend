@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import "../header/Header.css"
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from "../feature/user/userSlice"
-import { FaSearch, FaUserCircle  } from "react-icons/fa";
-import { FiLogOut  } from "react-icons/fi";
+import { FaSearch, FaUserCircle } from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
+
 
 const Header = () => {
   const { cart, quantityCart } = useSelector((state) => state.cart);
@@ -26,6 +27,13 @@ const Header = () => {
       <ul className="list-option">
         <li className='list-option__item'>
           <a className='list-option__option' href='/'>
+            <div className="option__icon-seller option__seller"></div>
+            <p>Seller Channel</p>
+          </a>
+        </li>
+
+        <li className='list-option__item'>
+          <a className='list-option__option' href='/'>
             <div className="option__icon-home option__home"></div>
             <p>Home</p>
           </a>
@@ -38,19 +46,19 @@ const Header = () => {
           </a>
 
           <ul className='option__subnav'>
-              <li><a href=''>IPhone 13 Promax</a></li>
-              <li><a href=''>Samsung Galaxy A71</a></li>
-              <li><a href=''>Lenovo</a></li>
-              <li><a href=''>Oppo New 3</a></li>
+            <li><a href=''>IPhone 13 Promax</a></li>
+            <li><a href=''>Samsung Galaxy A71</a></li>
+            <li><a href=''>Lenovo</a></li>
+            <li><a href=''>Oppo New 3</a></li>
           </ul>
         </li>
 
-        <li className='list-option__item'>
+        {/* <li className='list-option__item'>
           <a className='list-option__option' >
             <div className="option__icon-pen option__pen"></div>
             <p>About Us</p>
           </a>
-        </li>
+        </li> */}
 
         <li className='list-option__item'>
           <a className='list-option__option'>
@@ -78,7 +86,10 @@ const Header = () => {
                     </a>
                     {
                       isShow && <ul className='option__subnav'>
-                        <li><a href="">My profile</a></li>
+                        <li>
+                          <FaUserCircle className='option__subnav-profile' />
+                          <a href="">My profile</a>
+                        </li>
                         <li><a href="" onClick={() => dispatch(logout())}>Logout</a></li>
                       </ul>
                     }

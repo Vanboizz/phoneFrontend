@@ -81,8 +81,27 @@ const changePassword = async ({ password, retypeNewPassword }) => {
 };
 
 //get user
-const getUser = async ({ accessToken }) => {
+const getUser = async (accessToken) => {
   const response = await axios.get("http://localhost:8000/auth/user/getuser", {
+    headers: {
+      Authorization: "Bearer " + accessToken,
+    },
+  });
+  return response.data;
+};
+
+// Updateuser
+
+const updateUser = async ({ fullname, email, phonenumber, gender, days, months, years, accessToken }) => {
+  const response = await axios.post("http://localhost:8000/auth/user/updateUser", {
+    fullname, 
+    email, 
+    phonenumber, 
+    gender, 
+    days, 
+    months, 
+    years
+  }, {
     headers: {
       Authorization: "Bearer " + accessToken,
     },
@@ -96,6 +115,7 @@ const userService = {
   forgotPassword,
   changePassword,
   getUser,
+  updateUser,
 };
 
 export default userService;

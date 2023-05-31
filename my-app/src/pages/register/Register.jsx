@@ -48,6 +48,7 @@ const Register = () => {
     const dispatch = useDispatch()
     const { register, handleSubmit } = useForm()
     const submitForm = (data) => {
+        console.log(1111);
         if (data.password !== data.retypepassword) {
             toast("Password is not match")
             setState("")

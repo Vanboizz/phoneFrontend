@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import ReactPaginate from 'react-paginate';
 import { GrFormClose } from "react-icons/gr";
 import Orderdetail from '../orderdetail/Orderdetail';
+import Modelcancel from '../modelcancel/Modelcancel';
 
 
 const datas = [
@@ -45,7 +46,7 @@ const datas = [
         quantity: 2,
         datetime: "01-04-2023 07:27",
         price: 3500000,
-        status: "delivering"
+        status: "preparing"
     },
     {
         id: 5,
@@ -55,7 +56,7 @@ const datas = [
         quantity: 3,
         datetime: "18-03-2022 05:19",
         price: 6500000,
-        status: "delivering"
+        status: "preparing"
     },
     {
         id: 6,
@@ -65,7 +66,7 @@ const datas = [
         quantity: 4,
         datetime: "03-02-2022 13:27",
         price: 9500000,
-        status: "arrived"
+        status: "cancel"
     },
     {
         id: 7,
@@ -75,7 +76,7 @@ const datas = [
         quantity: 1,
         datetime: "25-05-2022 15:27",
         price: 4000000,
-        status: "arrived"
+        status: "cancel"
     },
     {
         id: 8,
@@ -115,7 +116,7 @@ const datas = [
         quantity: 2,
         datetime: "01-04-2023 07:27",
         price: 3500000,
-        status: "preparing"
+        status: "cancel"
     },
     {
         id: 12,
@@ -131,9 +132,11 @@ const datas = [
 ]
 
 const Purchase = () => {
+    const [cancel, setCancel] = useState(-1);
     const [statusSee, setStatusSee] = useState(1);
     const [statuscrr, setStatuscrr] = useState(1);
     const [dataapi, setDataApi] = useState(datas);
+    const [currentPage, setCurrentPage] = useState(0);
     const setStatus = (index) => {
         setStatuscrr(index);
     }
@@ -152,146 +155,156 @@ const Purchase = () => {
     const handlePageClick = (event) => {
         const newOffset = (event.selected * itemsPerPage) % datas.length;
         setItemOffset(newOffset);
+        // console.log(event.selected);
+        setCurrentPage(event.selected)
     };
 
     const handleData = (str) => {
-        if (str === '')
-            setDataApi(datas);
-        else
-            setDataApi(datas.filter((data) => data.status === str))
+        if (str === '') { setDataApi(datas); }
+        else { setDataApi(datas.filter((data) => data.status === str)) }
+        setItemOffset(0)
+        setCurrentPage(0)
+
+        console.log(currentPage);
     }
 
     const getStatusSee = (index) => {
         setStatusSee(index);
     }
 
-    const handleCancel = (data) => {
-        datas[data.id-1].status = 'cancel';
-        console.log(datas[data.id-1].status);
+    const handleNo = () => {
+        setCancel(-1)
     }
+
+    const handleYes = (data) => {
+        setCancel(!cancel)
+        datas[data.id - 1].status = 'cancel';
+        setDataApi(datas)
+    }
+
     return (
         <>
             {
-                dataapi.length >= 1 ?
-                    (statusSee === 1 ?
-                        (<div className='purchase'>
-                            <p className='purchase__name'>ORDER MANAGEMENT</p>
+                (statusSee === 1 ?
+                    (<div className='purchase'>
+                        <p className='purchase__name'>ORDER MANAGEMENT</p>
 
-                            <div className="purchase__status">
-                                <button
-                                    onClick={() => {
-                                        setStatus(1);
-                                        handleData('');
-                                    }}
-                                    className={statuscrr === 1 ? "purchase__status-common purchase__status-common-active" : "purchase__status-common"}>
-                                    All
-                                </button>
+                        <div className="purchase__status">
+                            <button
+                                onClick={() => {
+                                    setStatus(1);
+                                    handleData('');
+                                }}
+                                className={statuscrr === 1 ? "purchase__status-common purchase__status-common-active" : "purchase__status-common"}>
+                                All
+                            </button>
 
-                                <button
-                                    onClick={() => {
-                                        setStatus(2);
-                                        handleData('preparing');
-                                    }}
-                                    className={statuscrr === 2 ? "purchase__status-common purchase__status-common-active" : "purchase__status-common"}>
-                                    Confirmed
-                                </button>
+                            <button
+                                onClick={() => {
+                                    setStatus(2);
+                                    handleData('preparing');
+                                }}
+                                className={statuscrr === 2 ? "purchase__status-common purchase__status-common-active" : "purchase__status-common"}>
+                                Confirmed
+                            </button>
 
-                                <button
-                                    onClick={() => {
-                                        setStatus(3);
-                                        handleData('delivering');
-                                    }}
-                                    className={statuscrr === 3 ? "purchase__status-common purchase__status-common-active" : "purchase__status-common"}>
-                                    Being transported
-                                </button>
+                            <button
+                                onClick={() => {
+                                    setStatus(3);
+                                    handleData('delivering');
+                                }}
+                                className={statuscrr === 3 ? "purchase__status-common purchase__status-common-active" : "purchase__status-common"}>
+                                Being transported
+                            </button>
 
-                                <button
-                                    onClick={() => {
-                                        setStatus(4);
-                                        handleData('arrived');
-                                    }}
-                                    className={statuscrr === 4 ? "purchase__status-common purchase__status-common-active" : "purchase__status-common"}>
-                                    Received
-                                </button>
+                            <button
+                                onClick={() => {
+                                    setStatus(4);
+                                    handleData('arrived');
+                                }}
+                                className={statuscrr === 4 ? "purchase__status-common purchase__status-common-active" : "purchase__status-common"}>
+                                Received
+                            </button>
 
-                                <button
-                                    onClick={() => {
-                                        setStatus(5);
-                                        handleData('cancel');
-                                    }}
-                                    className={statuscrr === 5 ? "purchase__status-common purchase__status-common-active" : "purchase__status-common"}>
-                                    Cancelled
-                                </button>
-                            </div>
+                            <button
+                                onClick={() => {
+                                    setStatus(5);
+                                    handleData('cancel');
+                                }}
+                                className={statuscrr === 5 ? "purchase__status-common purchase__status-common-active" : "purchase__status-common"}>
+                                Cancelled
+                            </button>
+                        </div>
 
-                            <div className="purchase__title">
-                                <div className="purchase__title-des purchase-title-pro">PRODUCT</div>
-                                <div className="purchase__title-des purchase-title-date">DATE TIME</div>
-                                <div className="purchase__title-des purchase-title-price">PRICE</div>
-                                <div className="purchase__title-des purchase-title-status">STATUS</div>
-                            </div>
+                        <div className="purchase__title">
+                            <div className="purchase__title-des purchase-title-pro">PRODUCT</div>
+                            <div className="purchase__title-des purchase-title-date">DATE TIME</div>
+                            <div className="purchase__title-des purchase-title-price">PRICE</div>
+                            <div className="purchase__title-des purchase-title-status">STATUS</div>
+                        </div>
 
-                            <div className="purchase__list">
-                                {
+                        <div className="purchase__list">
+                            {
+                                currentItems.length >= 1 ?
+                                    currentItems.map((data) => (
 
-                                    currentItems.length >= 1 ?
-                                        currentItems.map((data) => (
-                                            <div className="purchase__list-item" key={data.id}>
-                                                <div className="purchase__list-item-pro">
-                                                    <img src={data.img} alt="" className='purchase__list-item-pro-img' />
-                                                    <div className="purchase__list-item-pro-detail">
-                                                        <p className="purchase__list-item-pro-detail-namepro">{data.name}</p>
-                                                        <p className="purchase__list-item-pro-detail-color">Color: {data.color}</p>
-                                                        <p className="purchase__list-item-pro-detail-quantity">x{data.quantity}</p>
-                                                    </div>
+                                        <div className="purchase__list-item" key={data.id}>
+                                            <div className="purchase__list-item-pro">
+                                                <img src={data.img} alt="" className='purchase__list-item-pro-img' />
+                                                <div className="purchase__list-item-pro-detail">
+                                                    <p className="purchase__list-item-pro-detail-namepro">{data.name}</p>
+                                                    <p className="purchase__list-item-pro-detail-color">Color: {data.color}</p>
+                                                    <p className="purchase__list-item-pro-detail-quantity">x{data.quantity}</p>
                                                 </div>
-
-                                                <div className="purchase__list-item-time">{data.datetime}</div>
-                                                <div className="purchase__list-item-price">{data.price}</div>
-                                                <div className={`purchase__list-item-status purchase__list-item-status-${data.status}`}>{data.status}</div>
-                                                <div className="purchase__list-item-btn">
-                                                    <button
-                                                        onClick={() => getStatusSee(2)}
-                                                        className='purchase__list-item-btn-detail'>See detail</button>
-                                                </div>
-                                                {data.status !== 'cancel' ? <GrFormClose className='purchase__list-item-icon' onClick={() => handleCancel(data)}/> : null}
-                                                
                                             </div>
-                                        ))
-                                        :
-                                        (<div className="purchase__list-empty">
-                                            <img src="https://media.itsnicethat.com/original_images/giphy-2021-gifs-and-clips-animation-itsnicethat-02.gif" alt="" className='purchase__list-empty-image' />
-                                            <p className='purchase__list-empty-text'>Empty</p>
-                                        </div>)
-                                }
-                            </div>
-                            <ReactPaginate
-                                breakLabel="..."
-                                nextLabel="→"
-                                onPageChange={handlePageClick}
-                                pageRangeDisplayed={3}
-                                pageCount={pageCount}
-                                previousLabel="←"
-                                renderOnZeroPageCount={null}
 
-                                containerClassName='pagination'
-                                pageLinkClassName='page-num'
+                                            <div className="purchase__list-item-time">{data.datetime}</div>
+                                            <div className="purchase__list-item-price">{data.price}</div>
+                                            <div className={`purchase__list-item-status purchase__list-item-status-${data.status}`}>{data.status}</div>
+                                            <div className="purchase__list-item-btn">
+                                                <button
+                                                    onClick={() => getStatusSee(2)}
+                                                    className='purchase__list-item-btn-detail'>See detail</button>
+                                            </div>
+                                            {data.status === 'preparing' ? <GrFormClose className='purchase__list-item-icon' onClick={() => setCancel(data.id)} /> : null}
+                                            {cancel === data.id ? <Modelcancel parentCallbackNo={handleNo} parentCallbackYes={handleYes} dataFromParent={data} /> : null}
+                                        </div>
+                                    ))
+                                    :
+                                    (<div className="purchase__list-empty">
+                                        <img src="https://media.itsnicethat.com/original_images/giphy-2021-gifs-and-clips-animation-itsnicethat-02.gif" alt="" className='purchase__list-empty-image' />
+                                        <p className='purchase__list-empty-text'>Empty</p>
+                                    </div>)
+                            }
+                        </div>
+                        <ReactPaginate
+                            forcePage={currentPage}
 
-                                previousLinkClassName='arrow-prev'
-                                nextLinkClassName='arrow-next'
+                            breakLabel="..."
+                            nextLabel="→"
+                            onPageChange={handlePageClick}
+                            pageRangeDisplayed={3}
+                            pageCount={pageCount}
+                            previousLabel="←"
+                            renderOnZeroPageCount={null}
 
-                                activeLinkClassName='active'
 
-                                nextClassName='purchase__next'
-                                previousClassName='purchase__prev'
-                            />
-                        </div>) : <Orderdetail parentCallback={getStatusSee}/>)
-                    :
-                    (<div className="empty">
-                        <img src="https://media.itsnicethat.com/original_images/giphy-2021-gifs-and-clips-animation-itsnicethat-02.gif" alt="" className='empty-image' />
-                        <p className='empty-text'>Empty</p>
-                    </div>)
+                            containerClassName='pagination'
+                            pageLinkClassName='page-num'
+
+                            previousLinkClassName='arrow-prev'
+                            nextLinkClassName='arrow-next'
+
+                            activeLinkClassName='active'
+
+                            nextClassName='purchase__next'
+                            previousClassName='purchase__prev'
+                        />
+                    </div>) : <Orderdetail parentCallback={getStatusSee} />)
+
             }
+
+
         </>
     )
 }

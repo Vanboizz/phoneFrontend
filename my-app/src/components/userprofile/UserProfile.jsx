@@ -1,10 +1,21 @@
 import React from 'react'
 import "../userprofile/UserProfile.css"
 import { useState, useEffect } from 'react'
+import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux'
+import { getUser, updateUser } from '../feature/user/userSlice'
 
 
 const UserProfile = () => {
 
+    const { user, accessToken } = useSelector(state => state.user)
+    const dispatch = useDispatch()
+    const [fullname, setFullName] = useState(user ? user[0].fullname : 'x')
+    
+    console.log(fullname);
+
+    const [email, setEmail] = useState(user ? user[0].email : '')
+    const [phonenumber, setPhonenumber] = useState(user ? user[0].phonenumber : '')
     const [dates, setDates] = useState([]);
 
     const [months, setMonths] = useState([]);
@@ -13,6 +24,12 @@ const UserProfile = () => {
     const [years, setYears] = useState([]);
     const [yearchoose, setYearChoose] = useState('');
 
+    const [inputDate, setInputDate] = useState('0')
+    const [inputMonth, setInputMonth] = useState('0')
+    const [inputYear, setInputYear] = useState('0')
+    const [gender, setGender] = useState('Female')
+
+    
 
     const getDate = (d) => {
         var tempdates = []
@@ -38,10 +55,10 @@ const UserProfile = () => {
 
     const handleMonth = (e) => {
         switch (parseInt(e.target.value)) {
-            case 0: 
-            case 1: 
+            case 0:
+            case 1:
             case 3:
-            case 5: 
+            case 5:
             case 7:
             case 8:
             case 10:
@@ -56,11 +73,11 @@ const UserProfile = () => {
                 setMonthChoose(1)
                 getDate(30);
                 break;
-            case 2:                
+            case 2:
                 setMonthChoose(2)
                 checkLeapYear(yearchoose) ? getDate(29) : getDate(28);
                 break;
-          }
+        }
     }
 
     useEffect(() => {
@@ -76,6 +93,12 @@ const UserProfile = () => {
         getYear()
     }, [])
 
+    useEffect(() => {
+        setFullName(user ? user[0].fullname : '')
+        setEmail(user ? user[0].email : '')
+        setPhonenumber(user ? user[0].phonenumber : '')
+    }, [user])
+
     const checkLeapYear = (y) => {
         return ((y % 4 === 0) && (y % 100 !== 0 || y % 400 === 0)) ? true : false
     }
@@ -87,30 +110,52 @@ const UserProfile = () => {
         }
     }
 
+ 
+    useEffect(() => {
+        dispatch(getUser(accessToken))
+    }, [])
+
+
+    const handleUpdateProfile = (e) => { 
+        e.preventDefault(); 
+        dispatch(updateUser({fullname: fullname, email: email, phonenumber: phonenumber, gender: gender, days: inputDate, months: inputMonth, years: inputYear, accessToken }))
+    }
 
     return (
         <div className='userprofile'>
-            <p className='userprofile__name'>Nguyễn Huỳnh Tuấn Khang</p>
+            <p className='userprofile__name'>{user ? user[0].fullname : null}</p>
 
-            <form action="">
-                <div className='userprofile__form'>
-                    <label className='userprofile__form-text'>USER NAME</label>
-                    <input placeholder='Add user name' className='userprofile__form-input' type="text" name='username' />
-                </div>
-
+            <form action="" onSubmit={handleUpdateProfile}>
                 <div className='userprofile__form'>
                     <label className='userprofile__form-text'>FULL NAME</label>
-                    <input placeholder='Add full name' className='userprofile__form-input' type="text" name='username' />
+                    <input
+                        placeholder='Add full name'
+                        value={fullname}
+                        onChange={(e) => setFullName(e.target.value)}
+                        className='userprofile__form-input' type="text" name='fullname'
+                    />
                 </div>
 
                 <div className='userprofile__form'>
                     <label className='userprofile__form-text'>EMAIL</label>
-                    <input placeholder='Add email' className='userprofile__form-input' type="text" name='username' />
+                    <input
+                        placeholder='Add email'
+                        className='userprofile__form-input'
+                        type="text" name='email'
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
                 </div>
 
                 <div className='userprofile__form'>
                     <label className='userprofile__form-text'>PHONE NUMBER</label>
-                    <input placeholder='Add phone number' className='userprofile__form-input' type="text" name='username' />
+                    <input
+                        placeholder='Add phone number'
+                        className='userprofile__form-input'
+                        type="text" name='phonenumber'
+                        onChange={(e) => setPhonenumber(e.target.value)}
+                        value={phonenumber}
+                    />
                 </div>
 
                 <div className="userprofile__form">
@@ -118,13 +163,14 @@ const UserProfile = () => {
                     <label className='userprofile__form-text'>GENDER</label>
 
                     <div className='userprofile__form-choose'>
+                        {/* remainer gender */}
                         <div className="choose__male">
-                            <input name='method' type="radio" value="xxx" className='pick-up__input' defaultChecked />
+                            <input name='gender' type="radio" value="Male" className='pick-up__input'  onChange={e => setGender(e.target.value)} />                                 
                             <label htmlFor="html" className='pick-up__text'>Male</label>
                         </div>
 
                         <div className="choose__female">
-                            <input name='method' type="radio" value="yyy" className='delivery__input' defaultChecked />
+                            <input name='gender' type="radio" value="Female" className='delivery__input' defaultChecked  onChange={(e) => setGender(e.target.value)} />
                             <label htmlFor="html" className='delivery__text'>Female</label>
                         </div>
                     </div>
@@ -135,7 +181,7 @@ const UserProfile = () => {
 
                     <div className='userprofile__form-birth'>
 
-                        <select name="pets" id="pet-select" className='userprofile__form-birth-input'>
+                        <select onChange={(e) => setInputDate(e.target.value)} name="date" id="date-select" className='userprofile__form-birth-input'>
                             <option value="0" placeholder=''>Date</option>
                             {
                                 dates
@@ -146,7 +192,11 @@ const UserProfile = () => {
                             }
                         </select>
 
-                        <select name="pets" id="pet-select" className='userprofile__form-birth-input' onChange={(e) => handleMonth(e)}>
+                        <select name="month" id="month-select" className='userprofile__form-birth-input'
+                            onChange={(e) => {
+                                handleMonth(e)
+                                setInputMonth(e.target.value)
+                            }}>
                             <option value="0" placeholder=''>Month</option>
                             {
                                 months
@@ -157,7 +207,12 @@ const UserProfile = () => {
                             }
                         </select>
 
-                        <select name="pets" id="pet-select" className='userprofile__form-birth-input' onChange={(e) => handleYear(e)}>
+                        <select name="year" id="year-select" className='userprofile__form-birth-input'
+                            onChange={(e) => {
+                                handleYear(e)
+                                setInputYear(e.target.value)
+                                
+                            }}>
                             <option value="0" placeholder=''>Year</option>
                             {
                                 years
@@ -172,10 +227,10 @@ const UserProfile = () => {
                 <div className='userprofile__form'>
                     <button type="submit" className='userprofile__form-update'> UPDATE INFOMATION</button>
                 </div>
-
             </form>
         </div>
     )
+
 }
 
 export default UserProfile

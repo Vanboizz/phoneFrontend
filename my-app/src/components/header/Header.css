@@ -15,11 +15,12 @@ header {
   right: 0;
   left: 0;
   top: 0;
+  justify-content: space-between;
 }
 
 header .logo {
   height: 90%;
-  width: 10%;
+  width: 8%;
   background-image: url("../../../public/logotsp.png");
   background-repeat: no-repeat;
   background-size: auto 100%;
@@ -30,9 +31,9 @@ header .search {
   display: flex;
   height: 90%;
   background-color: #f2f1f3;
-  width: 40%;
+  width: 38%;
   border-radius: 7px;
-  margin-right: 3.9%;
+  margin-right: 3%;
 }
 
 header .search .search__icon-search {
@@ -100,7 +101,8 @@ header .list-option__option .option__icon-home,
 header .list-option__option .option__icon-phone,
 header .list-option__option .option__icon-pen,
 header .list-option__option .option__icon-cart,
-header .list-option__option .option__icon-user {
+header .list-option__option .option__icon-user,
+header .list-option__option .option__icon-seller {
   height: 25px;
   width: 25px;
   background-repeat: no-repeat;
@@ -134,6 +136,10 @@ header .option__cart {
 }
 header .option__user {
   background-image: url("../../../public/user.png");
+}
+
+header .option__seller {
+  background-image: url("../../../public/seller.png");
 }
 
 header .circle-yellow {
