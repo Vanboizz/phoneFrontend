@@ -247,7 +247,7 @@
 }
 
 .product-detail .item-linked {
-  border: 1px solid #d1d5db;
+  border: 1px solid #999999;
   border-radius: 5px;
   cursor: pointer;
   width: calc(93% / 3);
