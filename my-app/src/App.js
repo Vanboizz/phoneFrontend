@@ -43,8 +43,8 @@ export default function App() {
           ></Route>
 
           {/* user */}
+          <Route path="/home" element={<Home />}></Route>
           <Route path="/" element={<PrivateRoute />}>
-            <Route path="/home" element={<Home />}></Route>
             <Route
               path="/productsdetail/:id"
               element={<ProductsDetail />}

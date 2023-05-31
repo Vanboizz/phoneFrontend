@@ -10,7 +10,8 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom"
 import { deleteAllCart } from '../../components/feature/cart/cartSlice';
 const Detailbill = () => {
-    const { accessToken } = useSelector(state => state.user)
+
+    const accessToken = localStorage.getItem("accessToken")
     const { totalPriceCart } = useSelector(state => state.cart)
     const navigate = useNavigate()
     const data = JSON.parse(localStorage.getItem("dataOrder"))
@@ -33,11 +34,10 @@ const Detailbill = () => {
                 Authorization: "Bearer " + accessToken,
             }
         })
-            .then(response => console.log(response.data))
-            .then(() => dispatch(deleteAllCart({ accessToken })))
             .then(() => {
-                navigate("/")
-                window.location.reload()
+                dispatch(deleteAllCart({ accessToken }));
+                navigate("/cartthanks")
+                localStorage.removeItem("dataOrder")
             })
             .catch(error => console.log(error))
     }

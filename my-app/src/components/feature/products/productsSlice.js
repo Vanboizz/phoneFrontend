@@ -68,11 +68,15 @@ export const productsSlice = createSlice({
       })
       .addCase(addProducts.pending, (state) => {
         state.isLoading = true;
+        state.isSuccess = false;
+        state.isError = false;
       })
       .addCase(addProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
         state.isSuccess = true;
       })
       .addCase(addProducts.rejected, (state, action) => {
+        state.isLoading = false;
         state.isError = true;
       });
   },

@@ -80,7 +80,6 @@ const ProductsDetail = () => {
     const [isMore, setIsMore] = useState(false)
     const location = useLocation()
     const product = location.state.product
-    // console.log(product);
     const [data, setData] = useState(product.size[0].color)
     const [idSize, setIdSize] = useState(product.size[0].idsize);
     const [idColor, setIdColor] = useState(product.size[0].color[0].idcolor);
@@ -89,7 +88,6 @@ const ProductsDetail = () => {
     const [nameSize, setNameSize] = useState(product.size[0].namesize)
     const [idProducts, setIdProducts] = useState(product.idproducts)
     const { accessToken } = useSelector((state) => state.user)
-    const { success } = useSelector((state) => state.cart)
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -260,10 +258,14 @@ const ProductsDetail = () => {
                                                     {item.namecolor}
                                                 </p>
                                                 {
-                                                    product ? product.size.map((value, index) => (
-                                                        <p className='price' key={index}>
-                                                            {(value.pricesize * product.discount) / 100}&nbsp;đ
-                                                        </p>
+                                                    product ? product.size.map((value) => (
+                                                        <div key={value.idsize}>
+                                                            {
+                                                                value.idsize === idSize ? <p className='price'>
+                                                                    {(value.pricesize * product.discount) / 100}&nbsp;đ
+                                                                </p> : null
+                                                            }
+                                                        </div>
                                                     )) : null
                                                 }
                                             </div>
@@ -274,6 +276,7 @@ const ProductsDetail = () => {
                                                 value={item.namecolor}
                                                 checked={item.idcolor === idColor}
                                                 onChange={(e) => {
+
                                                     setIdColor(item.idcolor)
                                                 }}
                                             />

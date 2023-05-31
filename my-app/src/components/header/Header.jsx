@@ -15,7 +15,7 @@ const Header = () => {
 
   return (
     <header>
-      <div className="logo" onClick={() => window.location.href = "/"}>
+      <div className="logo" onClick={() => navigate("/home")}>
       </div>
 
       <div className="search">
@@ -26,7 +26,7 @@ const Header = () => {
 
       <ul className="list-option">
         <li className='list-option__item'>
-          <a className='list-option__option' href='/'>
+          <a className='list-option__option' href='/home'>
             <div className="option__icon-home option__home"></div>
             <p>Home</p>
           </a>

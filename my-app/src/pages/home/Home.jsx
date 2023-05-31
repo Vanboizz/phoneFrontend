@@ -14,9 +14,13 @@ import { Link } from "react-router-dom"
 import Header from "../../components/header/Header"
 import Footer from "../../components/footer/Footer"
 import { getUser } from '../../components/feature/user/userSlice'
+import axios from 'axios'
+
 const Home = () => {
     const products = useSelector((state) => state.products)
+    console.log(products);
     const dispatch = useDispatch()
+    const [category, setCategory] = useState([])
 
     const accessToken = localStorage.getItem("accessToken")
 
@@ -25,12 +29,33 @@ const Home = () => {
         dispatch(getUser({ accessToken }))
     }, [])
 
+    useEffect(() => {
+        axios.get("http://localhost:8000/product/getcategory")
+            .then(res => {
+                setCategory(res.data)
+            })
+            .catch(error => console.log(error))
+    }, [])
+
     return (
         <div style={{ marginTop: "32px" }}>
             <Header />
             <Slider />
-            <div style={{ padding: "0 100px" }} className='home'>
-                <h2>THE MOST OUTSTANDING PHONE</h2>
+            <div className='home'>
+                <div className='product-list-title'>
+                    <div>
+                        <h2>THE MOST OUTSTANDING PHONE</h2>
+                    </div>
+                    <div>
+                        {
+                            category.map(value => (
+                                <Link className='related-tag' key={value.idcate}>
+                                    {value.namecate}
+                                </Link>
+                            ))
+                        }
+                    </div>
+                </div>
                 <div className="product-list">
                     <Swiper
                         slidesPerView={5}
@@ -45,7 +70,7 @@ const Home = () => {
                         {
                             products.data ? products.data.map((value, index) => {
                                 return (
-                                    <SwiperSlide key={index}>
+                                    <SwiperSlide key={index} >
                                         <Link to={`/productsdetail/${value.idproducts}`} state={{ product: value }}>
                                             <div className='item' key={index} onClick={() => window.location.replace(`/productsdetail/${value.idproducts}`)}>
                                                 <div className='discount'>
@@ -84,7 +109,7 @@ const Home = () => {
                     </Swiper>
                 </div>
             </div>
-            <AboutUs />
+            {/* <AboutUs /> */}
             <Footer />
 
         </div>

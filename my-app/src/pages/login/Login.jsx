@@ -20,18 +20,15 @@ const Login = () => {
     const accessToken = localStorage.getItem("accessToken")
 
     useEffect(() => {
-        // if (user && user.length > 0 ? user[0].role === "admin" : null) {
-        //     navigate("/productsmodifier")
-        // }
-        // if (user[0]?.role === "user") {
-        //     navigate("/home")
-        // }
+        if (accessToken) {
+            navigate("/home")
+        }
         if (isError) {
             toast.error(message)
             setInputEmail("")
             setInputPassword("")
         }
-    }, [isError])
+    }, [isError, user])
 
     const submitForm = (data) => {
         dispatch(loginUser(data))

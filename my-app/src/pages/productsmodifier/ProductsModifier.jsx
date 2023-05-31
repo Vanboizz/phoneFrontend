@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "../productsmodifier/ProductsModifier.css"
 import Modal from '../../components/modal/Modal'
 import { FaPenAlt } from "react-icons/fa"
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addProducts } from '../../components/feature/products/productsSlice';
-
+import { ToastContainer, toast } from "react-toastify"
+import axios from 'axios';
 
 const ProductsModifier = () => {
     const [data, setData] = useState({
@@ -24,7 +25,9 @@ const ProductsModifier = () => {
 
     const [size, setSize] = useState([])
 
-    const [select, setSelect] = useState("Apple")
+    const [select, setSelect] = useState(1)
+
+    const [category, setCategory] = useState([])
 
     const dispatch = useDispatch()
 
@@ -56,7 +59,9 @@ const ProductsModifier = () => {
     const handleAddProducts = async (e) => {
         e.preventDefault()
         const product = {
-            namcate: e.target.category.value,
+            selectedcategory: category.filter((value) => {
+                return value.idcate == e.target.category.value
+            })[0].idcate,
             nameproducts: e.target.name.value,
             promotion: e.target.promotion.value,
             discount: e.target.discount.value,
@@ -67,10 +72,20 @@ const ProductsModifier = () => {
             images: preview,
         }
         dispatch(addProducts({ product: product }))
+        toast("Add Products Is Succesfull")
     }
 
+    useEffect(() => {
+        axios.get("http://localhost:8000/product/getcategory")
+            .then(res => {
+                setCategory(res.data)
+            })
+            .catch(error => console.log(error))
+    }, [])
+
     return (
-        <div>
+        <>
+            <ToastContainer />
             <h1>Products Modifier</h1>
             <div className='product-modifier'>
                 <form className='form' onSubmit={handleAddProducts}>
@@ -84,15 +99,16 @@ const ProductsModifier = () => {
                         </div>
                         <textarea type='text' name='description' placeholder='Products Description' value={description} onChange={handleOnChange} required />
                         <h2>Category</h2>
-                        <select name="category" id="" onChange={(e) => setSelect(e.target.value)}>
-                            <option value="Apple">Apple</option>
-                            <option value="Samsung">SAMSUNG</option>
-                            <option value="Xiaomi">XIAOMI</option>
-                            <option value="Oppo">OPPO</option>
-                            <option value="Realme">realme</option>
-                            <option value="Nokia">NOKIA</option>
-                            <option value="Vivo">VIVO</option>
-                            <option value="Iphone">IPHONE</option>
+                        <select name="category" value={select} onChange={(e) => setSelect(e.target.value)}>
+                            {
+                                category ? category.map((value) => (
+                                    <option key={value.idcate} value={value.idcate} name={value.namecate}>
+                                        {
+                                            value.namecate
+                                        }
+                                    </option>
+                                )) : null
+                            }
                         </select>
                         <h2>Unit</h2>
                         <div >
@@ -164,7 +180,7 @@ const ProductsModifier = () => {
                     })}
                 />
             }
-        </div>
+        </>
     )
 }
 
