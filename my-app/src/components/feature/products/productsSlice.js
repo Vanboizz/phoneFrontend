@@ -21,6 +21,23 @@ export const getProducts = createAsyncThunk("/", async (_, thunkApi) => {
   }
 });
 
+export const addProducts = createAsyncThunk(
+  "/addproducts",
+  async ({ product }, thunkApi) => {
+    try {
+      return productsService.addProducts({ product });
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkApi.rejectWithValue(message);
+    }
+  }
+);
+
 export const productsSlice = createSlice({
   name: "products",
   initialState,
@@ -48,6 +65,19 @@ export const productsSlice = createSlice({
         state.message = action.payload;
         state.isSuccess = false;
         state.message = "Dont get data";
+      })
+      .addCase(addProducts.pending, (state) => {
+        state.isLoading = true;
+        state.isSuccess = false;
+        state.isError = false;
+      })
+      .addCase(addProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+      })
+      .addCase(addProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
       });
   },
 });

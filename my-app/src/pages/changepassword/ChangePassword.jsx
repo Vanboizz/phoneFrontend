@@ -20,13 +20,13 @@ const ChangePassword = () => {
     setState({ ...state, [name]: value })
   }
 
-  const {success} = useSelector(state => state.user)
-  
+  const { success } = useSelector(state => state.user)
+
   useEffect(() => {
-    if(state) {
+    if (state) {
       navigate("/login")
     }
-  },[success]) 
+  }, [success])
   const navigate = useNavigate()
 
   const { register, handleSubmit } = useForm()
@@ -44,9 +44,9 @@ const ChangePassword = () => {
   return (
     <>
       <ToastContainer />
-      <div className='gridContainer'>
+      <div className='grid-container'>
         <h1>Change Password</h1>
-        <div className='gridContent'>
+        <div className='grid-content'>
           <form action="" >
             <div style={{ marginBottom: "1rem", width: "350px" }}>
               <input {...register("password")} type="password" placeholder='New Password' name='password' value={password || ""} onChange={handleInputChange} />

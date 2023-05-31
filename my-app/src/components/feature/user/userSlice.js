@@ -178,6 +178,7 @@ export const userSlice = createSlice({
       .addCase(changePassword.fulfilled, (state, action) => {
         state.isLoading = false;
         state.success = true;
+        state.isLoading = false;
       })
       .addCase(changePassword.rejected, (state, action) => {
         state.isLoading = false;
@@ -190,6 +191,7 @@ export const userSlice = createSlice({
       .addCase(getUser.fulfilled, (state, action) => {
         state.success = true;
         state.user = action.payload;
+        state.isLoading = false;
       })
       .addCase(getUser.rejected, (state, action) => {
         state.isError = true;

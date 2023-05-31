@@ -5,8 +5,22 @@ const getProducts = async () => {
   return response.data;
 };
 
+const addProducts = async ({ product }) => {
+  const response = await axios.post(
+    "http://localhost:8000/product/addproduct",
+    product,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.data;
+};
+
 const productsService = {
   getProducts,
+  addProducts,
 };
 
 export default productsService;

@@ -41,7 +41,7 @@ const Relative = () => {
                                                 <p >Giảm <span>{value.discount}%</span></p>
                                             </div>
                                             <div className='url'>
-                                                <img key={index} src={value.image[0]} alt="" />
+                                                <img key={index} src={value.image[0].avt} alt="" />
                                             </div>
                                             <h3 style={{ color: "#000" }}>{value.nameproducts}</h3>
                                             <div className='format'>

@@ -64,9 +64,9 @@ header .list-option__item:hover .option__subnav {
 }
 
 header .list-option__item-phone {
-    display: flex;
-    flex-direction: column;
-    max-width: 119px;
+  display: flex;
+  flex-direction: column;
+  max-width: 119px;
 }
 
 header .list-option__item-login {
@@ -87,7 +87,7 @@ header .list-option {
 header .list-option__option {
   display: flex;
   align-items: center;
-  padding: 0px 20px;
+  padding: 0px 13px;
   border-radius: 10px;
   text-decoration: none;
 }
@@ -184,42 +184,42 @@ header .option__subnav a {
 }
 
 header .option__subnav > li {
-    list-style-type: none;
-    background: white;
-    border-radius: 3px;
-    box-shadow: 0 0 3px rgba(0,0,0,0.3);
-    display: none;
+  list-style-type: none;
+  background: white;
+  border-radius: 3px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+  display: none;
 }
 
 header .list-option__item-phone .option__subnav a {
-    text-decoration: none;
-    color: black;
-    font-size: 14px;
-    padding-left: 10px;
-    display: inline-block;
-    line-height: 20px;
-    padding: 10px 0px 10px 20px;
-    width: 100%;
+  text-decoration: none;
+  color: black;
+  font-size: 14px;
+  padding-left: 10px;
+  display: inline-block;
+  line-height: 20px;
+  padding: 10px 0px 10px 20px;
+  width: 100%;
 }
 
 header .list-option__item-login .option__subnav a {
-    text-decoration: none;
-    color: black;
-    font-size: 14px;
-    padding-left: 5px;
-    line-height: 20px;
-    width: 100%;
+  text-decoration: none;
+  color: black;
+  font-size: 14px;
+  padding-left: 5px;
+  line-height: 20px;
+  width: 100%;
 }
 
 header .list-option__item-login .option__subnav > li {
-    display: flex;
-    padding-left: 20px;
-    padding: 10px 0px 10px 20px;
-    align-items: center;
+  display: flex;
+  padding-left: 20px;
+  padding: 10px 0px 10px 20px;
+  align-items: center;
 }
 
 header .option__subnav > li:not(:first-child) {
-    border-top: 1px solid rgb(222, 222, 222);
+  border-top: 1px solid rgb(222, 222, 222);
 }
 
 header .option__subnav > li:hover {
@@ -228,10 +228,7 @@ header .option__subnav > li:hover {
 
 .subnav-icon-profile,
 .subnav-icon-logout {
-    height: 23px;
-    width: 23px;
-    display: inline-block;
+  height: 23px;
+  width: 23px;
+  display: inline-block;
 }
-
-
-

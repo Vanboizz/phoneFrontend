@@ -1,4 +1,4 @@
-.gridContainer {
+.grid-container {
   box-shadow: -1px 1px 8px 0 rgba(0, 0, 0, 0.3);
   padding: 2.4rem;
   border-radius: 0.8rem;
@@ -7,13 +7,19 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.gridContainer h1 {
+.grid-container h1 {
   text-align: center;
   color: #606060;
   padding-bottom: 2rem;
 }
 
-.gridContent input {
+.grid-container .row-two,
+.grid-container .row-one {
+  margin-bottom: 1rem;
+  width: 350px;
+}
+
+.grid-container input {
   width: 100%;
   padding: 0.8rem;
   border-radius: 0.4rem;
@@ -21,17 +27,34 @@
   color: #999;
 }
 
-.gridContainer span {
+.grid-container .row-three {
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.grid-container .row-three svg {
+  position: absolute;
+  right: 5%;
+  top: 30%;
+}
+
+.grid-container .row-six,
+.grid-container .row-five,
+.grid-container .row-four {
+  margin-bottom: 1rem;
+}
+
+.grid-container span {
   color: #ec7532;
   font-weight: bold;
 }
 
-.gridContainer .btnConfirm {
+.grid-container .btn-confirm {
   border-bottom: 0.05rem solid #ccc;
   padding-bottom: 1rem;
 }
 
-.gridContainer .btnConfirm button {
+.grid-container .btn-confirm button {
   background-color: #1a94ff;
   border: none;
   width: 100%;
@@ -42,26 +65,30 @@
   cursor: pointer;
 }
 
-.gridContainer .icon {
+.grid-container .icon {
   display: flex;
   justify-content: space-between;
   padding-top: 1rem;
 }
 
-.gridContainer .iconFace {
-  color: #0000ff;
-  font-size: 1.5rem;
-}
-
-.gridContainer .iconGoogle {
-  color: #a52a2a;
-  font-size: 1.5rem;
-}
-
-.gridContainer .format {
+.grid-container .icon .format {
   display: flex;
   align-items: center;
   padding: 0.4rem 1.2rem;
   border-radius: 0.4rem;
   border: 0.05rem solid #ccc;
+}
+
+.grid-container .icon p {
+  margin-left: 0.4rem;
+}
+
+.grid-container .icon-face {
+  color: #0000ff;
+  font-size: 1.5rem;
+}
+
+.grid-container .icon-google {
+  color: #a52a2a;
+  font-size: 1.5rem;
 }

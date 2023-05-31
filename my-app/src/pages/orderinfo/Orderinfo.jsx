@@ -23,8 +23,10 @@ const Orderinfo = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     useEffect(() => {
-        dispatch(getUser({ accessToken }))
-    }, [])
+        if (accessToken) {
+            dispatch(getUser({ accessToken }))
+        }
+    }, [accessToken])
 
     useEffect(() => {
         axios.get("https://provinces.open-api.vn/api/p/")

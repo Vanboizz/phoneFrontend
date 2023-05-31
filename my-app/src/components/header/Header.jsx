@@ -3,19 +3,19 @@ import "../header/Header.css"
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from "../feature/user/userSlice"
 import { FaSearch, FaUserCircle } from "react-icons/fa";
-import { FiLogOut } from "react-icons/fi";
-
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
-  const { cart, quantityCart } = useSelector((state) => state.cart);
-  const { accessToken } = useSelector((state) => state.user)
+  const { quantityCart } = useSelector((state) => state.cart);
+  const { accessToken, user } = useSelector((state) => state.user)
   const [isShow, setIsShow] = useState(false)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
 
   return (
     <header>
-      <div className="logo" onClick={() => window.location.href = "/"}>
+      <div className="logo" onClick={() => navigate("/home")}>
       </div>
 
       <div className="search">
@@ -33,7 +33,7 @@ const Header = () => {
         </li>
 
         <li className='list-option__item'>
-          <a className='list-option__option' href='/'>
+          <a className='list-option__option' href='/home'>
             <div className="option__icon-home option__home"></div>
             <p>Home</p>
           </a>
@@ -61,7 +61,7 @@ const Header = () => {
         </li> */}
 
         <li className='list-option__item'>
-          <a className='list-option__option'>
+          <a className='list-option__option' onClick={() => navigate("/cart")}>
             <div className="option__icon-cart option__cart option_contain-circle">
               <div className="circle-yellow">{quantityCart}</div>
             </div>
@@ -80,7 +80,7 @@ const Header = () => {
                       setIsShow(!isShow)
                     }} >
                       <span className="option__icon-user option__user"></span>
-                      <p>Login</p>
+                      <p>{user && user.length > 0 ? user[0].fullname : "Login"}</p>
                       <div className="option__icon-arrow-user option__phone">
                       </div>
                     </a>

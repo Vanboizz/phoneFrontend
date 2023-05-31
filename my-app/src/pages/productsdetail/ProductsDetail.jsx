@@ -14,11 +14,11 @@ import "swiper/css/thumbs";
 
 // import required modules
 import { FreeMode, Navigation, Thumbs } from "swiper";
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import axios from 'axios'
 import Relative from '../../components/relative/Relative';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addCart } from "../../components/feature/cart/cartSlice"
 import Header from "../../components/header/Header"
 import { ToastContainer, toast } from "react-toastify"
@@ -80,16 +80,14 @@ const ProductsDetail = () => {
     const [isMore, setIsMore] = useState(false)
     const location = useLocation()
     const product = location.state.product
-    // console.log(product);
     const [data, setData] = useState(product.size[0].color)
     const [idSize, setIdSize] = useState(product.size[0].idsize);
-    const [idColor, setIdColor] = useState(product.size[0].color[0].idcolor);
+    const [idColor, setIdColor] = useState();
     const [idImage, setIdImage] = useState(product.image[0].idimage)
     const [priceSize, setPriceSize] = useState(product.size[0].pricesize)
     const [nameSize, setNameSize] = useState(product.size[0].namesize)
     const [idProducts, setIdProducts] = useState(product.idproducts)
-    const { accessToken } = useSelector((state) => state.user)
-    const { success } = useSelector((state) => state.cart)
+    const accessToken = localStorage.getItem("accessToken")
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -115,16 +113,27 @@ const ProductsDetail = () => {
         }
     }, [selectedProvince])
 
-    const handleClick = () => {
-        dispatch(addCart({ idproducts: idProducts, idsize: idSize, idcolor: idColor, idimage: idImage, accessToken }))
-        toast("Add to cart successfully")
-    }
-
-    const handleBuyNow = () => {
-        dispatch(addCart({ idproducts: idProducts, idsize: idSize, idcolor: idColor, idimage: idImage, accessToken }))
-        if (success) {
+    const handleClick = (e) => {
+        e.preventDefault()
+        if (accessToken && idColor) {
+            dispatch(addCart({ idproducts: idProducts, idsize: idSize, idcolor: idColor, idimage: idImage, accessToken }))
             navigate("/cart")
             window.location.reload()
+        }
+        if (!idColor) {
+            toast("The Product is out of stock")
+        }
+    }
+
+    const handleBuyNow = (e) => {
+        e.preventDefault()
+        if (accessToken && idColor) {
+            dispatch(addCart({ idproducts: idProducts, idsize: idSize, idcolor: idColor, idimage: idImage, accessToken }))
+            navigate("/cart")
+            window.location.reload()
+        }
+        if (!idColor) {
+            toast("The Product is out of stock")
         }
     }
 
@@ -233,9 +242,12 @@ const ProductsDetail = () => {
                             <form>
                                 {
                                     data ? data.map((item) => (
-                                        <label key={item.idcolor} className='item-linked' style={
+                                        <label label key={item.idcolor} className='item-linked' style={
                                             {
                                                 border: item.idcolor === idColor ? "1.4px solid #1a94ff" : "",
+                                                opacity: item.quantity === 0 ? "0.4" : "",
+                                                border: item.quantity === 0 ? "1.4px solid red" : "",
+                                                color: item.quantity === 0 ? "red" : ""
                                             }
                                         }
                                         >
@@ -250,10 +262,14 @@ const ProductsDetail = () => {
                                                     {item.namecolor}
                                                 </p>
                                                 {
-                                                    product ? product.size.map((value, index) => (
-                                                        <p className='price' key={index}>
-                                                            {(value.pricesize * product.discount) / 100}&nbsp;đ
-                                                        </p>
+                                                    product ? product.size.map((value) => (
+                                                        <div key={value.idsize}>
+                                                            {
+                                                                value.idsize === idSize ? <p className='price'>
+                                                                    {(value.pricesize * product.discount) / 100}&nbsp;đ
+                                                                </p> : null
+                                                            }
+                                                        </div>
                                                     )) : null
                                                 }
                                             </div>
@@ -264,8 +280,10 @@ const ProductsDetail = () => {
                                                 value={item.namecolor}
                                                 checked={item.idcolor === idColor}
                                                 onChange={(e) => {
+
                                                     setIdColor(item.idcolor)
                                                 }}
+                                                disabled={item.quantity === 0 ? true : false}
                                             />
                                         </label>
                                     )) : null
@@ -406,7 +424,7 @@ const ProductsDetail = () => {
                     <hr />
                 </div>
                 <Relative />
-            </div>
+            </div >
             <ToastContainer />
 
         </>

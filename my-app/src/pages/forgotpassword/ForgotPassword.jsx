@@ -31,9 +31,9 @@ const ForgotPassword = () => {
   return (
     <>
       <ToastContainer />
-      <div className='gridContainer'>
+      <div className='grid-container'>
         <h1>Forgot Password</h1>
-        <div className='gridContent'>
+        <div className='grid-content'>
           <form action="">
             <div style={{ marginBottom: "1rem", position: "relative", width: "350px" }}>
               <input {...register("email")} type="email" placeholder='Email' name='email' value={email || ""} onChange={(e) => setEmail(e.target.value)} />
@@ -41,7 +41,7 @@ const ForgotPassword = () => {
             </div>
           </form>
         </div>
-        <div className='btnCofirm'>
+        <div className='btn-cofirm'>
           <Link to="/changepassword">
             <button onClick={handleSubmit(handleConfirm)}>Confirm</button>
           </Link>

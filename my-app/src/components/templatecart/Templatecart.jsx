@@ -2,14 +2,17 @@ import React from 'react'
 import "../templatecart/Templatecart.css"
 import { IoIosArrowBack } from "react-icons/io";
 import PropTypes from 'prop-types'
+import { useNavigate } from 'react-router-dom';
 
 const Templatecart = ({ text__my, children }) => {
+
+    const navigate = useNavigate()
 
     return (
         <div className='template-cart'>
             <h1 className='template-cart__title'>
                 {text__my}
-                <a className='title__back' onClick={() => window.location.replace("/")}>
+                <a className='title__back' onClick={() => navigate("/home")}>
                     <IoIosArrowBack className='title__icon' />
                     <p>Back</p>
                 </a>
