@@ -72,7 +72,8 @@ const Login = () => {
                         <p>Google</p>
                     </div>
                 </div>
-            </div></>
+            </div>
+        </>
     )
 }
 

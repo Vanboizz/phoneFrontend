@@ -11,8 +11,6 @@ const UserProfile = () => {
     const { user, accessToken } = useSelector(state => state.user)
     const dispatch = useDispatch()
     const [fullname, setFullName] = useState(user ? user[0].fullname : 'x')
-    
-    console.log(fullname);
 
     const [email, setEmail] = useState(user ? user[0].email : '')
     const [phonenumber, setPhonenumber] = useState(user ? user[0].phonenumber : '')
@@ -29,7 +27,6 @@ const UserProfile = () => {
     const [inputYear, setInputYear] = useState('0')
     const [gender, setGender] = useState('Female')
 
-    
 
     const getDate = (d) => {
         var tempdates = []
@@ -110,15 +107,14 @@ const UserProfile = () => {
         }
     }
 
- 
+
     useEffect(() => {
         dispatch(getUser(accessToken))
     }, [])
 
-
-    const handleUpdateProfile = (e) => { 
-        e.preventDefault(); 
-        dispatch(updateUser({fullname: fullname, email: email, phonenumber: phonenumber, gender: gender, days: inputDate, months: inputMonth, years: inputYear, accessToken }))
+    const handleUpdateProfile = (e) => {
+        e.preventDefault();
+        dispatch(updateUser({ fullname: fullname, email: email, phonenumber: phonenumber, gender: gender, days: inputDate, months: inputMonth, years: inputYear, accessToken }))
     }
 
     return (
@@ -165,12 +161,12 @@ const UserProfile = () => {
                     <div className='userprofile__form-choose'>
                         {/* remainer gender */}
                         <div className="choose__male">
-                            <input name='gender' type="radio" value="Male" className='pick-up__input'  onChange={e => setGender(e.target.value)} />                                 
+                            <input name='gender' type="radio" value="Male" className='pick-up__input' onChange={e => setGender(e.target.value)} />
                             <label htmlFor="html" className='pick-up__text'>Male</label>
                         </div>
 
                         <div className="choose__female">
-                            <input name='gender' type="radio" value="Female" className='delivery__input' defaultChecked  onChange={(e) => setGender(e.target.value)} />
+                            <input name='gender' type="radio" value="Female" className='delivery__input' defaultChecked onChange={(e) => setGender(e.target.value)} />
                             <label htmlFor="html" className='delivery__text'>Female</label>
                         </div>
                     </div>
@@ -180,7 +176,6 @@ const UserProfile = () => {
                     <label className='userprofile__form-text'>DATE OF BIRTH</label>
 
                     <div className='userprofile__form-birth'>
-
                         <select onChange={(e) => setInputDate(e.target.value)} name="date" id="date-select" className='userprofile__form-birth-input'>
                             <option value="0" placeholder=''>Date</option>
                             {
@@ -211,7 +206,7 @@ const UserProfile = () => {
                             onChange={(e) => {
                                 handleYear(e)
                                 setInputYear(e.target.value)
-                                
+
                             }}>
                             <option value="0" placeholder=''>Year</option>
                             {

@@ -107,6 +107,21 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+export const createNewPassword = createAsyncThunk(
+  "/createnewpassword",
+  async ({curpass, newpass, confirmpass, accessToken}, thunkAPI) => {
+    try {
+      return userService.createNewPassword({ curpass, newpass, confirmpass, accessToken });
+    } catch (error) {
+      const message =
+        (error.respone && error.respone.data && error.respone.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const userSlice = createSlice({
   name: "user",
   initialState,
@@ -146,6 +161,7 @@ export const userSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
+        console.log(action);
         state.isLoading = false;
         state.success = true;
         state.user = action.payload;
@@ -204,6 +220,16 @@ export const userSlice = createSlice({
         state.success = true;
       }) 
       .addCase(updateUser.rejected, (state, action) => {
+        state.isError = true;
+      })
+      // createnewpassword
+      .addCase(createNewPassword.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createNewPassword.fulfilled, (state, action) => {
+        state.success = true;
+      }) 
+      .addCase(createNewPassword.rejected, (state, action) => {
         state.isError = true;
       })
   },

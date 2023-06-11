@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getProducts } from '../../components/feature/products/productsSlice'
+import { getCategoryById, getProducts } from '../../components/feature/products/productsSlice'
 import Slider from '../../components/slider/Slider'
 import { FaStar, FaPlusCircle } from 'react-icons/fa'
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -16,17 +16,32 @@ import Footer from "../../components/footer/Footer"
 import { getUser } from '../../components/feature/user/userSlice'
 import axios from 'axios'
 
+
 const Home = () => {
+    const [data, setData] = useState([]);
+    console.log(data);
     const products = useSelector((state) => state.products)
-    console.log(products);
+    // const categoryId = useSelector((state) => state.products)
+
+    // console.log(categoryId);
+
     const dispatch = useDispatch()
     const [category, setCategory] = useState([])
 
     const accessToken = localStorage.getItem("accessToken")
 
     useEffect(() => {
+        axios.get('http://localhost:8000/product/getcategory/:id')
+        .then((res) => {
+            setData(res.data);
+        })
+        .catch(error => console.log(error));
+    }, [])
+
+    useEffect(() => {
         dispatch(getProducts())
         dispatch(getUser({ accessToken }))
+        // dispatch(getCategoryById())
     }, [])
 
     useEffect(() => {
@@ -49,7 +64,7 @@ const Home = () => {
                     <div>
                         {
                             category.map(value => (
-                                <Link className='related-tag' key={value.idcate}>
+                                <Link to={`/category/${value.idcate}`} className='related-tag' key={value.idcate}>
                                     {value.namecate}
                                 </Link>
                             ))
@@ -81,7 +96,7 @@ const Home = () => {
                                                 </div>
                                                 <h3 style={{ color: "#000" }}>{value.nameproducts}</h3>
                                                 <div className='format'>
-                                                    <p>{(value.size[0].pricesize * value.discount) / 100}&nbsp;đ</p>
+                                                    <p>{value.size[0].pricesize - ((value.size[0].pricesize * value.discount) / 100)}&nbsp;đ</p>
                                                     <p>{value.size[0].pricesize}&nbsp;đ</p>
                                                 </div>
                                                 <div className='promotion' style={{ color: "#000" }}>

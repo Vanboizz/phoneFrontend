@@ -3,6 +3,7 @@ import productsService from "./productsService";
 
 const initialState = {
   products: [],
+  categoryId: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -37,6 +38,18 @@ export const addProducts = createAsyncThunk(
     }
   }
 );
+
+export const getCategoryById = createAsyncThunk("/getCategoryById", async (_, thunkApi) => {
+  try {
+    return productsService.getCategoryById();
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkApi.rejectWithValue(message);
+  }
+});
 
 export const productsSlice = createSlice({
   name: "products",
@@ -78,7 +91,23 @@ export const productsSlice = createSlice({
       .addCase(addProducts.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-      });
+      })
+      
+      .addCase(getCategoryById.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getCategoryById.fulfilled, (state, action) => {
+        state.isSuccess = true;
+        state.isLoading = false;
+        state.data = action.payload;
+        state.message = "";
+      })
+      .addCase(getCategoryById.rejected, (state, action) => {
+        state.isError = true;
+        state.message = action.payload;
+        state.isSuccess = false;
+        state.message = "Dont get data";
+      })
   },
 });
 

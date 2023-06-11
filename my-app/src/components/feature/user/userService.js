@@ -1,5 +1,5 @@
 import axios from "axios";
-
+// Gọi api thông qua axios
 //Register
 const registerUser = async ({ fullname, phonenumber, email, password }) => {
   const config = {
@@ -17,7 +17,6 @@ const registerUser = async ({ fullname, phonenumber, email, password }) => {
     },
     config
   );
-  console.log(response.data);
   return response.data;
 };
 
@@ -122,6 +121,28 @@ const updateUser = async ({
   return response.data;
 };
 
+const createNewPassword = async ({
+  curpass,
+  newpass,
+  confirmpass,
+  accessToken,
+}) => {
+  const response = await axios.post(
+    "http://localhost:8000/auth/user/createnewpassword",
+    {
+      curpass,
+      newpass,
+      confirmpass,
+    },
+    {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    }
+  );
+  return response.data;
+};
+
 const userService = {
   registerUser,
   loginUser,
@@ -129,6 +150,7 @@ const userService = {
   changePassword,
   getUser,
   updateUser,
+  createNewPassword,
 };
 
 export default userService;

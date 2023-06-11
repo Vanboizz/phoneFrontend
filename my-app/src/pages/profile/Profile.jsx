@@ -13,12 +13,9 @@ const Profile = () => {
         <div>
            <Header/>
            <div className='profile'>
-                <BlockMenu/>
-                {/* <UserProfile/> */}
-                {/* <CreateNewPassword/> */}
-                {/* <CreateDelivery/> */}
-                {/* <Purchase/> */}
                 
+                <BlockMenu/>
+
            </div>
            <Fotter/> 
         </div>

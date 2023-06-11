@@ -18,9 +18,15 @@ const addProducts = async ({ product }) => {
   return response.data;
 };
 
+const getCategoryById = async () => {
+  const response = await axios.get("http://localhost:8000/product/getcategory/:id");
+  return response.data;
+};
+
 const productsService = {
   getProducts,
   addProducts,
+  getCategoryById,
 };
 
 export default productsService;
