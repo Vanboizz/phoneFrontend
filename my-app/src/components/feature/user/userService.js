@@ -124,7 +124,6 @@ const updateUser = async ({
 const createNewPassword = async ({
   curpass,
   newpass,
-  confirmpass,
   accessToken,
 }) => {
   const response = await axios.post(
@@ -132,7 +131,6 @@ const createNewPassword = async ({
     {
       curpass,
       newpass,
-      confirmpass,
     },
     {
       headers: {

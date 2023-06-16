@@ -8,6 +8,7 @@ const initialState = {
   accessToken: accessToken ? accessToken : null,
   isError: false,
   success: false,
+  success2: false,
   isLoading: false,
   message: "",
 };
@@ -109,9 +110,9 @@ export const updateUser = createAsyncThunk(
 
 export const createNewPassword = createAsyncThunk(
   "/createnewpassword",
-  async ({curpass, newpass, confirmpass, accessToken}, thunkAPI) => {
+  async ({curpass, newpass, accessToken}, thunkAPI) => {
     try {
-      return userService.createNewPassword({ curpass, newpass, confirmpass, accessToken });
+      return userService.createNewPassword({ curpass, newpass, accessToken });
     } catch (error) {
       const message =
         (error.respone && error.respone.data && error.respone.data.message) ||
@@ -203,14 +204,17 @@ export const userSlice = createSlice({
       //get user
       .addCase(getUser.pending, (state) => {
         state.isLoading = true;
+
       })
       .addCase(getUser.fulfilled, (state, action) => {
         state.success = true;
         state.user = action.payload;
         state.isLoading = false;
+        state.isError = false;
       })
       .addCase(getUser.rejected, (state, action) => {
         state.isError = true;
+        state.success = false;
       })
       // updateUser
       .addCase(updateUser.pending, (state) => {
@@ -225,11 +229,18 @@ export const userSlice = createSlice({
       // createnewpassword
       .addCase(createNewPassword.pending, (state) => {
         state.isLoading = true;
+        state.isError = false;
+        state.success = false;
+        state.success2 = false;
       })
       .addCase(createNewPassword.fulfilled, (state, action) => {
         state.success = true;
+        state.success2 = true;
+        state.isError = false;
       }) 
       .addCase(createNewPassword.rejected, (state, action) => {
+        state.success = false;
+        state.success2 = false;
         state.isError = true;
       })
   },
