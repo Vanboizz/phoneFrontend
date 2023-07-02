@@ -1,7 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import "./ProductList.css"
 import { BsPencil } from "react-icons/bs";
 import { ImBin } from "react-icons/im";
+import { useDispatch, useSelector } from 'react-redux';
+import { getProducts } from '../../components/feature/products/productsSlice';
+import { getUser } from '../../components/feature/user/userSlice';
+import ModalProductList from '../../components/modalproductlist/ModalProductList';
+import { Link } from 'react-router-dom';
 
 const datas = [
     {
@@ -42,15 +47,33 @@ const datas = [
                 pricesize: "9500000"
             },
 
-            
+
         ],
         images: []
     },
 ]
 
 const ProductList = () => {
+
+    const products = useSelector((state) => state.products);
+    const [modallist, setModalList] = useState(false)
+    const [choose, setChoose] = useState(-1)
+    const dispatch = useDispatch();
+
+    const accessToken = localStorage.getItem("accessToken")
+
+    useEffect(() => {
+        dispatch(getProducts())
+        dispatch(getUser({ accessToken }))
+    }, [])
+
+    const toggleModal = () => {
+        setModalList(!modallist)
+        console.log(choose);
+    }
     return (
         <>
+            {console.log(products)}
             <div className='productlist'>
 
                 <h1 className='productlist__title'>PRODUCTS</h1>
@@ -71,61 +94,58 @@ const ProductList = () => {
                         <p className='productlist__detail-title-com'>Quantity</p>
                         <p className='productlist__detail-title-com'>Action</p>
                     </div>
-
                     {
-                        datas.map((data, index) => (
+                        products.data ? products.data.map((data, index) => (
 
                             <div key={index} className='productlist__detail-product'>
                                 <div className='productlist__detail-product-common'>{data.nameproducts}</div>
                                 <div className='productlist__detail-product-common'>{data.discount}</div>
                                 <div>
                                     {
-                                        data.sizes.map((size, index) => (
+                                        data.size ? data.size.map((size, index) => (
                                             <div className='productlist__detail-product-size' key={index}>
                                                 <p className='productlist__detail-title-common'>{size.namesize}</p>
                                                 <p className='productlist__detail-title-common'>{size.pricesize}</p>
 
                                                 <div className='productlist__detail-title-namecolor'>
                                                     {
-                                                        size.colors.map((color, index) => (
+                                                        size.color ? size.color.map((color, index) => (
                                                             <p key={index} className='productlist__detail-title-common'>{color.namecolor}</p>
-                                                        ))
+                                                        )) : null
                                                     }
                                                 </div>
 
                                                 <div className='productlist__detail-title-quantity'>
                                                     {
-                                                        size.colors.map((color, index) => (
-                                                            color.quantity > 0 
-                                                            ? <p  key={index} className='productlist__detail-title-common'>{color.quantity}</p>
-                                                            : <p  key={index} className='productlist__detail-title-common'>Out off stock</p>
-                                                        ))
+                                                        size.color ? size.color.map((color, index) => (
+                                                            color.quantity > 0
+                                                                ? <p key={index} className='productlist__detail-title-common'>{color.quantity}</p>
+                                                                : <p key={index} className='productlist__detail-title-common'>Out off stock</p>
+                                                        )) : null
                                                     }
                                                 </div>
 
-                                                <div className='productlist__detail-title-action'>
-                                                    {
-                                                        size.colors.map((color, index) => (
-                                                            <div key={index}>
-                                                                <BsPencil className='productlist__detail-product-common-icon productlist__detail-product-common-pen' />
-                                                                <ImBin className='productlist__detail-product-common-icon productlist__detail-product-common-bin' />
-                                                            </div>
-                                                        ))
-                                                    }
+                                                <div key={index}>
+                                                    <Link to="/admin/productsmodifier" state={{ product: data }}>
+                                                        <BsPencil className='productlist__detail-product-common-icon productlist__detail-product-common-pen' />
+
+                                                    </Link>
+                                                    <ImBin className='productlist__detail-product-common-icon productlist__detail-product-common-bin' />
                                                 </div>
 
                                                 <div className='productlist__detail-product-common productlist__detail-product-action'>
                                                 </div>
-
                                             </div>
-                                        ))
+                                        )) : null
                                     }
                                 </div>
                             </div>
-                        ))
+                        )) : null
                     }
                 </div>
             </div>
+
+            {/* {modallist ? <ModalProductList callbackparent={toggleModal} ></ModalProductList> : null} */}
         </>
     )
 }

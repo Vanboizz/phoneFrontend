@@ -33,7 +33,7 @@ const Header = () => {
 
       <ul className="list-option">
         <li className='list-option__item'>
-          <a className='list-option__option' href='/'>
+          <a className='list-option__option' href='/admin/register'>
             <div className="option__icon-seller option__seller"></div>
             <p>Seller Channel</p>
           </a>

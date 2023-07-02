@@ -5,7 +5,6 @@ const Modelcancel = (props) => {
     return (
         
         <div className='modelcancel'>
-            {console.log(props)}
             <div className="modelcancel__overlay">
 
             </div>

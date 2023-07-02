@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import "../productsmodifier/ProductsModifier.css"
 import Modal from '../../components/modal/Modal'
 import { FaPenAlt } from "react-icons/fa"
+import { IoIosClose } from "react-icons/io"
 import { useDispatch } from 'react-redux';
 import { addProducts } from '../../components/feature/products/productsSlice';
 import { ToastContainer, toast } from "react-toastify"
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 const ProductsModifier = () => {
     const [data, setData] = useState({
@@ -15,17 +17,22 @@ const ProductsModifier = () => {
         description: ''
     });
 
+    var product = {};
+
+    const location = useLocation()
+
     const [modalOpen, setOpenModal] = useState(-2)
 
     const [preview, setPreview] = useState([])
+
 
     const fileObj = []
 
     const { name, discount, promotion, description } = data
 
-    const [size, setSize] = useState([])
+    const [size, setSize] = useState(location.state == null ? [] : location.state.product.size)
 
-    const [select, setSelect] = useState(1)
+    const [select, setSelect] = useState(2)
 
     const [category, setCategory] = useState([])
 
@@ -36,14 +43,36 @@ const ProductsModifier = () => {
         setData({ ...data, [name]: value })
     }
 
+    // console.log(name);
+    // console.log(discount);
+    // console.log(promotion);
+    // console.log(description);
+    // console.log(category);
+    console.log(size);
+    // console.log(preview);
+
+    useEffect(() => {
+        if (location.state !== null) {
+            product = location.state.product;
+            setData({ name: product.nameproducts, discount: product.discount, promotion: product.promotion, description: product.description })
+            setSelect(product.idcate)
+
+            product.image.forEach(element => {
+                preview.push(element.avt)
+                setPreview([... new Set(preview)])
+            });
+        }
+    }, [])
+
     const handleAddUnit = (e) => {
         e.preventDefault()
         setOpenModal(-1)
     }
-
     const changeHandler = (e) => {
         let files = e.target.files
+
         fileObj.push(files)
+
         let reader;
 
         for (var i = 0; i < fileObj[0].length; i++) {
@@ -56,23 +85,34 @@ const ProductsModifier = () => {
         }
     }
 
+    const HandleRemove = (index) => {
+        preview.splice(index, 1)
+        setPreview([... new Set(preview)]);
+    }
+
     const handleAddProducts = async (e) => {
         e.preventDefault()
-        const product = {
-            selectedcategory: category.filter((value) => {
-                return value.idcate == e.target.category.value
-            })[0].idcate,
-            nameproducts: e.target.name.value,
-            promotion: e.target.promotion.value,
-            discount: e.target.discount.value,
-            description: e.target.description.value,
-            sizes: size.map(value => {
-                return value
-            }),
-            images: preview,
+
+        if (location.state !== null) {
+            // toast("????")
         }
-        dispatch(addProducts({ product: product }))
-        toast("Add Products Is Succesfull")
+        else {
+            const product = {
+                selectedcategory: category.filter((value) => {
+                    return value.idcate == e.target.category.value
+                })[0].idcate,
+                nameproducts: e.target.name.value,
+                promotion: e.target.promotion.value,
+                discount: e.target.discount.value,
+                description: e.target.description.value,
+                sizes: size.map(value => {
+                    return value
+                }),
+                images: preview,
+            }
+            dispatch(addProducts({ product: product }))
+            toast("Add Products Is Succesfull")
+        }
     }
 
     useEffect(() => {
@@ -111,10 +151,12 @@ const ProductsModifier = () => {
                             }
                         </select>
                         <h2>Unit</h2>
-                        <div >
+                        <div>
                             {
-                                size.map((value, index) => (
+                                size ? size.map((value, index) => (
+
                                     <div key={index} className='sizes'>
+
                                         <div >
                                             <p>{value.namesize}</p>
                                         </div>
@@ -123,11 +165,10 @@ const ProductsModifier = () => {
                                         </div>
                                         <div>
                                             {
-                                                value.colors.map((color, index) => (
+                                                value.color.map((color, index) => (
                                                     <div key={index}>
                                                         <div >
                                                             <p >{color.namecolor}</p>
-
                                                         </div>
                                                         <div>
                                                             <p className='quantity'>{color.quantity}</p>
@@ -145,7 +186,7 @@ const ProductsModifier = () => {
                                             </button>
                                         </div>
                                     </div>
-                                ))
+                                )) : null
                             }
                         </div>
                         <div>
@@ -154,10 +195,13 @@ const ProductsModifier = () => {
                     </div>
                     <div className='rl'>
                         <input type="file" name='file' multiple onChange={changeHandler} required />
-                        <div>
+                        <div className='rl-container'>
                             {
                                 (preview || []).map((url, index) => (
-                                    <img src={url} key={index} alt="" />
+                                    <div className='rl-container-item' key={index}>
+                                        <img src={url} key={index} alt="" className='rl-container-img' />
+                                        <IoIosClose onClick={() => HandleRemove(index)} key={index + 1} className='rl-container-close' />
+                                    </div>
                                 ))
                             }
                         </div>

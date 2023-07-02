@@ -120,3 +120,31 @@ h1 {
   width: 200px;
   margin: 0.8rem 0;
 }
+
+.rl-container {
+  /* display: inline-block; */
+  /* display: flex; */
+  margin-top: 10px;
+  /* position: relative; */
+}
+
+.rl-container-item {
+  display: flex;
+  border: 1px solid rgba(153, 153, 153, 0.5);
+  margin-right: 10px;
+  border-radius: 10px;
+}
+
+.rl-container-img {
+  position: relative;
+}
+
+.rl-container-close {
+  width: 25px;
+  height: 25px;
+  position: absolute;
+}
+
+.rl-container-close:hover {
+  opacity: 0.5;
+}

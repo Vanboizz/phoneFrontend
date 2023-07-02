@@ -9,7 +9,6 @@ import "swiper/css/grid";
 import "../home/Home.css"
 import "swiper/css/navigation";
 import { Grid, Navigation } from "swiper"
-import AboutUs from '../../components/aboutus/AboutUs'
 import { Link } from "react-router-dom"
 import Header from "../../components/header/Header"
 import Footer from "../../components/footer/Footer"
@@ -19,12 +18,7 @@ import axios from 'axios'
 
 const Home = () => {
     const [data, setData] = useState([]);
-    console.log(data);
     const products = useSelector((state) => state.products)
-    // const categoryId = useSelector((state) => state.products)
-
-    // console.log(categoryId);
-
     const dispatch = useDispatch()
     const [category, setCategory] = useState([])
 
@@ -51,7 +45,7 @@ const Home = () => {
             })
             .catch(error => console.log(error))
     }, [])
-
+    
     return (
         <div style={{ marginTop: "32px" }}>
             <Header />
