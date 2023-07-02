@@ -7,6 +7,7 @@ import { registerUser, reset } from '../../components/feature/user/userSlice'
 import { useNavigate } from "react-router-dom"
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
+import Header from '../../components/header/Header'
 
 const initial = {
     fullname: "",
@@ -53,7 +54,6 @@ const Register = () => {
     }, [success, isError])
 
     const submitForm = (data) => {
-        console.log(1111);
         if (data.password !== data.retypepassword) {
             toast("Password is not match")
             setState("")
@@ -65,6 +65,7 @@ const Register = () => {
 
     return (
         <>
+            <Header />
             <div className='grid-container'>
                 <h1>Register</h1>
                 <div className='grid-content'>

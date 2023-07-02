@@ -1,26 +1,19 @@
 import React, { useEffect } from 'react'
 import "../createnewpassword/CreateNewPassword.css"
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { createNewPassword, getUser, reset } from '../feature/user/userSlice';
+import { useDispatch } from 'react-redux';
+import { createNewPassword, reset } from '../feature/user/userSlice';
 import { ToastContainer, toast } from "react-toastify"
-
-
-
 
 const CreateNewPassword = () => {
     const [newUser, setNewUser] = useState({ curpass: '', newpass: '', confirmpass: '', })
-    const { user, success, isError } = useSelector(state => state.user)
     const accessToken = localStorage.getItem('accessToken');
     const dispatch = useDispatch();
-    
-    
+
     useEffect(() => {
         dispatch(reset())
     }, [])
 
-    
-    
     const handleCreateNewPassWord = (e) => {
 
         e.preventDefault();
@@ -41,7 +34,7 @@ const CreateNewPassword = () => {
                 <form action="" onSubmit={handleCreateNewPassWord}>
                     <div className='userprofile__form'>
                         <label className='userprofile__form-text'>CURRENT PASSWORD</label>
-                        <input  required onChange={e => { setNewUser({ ...newUser, curpass: e.target.value }) }} placeholder='Add current password' className='userprofile__form-input' type="text" name='username' />
+                        <input required onChange={e => { setNewUser({ ...newUser, curpass: e.target.value }) }} placeholder='Add current password' className='userprofile__form-input' type="text" name='username' />
                     </div>
 
                     <div className='userprofile__form'>

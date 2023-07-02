@@ -5,6 +5,8 @@ import axios from 'axios'
 import { ToastContainer, toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom'
+import Header from '../../components/header/Header'
+import Footer from '../../components/footer/Footer'
 
 const initial = {
     fullname: "",
@@ -48,6 +50,7 @@ const AdminRegister = () => {
 
     return (
         <>
+            <Header />
             <div className='admin-register' >
                 <h1>Amin Register</h1>
                 <div className='grid-content'>
