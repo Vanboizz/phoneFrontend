@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getCategoryById, getProducts } from '../../components/feature/products/productsSlice'
+import { getProducts } from '../../components/feature/products/productsSlice'
 import Slider from '../../components/slider/Slider'
 import { FaStar, FaPlusCircle } from 'react-icons/fa'
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -17,25 +17,17 @@ import axios from 'axios'
 
 
 const Home = () => {
-    const [data, setData] = useState([]);
     const products = useSelector((state) => state.products)
+
     const dispatch = useDispatch()
     const [category, setCategory] = useState([])
 
     const accessToken = localStorage.getItem("accessToken")
 
-    useEffect(() => {
-        axios.get('http://localhost:8000/product/getcategory/:id')
-        .then((res) => {
-            setData(res.data);
-        })
-        .catch(error => console.log(error));
-    }, [])
 
     useEffect(() => {
         dispatch(getProducts())
         dispatch(getUser({ accessToken }))
-        // dispatch(getCategoryById())
     }, [])
 
     useEffect(() => {

@@ -1,7 +1,6 @@
 import React from 'react'
 import "../userprofile/UserProfile.css"
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUser, updateUser } from '../feature/user/userSlice'
 

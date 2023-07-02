@@ -5,8 +5,9 @@ import Hiden from '../../components/hiden/Hiden'
 import { useNavigate } from "react-router-dom"
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { getUser, loginUser, reset } from '../../components/feature/user/userSlice'
+import { loginUser } from '../../components/feature/user/userSlice'
 import { ToastContainer, toast } from "react-toastify"
+import Header from '../../components/header/Header'
 
 
 const Login = () => {
@@ -36,6 +37,7 @@ const Login = () => {
 
     return (
         <>
+            <Header />
             <ToastContainer />
             <div className='grid-container'>
                 <h1>Login</h1>

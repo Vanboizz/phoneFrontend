@@ -44,9 +44,11 @@ export default function App() {
             path="/changepassword/:accessToken"
             element={<ChangePassword />}
           ></Route>
-          {/* user */}
+          {/* Visitor */}
           <Route path="/home" element={<Home />}></Route>
-          
+          <Route path="/category/:id" element={<Category />}></Route>
+          <Route path="/cart" element={<Cart />}></Route>
+          {/* user */}
           <Route path="/" element={<PrivateRoute />}>
             <Route
               path="/productsdetail/:id"
@@ -55,11 +57,8 @@ export default function App() {
             <Route path="/profile" element={<Profile />}></Route>
             <Route path="/orderinfo" element={<Orderinfo />}></Route>
             <Route path="/detailbill" element={<Detailbill />}></Route>
-            <Route path="/cart" element={<Cart />}></Route>
             <Route path="/cartthanks" element={<Cartthanks />}></Route>
             <Route path="/profile" element={<Profile />}></Route>
-            <Route path="/category/:id" element={<Category />}></Route>
-
           </Route>
 
           {/* admin */}

@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { getProducts } from '../../components/feature/products/productsSlice'
-import Slider from '../../components/slider/Slider'
 import { FaStar, FaPlusCircle } from 'react-icons/fa'
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/grid";
 import "../category/Category.css"
 import "swiper/css/navigation";
-import { Grid, Navigation } from "swiper"
-import AboutUs from '../../components/aboutus/AboutUs'
 import { Link } from "react-router-dom"
 import Header from "../../components/header/Header"
 import Footer from "../../components/footer/Footer"
-import { getUser } from '../../components/feature/user/userSlice'
 import axios from 'axios'
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa'
 
@@ -76,7 +69,7 @@ const Category = () => {
                     </div>
                 </div>
 
-                <div className="category__product-list" style={ {maxHeight: More ? undefined : '410px'} }>
+                <div className="category__product-list" style={{ maxHeight: More ? undefined : '410px' }}>
 
                     {
                         categorytemp ? categorytemp.map((value, index) => {

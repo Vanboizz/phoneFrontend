@@ -60,13 +60,6 @@ const Header = () => {
           </ul>
         </li>
 
-        {/* <li className='list-option__item'>
-          <a className='list-option__option' >
-            <div className="option__icon-pen option__pen"></div>
-            <p>About Us</p>
-          </a>
-        </li> */}
-
         <li className='list-option__item'>
           <a className='list-option__option' onClick={() => navigate("/cart")}>
             <div className="option__icon-cart option__cart option_contain-circle">
@@ -95,7 +88,7 @@ const Header = () => {
                       isShow && <ul className='option__subnav'>
                         <li>
                           <FaUserCircle className='option__subnav-profile' />
-                          <a href="">My profile</a>
+                          <a href="/profile">My profile</a>
                         </li>
                         <li><a href="" onClick={() => dispatch(logout())}>Logout</a></li>
                       </ul>
