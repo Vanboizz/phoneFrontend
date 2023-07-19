@@ -18,6 +18,21 @@ const addProducts = async ({ product }) => {
   return response.data;
 };
 
+const updateProducts = async ({ product }) => {
+
+  const response = await axios.post(
+    "http://localhost:8000/product/updateproduct",
+    product,
+    {
+      headers: {
+
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.data;
+};
+
 const getCategoryById = async () => {
   const response = await axios.get("http://localhost:8000/product/getcategory/:id");
   return response.data;
@@ -27,6 +42,7 @@ const productsService = {
   getProducts,
   addProducts,
   getCategoryById,
+  updateProducts,
 };
 
 export default productsService;

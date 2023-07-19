@@ -45,8 +45,8 @@ const Detailbill = () => {
     return (
         <>
             <Header></Header>
-            <Templatecart text__my='Payment orders' text__btn='CONTINUES' >
-                <Statusorder />
+            <Templatecart text__my='Payment orders' text__btn='CONTINUES' text_back='/orderinfo'>
+                <Statusorder active_payment='active' />
                 <div className='detailbill'>
                     <h3 className='detailbill__order-info'> Order Information</h3>
                     <div >

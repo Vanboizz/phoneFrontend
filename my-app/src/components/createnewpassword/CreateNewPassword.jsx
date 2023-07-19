@@ -4,27 +4,54 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { createNewPassword, reset } from '../feature/user/userSlice';
 import { ToastContainer, toast } from "react-toastify"
+import axios from 'axios';
 
 const CreateNewPassword = () => {
-    const [newUser, setNewUser] = useState({ curpass: '', newpass: '', confirmpass: '', })
+    var [newUser, setNewUser] = useState({ curpass: '', newpass: '', confirmpass: '', })
     const accessToken = localStorage.getItem('accessToken');
     const dispatch = useDispatch();
+    const message = useState('')
 
     useEffect(() => {
+
         dispatch(reset())
+
     }, [])
+
+
+    const createNewPassword = async () => {
+        const response = await axios.post(
+            "http://localhost:8000/auth/user/createnewpassword",
+            {
+                curpass: newUser.curpass,
+                newpass: newUser.newpass,
+            },
+            {
+                headers: {
+                    Authorization: "Bearer " + accessToken,
+                },
+            }
+        )
+            .then((result) => {
+                toast(result.data.message)
+            })
+            .catch(error => {
+                toast.error(error.response.data.message)
+            })
+    }
 
     const handleCreateNewPassWord = (e) => {
 
         e.preventDefault();
-        if (newUser.newpass !== newUser.confirmpass) {
-            toast.error("Confirm password must match the new password")
-        }
-        else {
-            dispatch(createNewPassword({ curpass: newUser.curpass, newpass: newUser.newpass, accessToken: accessToken }))
-        }
-    }
 
+        if (newUser.curpass === newUser.newpass)
+            toast.error("Current password must be different from newpassword")
+        else if (newUser.newpass !== newUser.confirmpass)
+            toast.error("Confirm password isn't the same new password")
+        else
+            createNewPassword();
+    }
+    
     return (
         <>
             <ToastContainer />
@@ -34,17 +61,17 @@ const CreateNewPassword = () => {
                 <form action="" onSubmit={handleCreateNewPassWord}>
                     <div className='userprofile__form'>
                         <label className='userprofile__form-text'>CURRENT PASSWORD</label>
-                        <input required onChange={e => { setNewUser({ ...newUser, curpass: e.target.value }) }} placeholder='Add current password' className='userprofile__form-input' type="text" name='username' />
+                        <input type='password' required onChange={e => { setNewUser({ ...newUser, curpass: e.target.value }) }} placeholder='Add current password' className='userprofile__form-input' name='username' />
                     </div>
 
                     <div className='userprofile__form'>
                         <label className='userprofile__form-text'>NEW PASSWORD</label>
-                        <input required onChange={e => { setNewUser({ ...newUser, newpass: e.target.value }) }} placeholder='Add new password' className='userprofile__form-input' type="text" name='username' />
+                        <input type='password' required onChange={e => { setNewUser({ ...newUser, newpass: e.target.value }) }} placeholder='Add new password' className='userprofile__form-input' name='username' />
                     </div>
 
                     <div className='userprofile__form'>
                         <label className='userprofile__form-text'>CONFIRM NEW PASSWORD</label>
-                        <input required onChange={e => { setNewUser({ ...newUser, confirmpass: e.target.value }) }} placeholder='Confirm new password' className='userprofile__form-input' type="text" name='username' />
+                        <input type='password' required onChange={e => { setNewUser({ ...newUser, confirmpass: e.target.value }) }} placeholder='Confirm new password' className='userprofile__form-input' name='username' />
                     </div>
 
                     <div className='userprofile__form'>

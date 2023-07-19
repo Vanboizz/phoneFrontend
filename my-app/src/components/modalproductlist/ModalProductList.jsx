@@ -6,7 +6,6 @@ const ModalProductList = (props) => {
     return (
         <div className='modelproductlist'>
             <div className="modelproductlist__overlay">
-                {console.log(props)}
             </div>
 
             <div className="modelproductlist__content">
@@ -14,8 +13,6 @@ const ModalProductList = (props) => {
                 <h1 className='modelproductlist__content-title'>Update Product</h1>
 
                 <form className='modelproductlist__content-body'>
-                    {/* <input className='products-name' type='text' name='name' placeholder='Products Name' value={name} onChange={handleOnChange} />
-                    <input className='discount' name='discount' placeholder='Discount' value={discount} onChange={handleOnChange} /> */}
                         <input className='modelproductlist__content-body-common' placeholder='Product name' type="text" />
                         <input  className='modelproductlist__content-body-common' placeholder='Discount'  type="text" />
                     
@@ -35,10 +32,7 @@ const ModalProductList = (props) => {
                         </div>
                     
                 </form>
-
-                
-                
-
+               
                 <div className='modelproductlist__content-button'>
                         <button className="modelproductlist__content-body-no" onClick={() => { props.callbackparent() }}>
                             No

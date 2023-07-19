@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux'
 
 const Totalcart = ({ text__btn, handle__checkout }) => {
     const { totalPriceCart } = useSelector(state => state.cart)
-
     return (
         <div className='total-cart'>
             <div className='total-cart__title'>
@@ -18,8 +17,9 @@ const Totalcart = ({ text__btn, handle__checkout }) => {
                     {text__btn}
                 </button>
 
-                <a href='/' className='btn-submit__add-product'>
-                    CHOOSE ADD THE OTHER PRODUCT
+                <a href='/home' className='btn-submit__add-product'>
+                    CHOOSE ADD THE OTHER 
+                    PRODUCT
                 </a>
             </div>
         </div>

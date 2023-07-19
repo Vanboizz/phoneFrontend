@@ -3,22 +3,31 @@ import "../header/Header.css"
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser, logout } from "../feature/user/userSlice"
 import { FaSearch, FaUserCircle } from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-const Header = () => {
+const Header = (props) => {
   const { quantityCart } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.user)
+
   const accessToken = localStorage.getItem("accessToken")
-  const [isShow, setIsShow] = useState(false)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const [category, setCategory] = useState([])
 
   useEffect(() => {
     if (accessToken) {
       dispatch(getUser(accessToken))
     }
-  }, [])
 
+    axios.get("http://localhost:8000/product/getcategory")
+      .then(res => {
+        setCategory(res.data)
+      })
+      .catch(error => console.log(error))
+
+  }, [])
 
   return (
     <header>
@@ -27,8 +36,7 @@ const Header = () => {
 
       <div className="search">
         <FaSearch className="search__icon-search" />
-
-        <input className='search__input-search' type="text" placeholder="Find what that on Smartphone..." />
+        <input onChange={(e) => props.parentCallback(e.target.value)} className='search__input-search' type="text" placeholder="Find what that on Smartphone..." />
       </div>
 
       <ul className="list-option">
@@ -47,17 +55,25 @@ const Header = () => {
         </li>
 
         <li className='list-option__item list-option__item-phone'>
-          <a className='list-option__option'>
-            <div className="option__icon-phone option__phone"></div>
-            <p>Phone</p>
-          </a>
 
-          <ul className='option__subnav'>
-            <li><a href=''>IPhone 13 Promax</a></li>
-            <li><a href=''>Samsung Galaxy A71</a></li>
-            <li><a href=''>Lenovo</a></li>
-            <li><a href=''>Oppo New 3</a></li>
-          </ul>
+          <div>
+            <a className='list-option__option'>
+              <div className="option__icon-phone option__phone"></div>
+              <p>Phone</p>
+            </a>
+            <ul className='option__subnav option__subnav-phone'>
+              {
+                category ?
+                  category.map((cateitem, index) => (
+                    <li key={index}>
+                      <a href={`http://localhost:3000/category/${cateitem.idcate}`}>{cateitem.namecate}</a>
+                    </li>
+
+                  ))
+                  : null
+              }
+            </ul>
+          </div>
         </li>
 
         <li className='list-option__item'>
@@ -75,25 +91,27 @@ const Header = () => {
               ?
               <div>
                 {
-                  <div>
-                    <a className='list-option__option list-option__login' onClick={() => {
-                      setIsShow(!isShow)
-                    }} >
+                  <>
+                    <a className='list-option__option list-option__login'>
                       <span className="option__icon-user option__user"></span>
                       <p>{user && user.length > 0 ? user[0].fullname : "Login"}</p>
                       <div className="option__icon-arrow-user option__phone">
                       </div>
                     </a>
                     {
-                      isShow && <ul className='option__subnav'>
+
+                      <ul className='option__subnav option__subnav-pro'>
                         <li>
                           <FaUserCircle className='option__subnav-profile' />
                           <a href="/profile">My profile</a>
                         </li>
-                        <li><a href="" onClick={() => dispatch(logout())}>Logout</a></li>
+                        <li>
+                          <FiLogOut />
+                          <a href="" onClick={() => dispatch(logout())}>Log out</a>
+                        </li>
                       </ul>
                     }
-                  </div>
+                  </>
                 }
               </div>
               :
@@ -102,7 +120,6 @@ const Header = () => {
                 <p>Login</p>
               </a>
           }
-
         </li>
 
       </ul>

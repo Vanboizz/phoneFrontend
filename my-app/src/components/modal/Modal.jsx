@@ -8,7 +8,6 @@ const NEW_ITEM = "new_item"
 const DELETE_ITEM = "delete_item"
 const CHANGE_NAME_COLOR = "change_name_color"
 const CHANGE_QUANTITY_COLOR = "change_quantity_color"
-const SET_NAME_QUANTITY_COLOR = "set_name_quantity_color"
 
 // Reducer
 const reducer = (state, action) => {
@@ -38,13 +37,6 @@ const reducer = (state, action) => {
             delete state[action.payload.key]
             return { ...state }
 
-        // case SET_NAME_QUANTITY_COLOR: 
-        //     return {
-        //         ...state, [Date.now().toString()]: {
-        //             namecolor: action.payload.data.namecolor,
-        //             quantity: action.payload.data.quantity
-        //         }
-        //     }
         default:
             return state
     }
@@ -52,7 +44,7 @@ const reducer = (state, action) => {
 
 // map ooj to arr
 const objToArray = (obj, fn) => {
-    const res = []; 
+    const res = [];
     for (const key in obj) {
         res.push(fn(obj[key], key));
     }
@@ -64,10 +56,10 @@ const Modal = ({ size, setOpenModal, onSubmit }) => {
     // Object.assign({}, [] => Initial State.
     const [array, dispatch] = useReducer(reducer, Object.assign({}, size ? size.color : []))
     const [data, setData] = useState({
+        idsize: size ? size.idsize : "",
         namesize: size ? size.namesize : "",
         pricesize: size ? size.pricesize : ""
     })
-
     const { namesize, pricesize } = data
 
     const handleOnChange = (e) => {
@@ -85,105 +77,79 @@ const Modal = ({ size, setOpenModal, onSubmit }) => {
         })
         setOpenModal(false)
     }
-    useEffect(() => {
-        {   
-            if (size) {
-                // size.color.forEach(element => {
-                //     console.log(element);
-                //     dispatch({
-                //         type: SET_NAME_QUANTITY_COLOR,
-                //         payload: {
-                //             data: element
-                //         }
-                //     })
-                // });
-
-                // for (var i = 0 ; i < size.color.length; i++) {
-                //     console.log('abc');
-                //     // console.log(size.color[i]);
-                //     dispatch({
-                //         type: SET_NAME_QUANTITY_COLOR,
-                //         payload: {
-                //             data: size.color[i]
-                //         }
-                //     })
-                // }
-            }
-        }
-    }, [])
 
     return (
-        <div className='modal-container'>
-            <div>
-                <p>Form Adding</p>
-                <form action="" onSubmit={handleUnit}>
-                    <div className='name-size'>
-                        <label htmlFor="">Name Size:</label>
-                        <input type="text" value={namesize} name='namesize' onChange={handleOnChange} required />
-                    </div>
-                    <div className='price-size'>
-                        <label htmlFor="">Price Size:</label>
-                        <input type="text" value={pricesize} name='pricesize' onChange={handleOnChange} required />
-                    </div>
-                    <div className='plus'>
-                        <label htmlFor="">Color:</label>
-                        <button onClick={(e) => {
-                            e.preventDefault()
-                            dispatch({
-                                type: NEW_ITEM
-                            })
-                        }}>
-                            <FaPlus />
-                        </button>
-                    </div>
-                    
-                    
+        <div className='modal'>
+            <div className='modal-container'>
 
-                    {
-                        objToArray(array, (value, key) => (
-                            <div key={key}>
-                                {console.log(value)}
-                                <div className='name-color'>
-                                    <label htmlFor="">Name Color:</label>
-                                    <input type="text" name='namecolor' value={value.namecolor} onChange={(e) => dispatch({
-                                        type: CHANGE_NAME_COLOR,
-                                        payload: {
-                                            key: key,
-                                            data: e.target.value
-                                        }
-                                    })} required />
+                <div>
+                    <p>Form Adding</p>
+                    <form action="" onSubmit={handleUnit}>
+                        <div className='name-size'>
+                            <label htmlFor="">Name Size:</label>
+                            <input type="text" value={namesize} name='namesize' onChange={handleOnChange} required />
+                        </div>
+                        <div className='price-size'>
+                            <label htmlFor="">Price Size:</label>
+                            <input type="text" value={pricesize} name='pricesize' onChange={handleOnChange} required />
+                        </div>
+                        <div className='plus'>
+                            <label htmlFor="">Color:</label>
+                            <button onClick={(e) => {
+                                e.preventDefault()
+                                dispatch({
+                                    type: NEW_ITEM
+                                })
+                            }}>
+                                <FaPlus />
+                            </button>
+                        </div>
+
+                        {
+                            objToArray(array, (value, key) => (
+                                <div key={key}>
+                                    <div className='name-color'>
+                                        <label htmlFor="">Name Color:</label>
+                                        <input type="text" name='namecolor' value={value.namecolor} onChange={(e) => dispatch({
+                                            type: CHANGE_NAME_COLOR,
+                                            payload: {
+                                                key: key,
+                                                data: e.target.value,
+                                                idcolor: key
+                                            }
+                                        })} required />
+                                    </div>
+                                    <div className='quantity'>
+                                        <label htmlFor="">Quantity:</label>
+                                        <input type="number" name='quantity' value={value.quantity} onChange={(e) => dispatch({
+                                            type: CHANGE_QUANTITY_COLOR,
+                                            payload: {
+                                                key: key,
+                                                data: e.target.value
+                                            }
+                                        })} required min={1} max={10} />
+                                    </div>
+                                    <div className='action'>
+                                        <label htmlFor="">Action:</label>
+                                        <button onClick={() => dispatch({
+                                            type: DELETE_ITEM,
+                                            payload: {
+                                                key: key
+                                            }
+                                        })}>
+                                            <FaTrash />
+                                        </button>
+                                    </div>
                                 </div>
-                                <div className='quantity'>
-                                    <label htmlFor="">Quantity:</label>
-                                    <input type="number" name='quantity' value={value.quantity} onChange={(e) => dispatch({
-                                        type: CHANGE_QUANTITY_COLOR,
-                                        payload: {
-                                            key: key,
-                                            data: e.target.value
-                                        }
-                                    })} required min={1} max={10} />
-                                </div>
-                                <div className='action'>
-                                    <label htmlFor="">Action:</label>
-                                    <button onClick={() => dispatch({
-                                        type: DELETE_ITEM,
-                                        payload: {
-                                            key: key
-                                        }
-                                    })}>
-                                        <FaTrash />
-                                    </button>
-                                </div>
-                            </div>
-                        ))
-                    }
-                    <div className='btn'>
-                        <button className='cancel' onClick={setOpenModal}>Cancel</button>
-                        <button className='ok'>OK</button>
-                    </div>
-                </form>
+                            ))
+                        }
+                        <div className='btn'>
+                            <button className='cancel' onClick={setOpenModal}>Cancel</button>
+                            <button className='ok'>OK</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-
         </div>
     )
 }

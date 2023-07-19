@@ -12,7 +12,6 @@ import { Grid, Navigation } from "swiper"
 import { Link } from "react-router-dom"
 import Header from "../../components/header/Header"
 import Footer from "../../components/footer/Footer"
-import { getUser } from '../../components/feature/user/userSlice'
 import axios from 'axios'
 
 
@@ -21,26 +20,27 @@ const Home = () => {
 
     const dispatch = useDispatch()
     const [category, setCategory] = useState([])
-
-    const accessToken = localStorage.getItem("accessToken")
-
+    const [inputhome, setInputHome] = useState('')
+    var profilter = [];
 
     useEffect(() => {
         dispatch(getProducts())
-        dispatch(getUser({ accessToken }))
-    }, [])
-
-    useEffect(() => {
         axios.get("http://localhost:8000/product/getcategory")
             .then(res => {
                 setCategory(res.data)
             })
             .catch(error => console.log(error))
+
     }, [])
-    
+
+    const setInput = (childdata) => {
+        setInputHome(childdata)
+    }
+
     return (
         <div style={{ marginTop: "32px" }}>
-            <Header />
+
+            <Header parentCallback={setInput} />
             <Slider />
             <div className='home'>
                 <div className='product-list-title'>
@@ -69,48 +69,65 @@ const Home = () => {
                         className="mySwiper"
                     >
                         {
-                            products.data ? products.data.map((value, index) => {
-                                return (
-                                    <SwiperSlide key={index} >
-                                        <Link to={`/productsdetail/${value.idproducts}`} state={{ product: value }}>
-                                            <div className='item' key={index} onClick={() => window.location.replace(`/productsdetail/${value.idproducts}`)}>
-                                                <div className='discount'>
-                                                    <p >Giảm <span>{value.discount}%</span></p>
-                                                </div>
-                                                <div className='url'>
-                                                    <img key={index} src={value.image[0].avt} alt="" />
-                                                </div>
-                                                <h3 style={{ color: "#000" }}>{value.nameproducts}</h3>
-                                                <div className='format'>
-                                                    <p>{value.size[0].pricesize - ((value.size[0].pricesize * value.discount) / 100)}&nbsp;đ</p>
-                                                    <p>{value.size[0].pricesize}&nbsp;đ</p>
-                                                </div>
-                                                <div className='promotion' style={{ color: "#000" }}>
-                                                    {value.promotion}
-                                                </div>
-                                                <div className='icon'>
-                                                    <div>
-                                                        <FaStar className='star' />
-                                                        <FaStar className='star' />
-                                                        <FaStar className='star' />
-                                                        <FaStar className='star' />
-                                                        <FaStar className='star' />
+                            products.data ? profilter = products.data
+                                .filter((product) => {
+                                    if (inputhome === '')
+                                        return product;
+                                    else if (product.nameproducts.toLowerCase().includes(inputhome.toLowerCase()))
+                                        return product;
+                                })
+                                .map((value, index) => {
+                                    return (
+                                        <SwiperSlide key={index} style={{}}>
+                                            <Link to={`/productsdetail/${value.idproducts}`} state={{ product: value }}>
+                                                <div className='item' key={index} onClick={() => window.location.replace(`/productsdetail/${value.idproducts}`)}>
+                                                    <div className='discount'>
+                                                        <p >Giảm <span>{value.discount}%</span></p>
                                                     </div>
-                                                    <button>
-                                                        <FaPlusCircle className='circle' />
-                                                    </button>
+                                                    <div className='url'>
+                                                        <img key={index} src={value.image[0].avt} alt="" />
+                                                    </div>
+                                                    <h3 style={{ color: "#000" }}>{value.nameproducts}</h3>
+                                                    <div className='format'>
+                                                        <p>{value.size[0].pricesize - ((value.size[0].pricesize * value.discount) / 100)}&nbsp;đ</p>
+                                                        <p>{value.size[0].pricesize}&nbsp;đ</p>
+                                                    </div>
+                                                    <div className='promotion' style={{ color: "#000" }}>
+                                                        {value.promotion}
+                                                    </div>
+                                                    <div className='icon'>
+                                                        <div>
+                                                            <FaStar className='star' />
+                                                            <FaStar className='star' />
+                                                            <FaStar className='star' />
+                                                            <FaStar className='star' />
+                                                            <FaStar className='star' />
+                                                        </div>
+                                                        <button>
+                                                            <FaPlusCircle className='circle' />
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </Link>
+                                            </Link>
 
-                                    </SwiperSlide>
-                                )
-                            }) : null
+                                        </SwiperSlide>
+                                    )
+                                }) : null
                         }
                     </Swiper>
+                    {
+                        profilter.length === 0
+                            ?
+                            <div className='product-list-container'>
+
+                                <img src="https://media.itsnicethat.com/original_images/giphy-2021-gifs-and-clips-animation-itsnicethat-02.gif" alt="" className='product-list-container__image' />
+
+                                <h1 className='product-list-container__empty'>NO PRODUCT FOUND</h1>
+                            </div>
+                            : null
+                    }
                 </div>
             </div>
-            {/* <AboutUs /> */}
             <Footer />
 
         </div>

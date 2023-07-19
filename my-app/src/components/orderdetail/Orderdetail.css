@@ -25,17 +25,13 @@
     width: 12%;
 }
 
-.orderdetail__back:hover { 
+.orderdetail__back:hover {
     cursor: pointer;
     opacity: 0.7;
 }
 
 .orderdetail__back-icon {
     font-size: 30px;
-}
-
-.orderdetail__back-text {
-
 }
 
 .orderdetail__item {
@@ -50,21 +46,22 @@
     justify-content: space-between;
 }
 
-
 .orderdetail__item-pro {
     display: flex;
     align-items: center;
+    gap: 20px;
+    font-size: 15px;
 }
 
 .orderdetail__item-pro-img {
-    height: 120px; 
+    height: 120px;
 }
-
 
 .orderdetail__item-pro-detail {
     display: flex;
     flex-direction: column;
     margin-left: 5px;
+    gap: 3px;
 }
 
 .orderdetail__item-pro-detail-namepro {
@@ -72,6 +69,12 @@
     font-weight: 600;
 }
 
+.container-size-color {
+    display: flex;
+    gap: 10px;
+}
+
+.orderdetail__item-pro-detail-size,
 .orderdetail__item-pro-detail-color {
     margin-bottom: 7px;
     color: #818181;
@@ -82,21 +85,42 @@
     color: #818181;
 }
 
+.orderdetail .container-price {
+    display: flex;
+    gap: 20px;
+    text-align: center;
+    align-items: center;
+}
+
 .orderdetail__item-pro-detail-price {
     color: red;
     font-weight: 600;
+    font-size: 16px
 }
 
-.orderdetail__status {
-    text-align: center;
-    color: #ec7532;
+.orderdetail__item-pro-detail-pricesize {
+    color: #707070;
+    font-weight: 600;
+    text-decoration: line-through;
+    font-size: 14px;
+}
+
+.orderdetail-container_status {
+    display: flex;
+    align-items: center;
+    justify-content: right;
     text-transform: uppercase;
     font-weight: 600;
-    font-size: 17px;
+    font-size: 20px;
 }
 
-.time-detail {
-    padding-right: 15px;
+.orderdetail-container_status-Paid {
+    color: #0bd019;
+
+}
+
+.orderdetail-container_status-UnPaid {
+    color: #ec7532;
 }
 
 .time-detail__title {
@@ -115,11 +139,11 @@
 .time-detail__point-under::after {
     content: "";
     border-left: 2.0px dashed #777;
-    height: 25px;
+    height: 20px;
     left: 1%;
-    top: -64%;
+    top: -98%;
     position: absolute;
-    width: 30%;
+    width: 15%;
     margin-left: 4px;
 }
 
@@ -161,7 +185,7 @@
 
 .orderdetail__cusinfo-title-icon,
 .orderdetail__orderinfo-title-basket {
-    font-size: 30px; 
+    font-size: 30px;
 }
 
 .orderdetail__cusinfo-title-text,
@@ -171,10 +195,17 @@
 }
 
 .orderdetail__orderinfo-tran-fee,
-.orderdetail__orderinfo-total { 
+.orderdetail__orderinfo-total {
     display: flex;
     justify-content: space-between;
     margin-top: 5px;
+}
+
+.orderdetail__orderinfo-total .orderdetail__orderinfo-total-price,
+.orderdetail__orderinfo-total-text-total-price {
+    color: red;
+    font-weight: 600;
+    font-size: 16px;
 }
 
 .orderdetail__cusinfo-row {

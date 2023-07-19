@@ -16,8 +16,6 @@ const Category = () => {
     const [More, setMore] = useState(false)
     const [categorytemp, setCategorytemp] = useState([])
 
-    console.log(category);
-
     useEffect(() => {
         axios.get(`http://localhost:8000/product/getcategory/${window.location.href.substring(
             window.location.href.lastIndexOf("/") + 1
@@ -52,22 +50,35 @@ const Category = () => {
         <>
             <Header />
             <div className='category'>
-                <div className='category__sort'>
-                    <h2 className='category__sort-title'>Sorted by</h2>
+                {
+                    categorytemp.length !== 0 ?
+                        <div className='category__sort'>
+                            <h2 className='category__sort-title'>Sorted by</h2>
 
-                    <div className='category__sort-filter'>
+                            <div className='category__sort-filter'>
 
-                        <button className='category__sort-filter-wrap' onClick={() => handleLH()}>
-                            <div className='category__sort-filter-wrap-icon category__sort-filter-wrap-icon-lh'></div>
-                            <p className='category__sort-filter-hl-title'>Price Low - High</p>
-                        </button>
+                                <button className='category__sort-filter-wrap' onClick={() => handleLH()}>
+                                    <div className='category__sort-filter-wrap-icon category__sort-filter-wrap-icon-lh'></div>
+                                    <p className='category__sort-filter-hl-title'>Price Low - High</p>
+                                </button>
 
-                        <button className='category__sort-filter-wrap' onClick={() => handleHL()}>
-                            <div className='category__sort-filter-wrap-icon category__sort-filter-wrap-icon-hl'></div>
-                            <p className='category__sort-filter-hl-title'>Price High - Low</p>
-                        </button>
-                    </div>
-                </div>
+                                <button className='category__sort-filter-wrap' onClick={() => handleHL()}>
+                                    <div className='category__sort-filter-wrap-icon category__sort-filter-wrap-icon-hl'></div>
+                                    <p className='category__sort-filter-hl-title'>Price High - Low</p>
+                                </button>
+                            </div>
+                        </div>
+                        : null
+                }
+
+                {
+                    categorytemp.length === 0 ?
+                        (<div className="category__list-empty">
+                            <img src="https://media.itsnicethat.com/original_images/giphy-2021-gifs-and-clips-animation-itsnicethat-02.gif" alt="" className='category__list-empty-image' />
+                            <p className='category__list-empty-text'>Empty</p>
+                        </div>)
+                        : null
+                }
 
                 <div className="category__product-list" style={{ maxHeight: More ? undefined : '410px' }}>
 
@@ -105,29 +116,29 @@ const Category = () => {
                                     </div>
                                 </Link>
 
-                                // <SwiperSlide key={index} >
-                                // </SwiperSlide>
                             )
                         }) : null
                     }
-                    {/* </Swiper> */}
                 </div>
-
-                <div className='category__btn-show'>
-                    <button onClick={() => setMore(!More)}>
-                        <span>
-                            {
-                                More ? 'Collagse' : 'See More'
-                            }
-                        </span>
-                        <div>
-                            {
-                                More ? <FaAngleUp /> : <FaAngleDown />
-                            }
+                {
+                    categorytemp.length >= 6
+                        ?
+                        <div className='category__btn-show'>
+                            <button onClick={() => setMore(!More)}>
+                                <span>
+                                    {
+                                        More ? 'Collagse' : 'See More'
+                                    }
+                                </span>
+                                <div>
+                                    {
+                                        More ? <FaAngleUp /> : <FaAngleDown />
+                                    }
+                                </div>
+                            </button>
                         </div>
-                    </button>
-                </div>
-
+                        : null
+                }
             </div>
 
             <Footer />

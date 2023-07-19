@@ -21,8 +21,7 @@ const Cart = () => {
     return (
         <>
             <Header></Header>
-            <Templatecart text__my='My Cart' text__btn='PROCEED TO ORDER' >
-                {/* have item */}
+            <Templatecart text__my='My Cart' text__btn='PROCEED TO ORDER' text_back='/home'>
                 <div className="product">
                     {
                         cart ? cart.map((value, index) => (
@@ -32,7 +31,7 @@ const Cart = () => {
                                 <div className='item__info'>
                                     <a className='info__name-pro'>{value.nameproducts}<span>{value.size[0].namesize}({value.size[0].color[0].namecolor})</span></a>
                                     <div className='info__line-2'>
-                                        <p className='info__sale-price'>{(value.size[0].pricesize * value.discount) / 100}</p>
+                                        <p className='info__sale-price'>{value.size[0].pricesize - ((value.size[0].pricesize * value.discount) / 100)}</p>
                                         <div className='change-quantity'>
                                             <button onClick={() => {
                                                 if (value.quantity > 1) {

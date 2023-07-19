@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { changePassword } from '../../components/feature/user/userSlice'
 import { ToastContainer, toast } from "react-toastify"
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const initial = {
   password: "",

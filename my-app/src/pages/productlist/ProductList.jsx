@@ -1,151 +1,165 @@
 import React, { useEffect, useState } from 'react'
 import "./ProductList.css"
 import { BsPencil } from "react-icons/bs";
-import { ImBin } from "react-icons/im";
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from '../../components/feature/products/productsSlice';
-import { getUser } from '../../components/feature/user/userSlice';
-import ModalProductList from '../../components/modalproductlist/ModalProductList';
-import { Link } from 'react-router-dom';
-
-const datas = [
-    {
-        idcate: "1",
-        namecat: "Samsung",
-        nameproducts: "Samsung Galaxy A20",
-        promotion: "Tăng thêm dịch vụ bảo hành Vip 12 tháng 1 đổi 1 và 1km khác",
-        discount: "30",
-        description: "Samsung Galaxy A20 - Mang đến những trải nghiệm ấn tượng.Samsung Galaxy A20 là chiếc điện thoại tiếp nối sự thành công của dòng smartphone Reno. Với những cải tiến mạnh mẽ về cấu hình, hiệu năng lẫn ngoại hình, Oppo Reno7 đã mang đến cho người dùng chiếc điện thoại với những trải nghiệm ấn tượng và tuyệt vời hơn. Cùng khám phá những điều mới mẻ mà Oppo Reno7 mang lại nhé!",
-        sizes: [
-            {
-                colors: [
-                    {
-                        namecolor: "Orange",
-                        quantity: "10"
-                    },
-                    {
-                        namecolor: "Blue",
-                        quantity: "5"
-                    }
-                ],
-                namesize: "256GB",
-                pricesize: "10500000"
-            },
-
-            {
-                colors: [
-                    {
-                        namecolor: "Purple",
-                        quantity: "2"
-                    },
-                    {
-                        namecolor: "Red",
-                        quantity: "4"
-                    }
-                ],
-                namesize: "126GB",
-                pricesize: "9500000"
-            },
-
-
-        ],
-        images: []
-    },
-]
+import { BiTrash } from "react-icons/bi";
+import { Link, useNavigate } from 'react-router-dom';
+import HeaderManager from '../../components/headermanager/HeaderManager';
+import Modelcancel from '../../components/modelcancel/Modelcancel';
+import { ToastContainer, toast } from "react-toastify"
+import axios from 'axios';
 
 const ProductList = () => {
-
+    const navigate = useNavigate()
     const products = useSelector((state) => state.products);
-    const [modallist, setModalList] = useState(false)
-    const [choose, setChoose] = useState(-1)
+    const [modallist, setModalList] = useState(-1)
+    const [inputSearch, setInputSearch] = useState('')
+    const [prodelete, setProDelete] = useState([])
+
+    var profilter = [];
+
     const dispatch = useDispatch();
 
-    const accessToken = localStorage.getItem("accessToken")
 
     useEffect(() => {
         dispatch(getProducts())
-        dispatch(getUser({ accessToken }))
     }, [])
 
-    const toggleModal = () => {
-        setModalList(!modallist)
-        console.log(choose);
+    const toggleModal = (data, number) => {
+        setProDelete(data)
+        setModalList(number)
     }
+
+    const Createproduct = () => {
+        navigate("/admin/productsmodifier")
+    }
+
+    const removeProduct = async (idproducts) => {
+        const response = await axios.post("http://localhost:8000/product/removeproduct",
+            { idproducts },
+            {
+                headers: {
+
+                    "Content-Type": "application/json",
+                },
+            })
+            .then((result) => {
+                toast(result.data.message)
+                dispatch(getProducts())
+            })
+            .catch((error) => {
+                toast(error)
+            })
+    }
+
+    const handleYes = (prochoose) => {
+        removeProduct(prochoose.idproducts)
+        setModalList(-1)
+    }
+
+    const handleNo = () => {
+        setModalList(-1)
+    }
+
     return (
         <>
-            {console.log(products)}
+            <ToastContainer />
+            <HeaderManager />
             <div className='productlist'>
 
-                <h1 className='productlist__title'>PRODUCTS</h1>
+                <h1 className='productlist__title'>PRODUCTS LIST</h1>
 
                 <div className='productlist__search'>
-                    <input title='search' type="text" className='productlist__search-input' />
-                    <button className='productlist__search-btn'>CREATE</button>
+                    <input title='search' type="text" className='productlist__search-input' placeholder='Search here .....' onChange={e => setInputSearch(e.target.value)} />
+                    <button onClick={() => { Createproduct() }} className='productlist__search-btn'>CREATE</button>
                 </div>
 
 
+                <div className='productlist__detail-title'>
+                    <p className='productlist__detail-title-com'>ID</p>
+                    <p className='productlist__detail-title-com'>Name Product</p>
+                    <p className='productlist__detail-title-com'>Discount</p>
+                    <p className='productlist__detail-title-com'>Name Size</p>
+                    <p className='productlist__detail-title-com '>Price Size</p>
+                    <p className='productlist__detail-title-com'>Name Color</p>
+                    <p className='productlist__detail-title-com'>Quantity</p>
+                    <p className='productlist__detail-title-com'>Action</p>
+                </div>
+                {console.log(products.data)}
+
                 <div className='productlist__detail'>
-                    <div className='productlist__detail-title'>
-                        <p className='productlist__detail-title-com'>Name Product</p>
-                        <p className='productlist__detail-title-com'>Discount</p>
-                        <p className='productlist__detail-title-com'>Name Size</p>
-                        <p className='productlist__detail-title-com'>Price Size</p>
-                        <p className='productlist__detail-title-com'>Name Color</p>
-                        <p className='productlist__detail-title-com'>Quantity</p>
-                        <p className='productlist__detail-title-com'>Action</p>
-                    </div>
                     {
-                        products.data ? products.data.map((data, index) => (
+                        products.data ? profilter = products.data
+                            .filter((product) => {
+                                if (inputSearch === '')
+                                    return product;
+                                else if (product.nameproducts.toLowerCase().includes(inputSearch.toLowerCase()))
+                                    return product;
+                            })
+                            .map((data, i) => (
+                                <>
+                                    <div className='productlist__detail-product' key={i}>
+                                        <div className='productlist__detail-product-common'>{data.idproducts}</div>
 
-                            <div key={index} className='productlist__detail-product'>
-                                <div className='productlist__detail-product-common'>{data.nameproducts}</div>
-                                <div className='productlist__detail-product-common'>{data.discount}</div>
-                                <div>
-                                    {
-                                        data.size ? data.size.map((size, index) => (
-                                            <div className='productlist__detail-product-size' key={index}>
-                                                <p className='productlist__detail-title-common'>{size.namesize}</p>
-                                                <p className='productlist__detail-title-common'>{size.pricesize}</p>
+                                        <div className='productlist__detail-product-common'>{data.nameproducts}</div>
+                                        <div className='productlist__detail-product-common'>{data.discount}</div>
+                                        <div>
+                                            {
+                                                data.size ? data.size.map((size, j) => (
+                                                    <div className='productlist__detail-product-size' key={j}>
+                                                        <p className='productlist__detail-title-common'>{size.namesize}</p>
+                                                        <p className='productlist__detail-title-common productlist__detail-title-price'>{size.pricesize}đ</p>
 
-                                                <div className='productlist__detail-title-namecolor'>
-                                                    {
-                                                        size.color ? size.color.map((color, index) => (
-                                                            <p key={index} className='productlist__detail-title-common'>{color.namecolor}</p>
-                                                        )) : null
-                                                    }
-                                                </div>
+                                                        <div className='productlist__detail-title-namecolor'>
+                                                            {
+                                                                size.color ? size.color.map((color, k) => (
+                                                                    <p key={k} className='productlist__detail-title-common'>{color.namecolor}</p>
+                                                                )) : null
+                                                            }
+                                                        </div>
 
-                                                <div className='productlist__detail-title-quantity'>
-                                                    {
-                                                        size.color ? size.color.map((color, index) => (
-                                                            color.quantity > 0
-                                                                ? <p key={index} className='productlist__detail-title-common'>{color.quantity}</p>
-                                                                : <p key={index} className='productlist__detail-title-common'>Out off stock</p>
-                                                        )) : null
-                                                    }
-                                                </div>
+                                                        <div className='productlist__detail-title-quantity'>
+                                                            {
+                                                                size.color ? size.color.map((color, k) => (
+                                                                    color.quantity > 0
+                                                                        ? <p key={k} className='productlist__detail-title-common'>{color.quantity}</p>
+                                                                        : <p key={k} className='productlist__detail-title-common'>Out off stock</p>
+                                                                )) : null
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                )) : null
 
-                                                <div key={index}>
-                                                    <Link to="/admin/productsmodifier" state={{ product: data }}>
-                                                        <BsPencil className='productlist__detail-product-common-icon productlist__detail-product-common-pen' />
+                                            }
+                                        </div>
+                                        <div key={i}>
+                                            <Link to="/admin/productsmodifier" state={{ product: data, message: "update" }}>
+                                                <BsPencil className='productlist__detail-product-common-icon productlist__detail-product-common-pen' />
+                                            </Link>
+                                            <BiTrash className='productlist__detail-product-common-icon productlist__detail-product-common-trash' onClick={() => toggleModal(data, i)} />
+                                        </div>
+                                    </div>
+                                </>
+                            ))
+                            : null
+                    }
 
-                                                    </Link>
-                                                    <ImBin className='productlist__detail-product-common-icon productlist__detail-product-common-bin' />
-                                                </div>
+                    {modallist !== -1 ? <Modelcancel parentCallbackNo={handleNo} parentCallbackYes={handleYes} dataFromParent={prodelete} text = 'Do you want to delete this product?'/> : null}
 
-                                                <div className='productlist__detail-product-common productlist__detail-product-action'>
-                                                </div>
-                                            </div>
-                                        )) : null
-                                    }
-                                </div>
+                    {
+                        profilter.length === 0
+                            ?
+                            <div className='product-list-container'>
+
+                                <img src="https://media.itsnicethat.com/original_images/giphy-2021-gifs-and-clips-animation-itsnicethat-02.gif" alt="" className='product-list-container__image' />
+
+                                <h1 className='product-list-container__empty'>NO PRODUCT FOUND</h1>
                             </div>
-                        )) : null
+                            : null
                     }
                 </div>
             </div>
-
-            {/* {modallist ? <ModalProductList callbackparent={toggleModal} ></ModalProductList> : null} */}
         </>
     )
 }

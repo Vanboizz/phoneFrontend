@@ -11,7 +11,7 @@ const Profile = () => {
             <div className='profile'>
 
                 <BlockMenu />
-
+                
             </div>
             <Fotter />
         </div>

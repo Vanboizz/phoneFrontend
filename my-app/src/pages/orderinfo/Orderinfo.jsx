@@ -89,7 +89,7 @@ const Orderinfo = () => {
             <>
                 <ToastContainer />
                 <Header></Header>
-                <Templatecart text__my='Order information' text__btn='CONTINUES' >
+                <Templatecart text__my='Order information' text__btn='CONTINUES' text_back='/cart'>
                     <Statusorder />
                     <form action="" onSubmit={handleOrder}>
                         <div className='order-info'>
@@ -130,7 +130,6 @@ const Orderinfo = () => {
                                             value={selectedDistrict} onChange={(e) => setSelectedDistrict(e.target.value)} >
                                             <option value="">--District--</option>
                                             {
-
                                                 district.map((value) => (
                                                     <option key={value.code} value={value.code} name={value.name}>{value.name}</option>
 

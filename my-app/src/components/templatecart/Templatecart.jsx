@@ -4,7 +4,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom';
 
-const Templatecart = ({ text__my, children }) => {
+const Templatecart = ({ text__my, children, text_back }) => {
 
     const navigate = useNavigate()
 
@@ -12,7 +12,7 @@ const Templatecart = ({ text__my, children }) => {
         <div className='template-cart'>
             <h1 className='template-cart__title'>
                 {text__my}
-                <a className='title__back' onClick={() => navigate("/home")}>
+                <a className='title__back' onClick={() => navigate(text_back)}>
                     <IoIosArrowBack className='title__icon' />
                     <p>Back</p>
                 </a>
@@ -27,6 +27,5 @@ const Templatecart = ({ text__my, children }) => {
 Templatecart.propTypes = {
     text__my: PropTypes.string,
 };
-
 
 export default Templatecart

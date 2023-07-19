@@ -3,15 +3,11 @@ import "../relative/Relative.css"
 import { FaStar, FaPlusCircle } from 'react-icons/fa'
 import { Link } from "react-router-dom"
 import { Swiper, SwiperSlide } from "swiper/react";
-
 import "swiper/css";
 import "swiper/css/navigation";
-
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from '../feature/products/productsSlice';
 import { Grid, Navigation } from 'swiper';
-
-
 
 const Relative = () => {
     const products = useSelector((state) => state.products)

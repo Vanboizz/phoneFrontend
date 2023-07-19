@@ -3,16 +3,13 @@ import "../productsdetail/ProductsDetail.css"
 import { FaStar, FaAngleDown, FaAngleUp, FaCartPlus, FaMobileAlt, FaRegHandPointRight } from 'react-icons/fa'
 import { AiOutlineCheck } from "react-icons/ai";
 
-// Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
 
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
 
-// import required modules
 import { FreeMode, Navigation, Thumbs } from "swiper";
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -193,7 +190,7 @@ const ProductsDetail = () => {
                     </div>
                     <div className='middle-container'>
                         <div className='box-price'>
-                            <p className='price-show'>{(priceSize * product.discount) / 100}&nbsp;đ</p>
+                            <p className='price-show'>{priceSize - ((priceSize * product.discount) / 100)}&nbsp;đ</p>
                             <p className='price-through'>{priceSize}&nbsp;đ</p>
                         </div>
                         <div>
@@ -216,7 +213,7 @@ const ProductsDetail = () => {
                                                     {value.namesize}
                                                 </p>
                                                 <p className="price">
-                                                    {(value.pricesize * product.discount) / 100}&nbsp;đ
+                                                    {value.pricesize - ((value.pricesize * product.discount) / 100)}&nbsp;đ
                                                 </p>
                                             </div>
                                             <input type="radio" name="size" id={value.idsize} value={value.idsize}
@@ -242,7 +239,7 @@ const ProductsDetail = () => {
                             <form>
                                 {
                                     data ? data.map((item) => (
-                                        <label label key={item.idcolor} className='item-linked' style={
+                                        <label key={item.idcolor} className='item-linked' style={
                                             {
                                                 border: item.idcolor === idColor ? "1.4px solid #1a94ff" : "",
                                                 opacity: item.quantity === 0 ? "0.4" : "",
@@ -266,7 +263,7 @@ const ProductsDetail = () => {
                                                         <div key={value.idsize}>
                                                             {
                                                                 value.idsize === idSize ? <p className='price'>
-                                                                    {(value.pricesize * product.discount) / 100}&nbsp;đ
+                                                                    {value.pricesize - ((value.pricesize * product.discount) / 100)}&nbsp;đ
                                                                 </p> : null
                                                             }
                                                         </div>

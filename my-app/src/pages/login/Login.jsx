@@ -21,8 +21,10 @@ const Login = () => {
     const accessToken = localStorage.getItem("accessToken")
 
     useEffect(() => {
-        if (accessToken) {
+        if (accessToken && user?.role != 'admin') {
             navigate("/home")
+        } else if (accessToken && user?.role === 'admin') {
+            navigate("/admin/productlist")
         }
         if (isError) {
             toast.error(message)

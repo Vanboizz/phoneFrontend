@@ -27,6 +27,17 @@
     padding-top: 30px;
 }
 
+.f-wrapper .list-2__pro {
+    display: flex;
+    flex-direction: column;
+}
+
+.f-wrapper .related-tag {
+    text-decoration: none;
+    color: black;
+    margin-top: 7px;
+}
+
 .f-wrapper .list-1__tspblack {
     height: 36px;
     background-image: url('../../../public/tspblack.png');
@@ -60,6 +71,7 @@
 .f-wrapper .list-3__title {
     height: 36px;
     font-size: 30px;
+    margin-bottom: 3px;
 }
 
 .f-wrapper .list-2__title__item {
@@ -79,12 +91,10 @@
 }
 
 .f-wrapper .list-3__title__email {
-    text-decoration: none;
+    display: inline-block;
     color: black;
+    margin-left: 5px;
 }
 
-.f-wrapper .list-3__title__email:hover {
-    opacity: 0.6;
-}
 
 
