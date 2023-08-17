@@ -18,6 +18,11 @@ const Cart = () => {
     const handle_order = () => {
         navigate("/orderinfo")
     }
+
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'VND',
+    });
     return (
         <>
             <Header></Header>
@@ -31,7 +36,7 @@ const Cart = () => {
                                 <div className='item__info'>
                                     <a className='info__name-pro'>{value.nameproducts}<span>{value.size[0].namesize}({value.size[0].color[0].namecolor})</span></a>
                                     <div className='info__line-2'>
-                                        <p className='info__sale-price'>{value.size[0].pricesize - ((value.size[0].pricesize * value.discount) / 100)}</p>
+                                        <p className='info__sale-price'>{(value.size[0].pricesize - ((value.size[0].pricesize * value.discount) / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
                                         <div className='change-quantity'>
                                             <button onClick={() => {
                                                 if (value.quantity > 1) {
@@ -51,7 +56,7 @@ const Cart = () => {
                                         </div>
                                     </div>
                                     <div className='info__line-3'>
-                                        <p className='info__sale-regular'>{value.size[0].pricesize}₫</p>
+                                        <p className='info__sale-regular'>{(value.size[0].pricesize).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
                                         <p className='sales'> {value.discount}%</p>
                                     </div>
                                     <GrFormClose className='info__icon' onClick={() => {

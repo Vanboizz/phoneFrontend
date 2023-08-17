@@ -21,7 +21,6 @@ const Purchase = () => {
         setStatuscrr(index);
     }
     const accessToken = localStorage.getItem("accessToken")
-    console.log(datas);
     const getCheckout = async () => {
         const response = await axios.get("http://localhost:8000/invoice/getcheckout", {
             headers: {
@@ -53,7 +52,6 @@ const Purchase = () => {
                 console.log(error);
             })
     }
-
     useEffect(() => {
         getCheckout()
     }, [])
@@ -168,7 +166,7 @@ const Purchase = () => {
                                                 {(new Date(data[0].ivday).getHours() + ":" + new Date(data[0].ivday).getMinutes() + ":" + new Date(data[0].ivday).getSeconds())}
                                             </div>
 
-                                            <div className="purchase__list-data-price">{data[0].totalprice}đ</div>
+                                            <div className="purchase__list-data-price">{(data[0].totalprice).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</div>
                                             <div className={`purchase__list-item-status purchase__list-item-status-${data[0].statusiv}`}>{data[0].statusiv}</div>
                                             <div className="purchase__list-item-btn">
                                                 <button

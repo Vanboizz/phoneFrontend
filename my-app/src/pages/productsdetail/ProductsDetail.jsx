@@ -134,6 +134,11 @@ const ProductsDetail = () => {
         }
     }
 
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'VND',
+      
+      });
     return (
         <>
             <Header />
@@ -190,8 +195,8 @@ const ProductsDetail = () => {
                     </div>
                     <div className='middle-container'>
                         <div className='box-price'>
-                            <p className='price-show'>{priceSize - ((priceSize * product.discount) / 100)}&nbsp;đ</p>
-                            <p className='price-through'>{priceSize}&nbsp;đ</p>
+                            <p className='price-show'>{(priceSize - ((priceSize * product.discount) / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;</p>
+                            <p className='price-through'>{(priceSize).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;</p>
                         </div>
                         <div>
                             <form >
@@ -213,7 +218,7 @@ const ProductsDetail = () => {
                                                     {value.namesize}
                                                 </p>
                                                 <p className="price">
-                                                    {value.pricesize - ((value.pricesize * product.discount) / 100)}&nbsp;đ
+                                                    {(value.pricesize - ((value.pricesize * product.discount) / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;
                                                 </p>
                                             </div>
                                             <input type="radio" name="size" id={value.idsize} value={value.idsize}
@@ -263,7 +268,7 @@ const ProductsDetail = () => {
                                                         <div key={value.idsize}>
                                                             {
                                                                 value.idsize === idSize ? <p className='price'>
-                                                                    {value.pricesize - ((value.pricesize * product.discount) / 100)}&nbsp;đ
+                                                                    {(value.pricesize - ((value.pricesize * product.discount) / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;
                                                                 </p> : null
                                                             }
                                                         </div>

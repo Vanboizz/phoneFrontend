@@ -230,7 +230,7 @@ const ProductsModifier = () => {
                                         <div key={index} className='sizes'>
 
                                             <p>{value.namesize}</p>
-                                            <p>{value.pricesize}đ</p>
+                                            <p>{value.pricesize.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
                                             <div className='container-unit__namecolor'>
                                                 {
                                                     value.color.map((color, index) => (

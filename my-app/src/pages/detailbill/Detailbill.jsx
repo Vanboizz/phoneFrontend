@@ -79,7 +79,7 @@ const Detailbill = () => {
                         <div className="detailbill__info-common">
                             <p>
                                 <span className='info-common-before'>Total Money</span>
-                                {totalPriceCart} ₫
+                                {totalPriceCart.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
                             </p>
                         </div>
                     </div>

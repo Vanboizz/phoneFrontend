@@ -30,12 +30,16 @@ const Home = () => {
                 setCategory(res.data)
             })
             .catch(error => console.log(error))
-
     }, [])
 
     const setInput = (childdata) => {
         setInputHome(childdata)
     }
+
+    const formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'VND',
+    });
 
     return (
         <div style={{ marginTop: "32px" }}>
@@ -89,8 +93,9 @@ const Home = () => {
                                                     </div>
                                                     <h3 style={{ color: "#000" }}>{value.nameproducts}</h3>
                                                     <div className='format'>
-                                                        <p>{value.size[0].pricesize - ((value.size[0].pricesize * value.discount) / 100)}&nbsp;đ</p>
-                                                        <p>{value.size[0].pricesize}&nbsp;đ</p>
+
+                                                        <p>{(value.size[0].pricesize - ((value.size[0].pricesize * value.discount) / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;</p>
+                                                        <p>{(value.size[0].pricesize).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;</p>
                                                     </div>
                                                     <div className='promotion' style={{ color: "#000" }}>
                                                         {value.promotion}

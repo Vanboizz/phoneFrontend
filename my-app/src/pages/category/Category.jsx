@@ -10,6 +10,10 @@ import Footer from "../../components/footer/Footer"
 import axios from 'axios'
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa'
 
+const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'VND',
+});
 
 const Category = () => {
     const [category, setCategory] = useState([])
@@ -95,8 +99,8 @@ const Category = () => {
                                         </div>
                                         <h3 style={{ color: "#000" }}>{value.nameproducts}</h3>
                                         <div className='format'>
-                                            <p>{value.size[0].pricesize - ((value.size[0].pricesize * value.discount) / 100)}&nbsp;đ</p>
-                                            <p>{value.size[0].pricesize}&nbsp;đ</p>
+                                            <p>{formatter.format(value.size[0].pricesize - ((value.size[0].pricesize * value.discount) / 100))}&nbsp;</p>
+                                            <p>{formatter.format(value.size[0].pricesize)}&nbsp;</p>
                                         </div>
                                         <div className='promotion' style={{ color: "#000" }}>
                                             {value.promotion}
