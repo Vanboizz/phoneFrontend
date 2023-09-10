@@ -37,7 +37,7 @@ const Home = () => {
             })
             .catch(error => console.log(error))
     }, [])
-    
+
     return (
         <div style={{ marginTop: "32px" }}>
             <Header />
