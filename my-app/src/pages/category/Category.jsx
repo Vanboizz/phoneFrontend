@@ -10,13 +10,15 @@ import Footer from "../../components/footer/Footer"
 import axios from 'axios'
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa'
 
+const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'VND',
+});
 
 const Category = () => {
     const [category, setCategory] = useState([])
     const [More, setMore] = useState(false)
     const [categorytemp, setCategorytemp] = useState([])
-
-    console.log(category);
 
     useEffect(() => {
         axios.get(`http://localhost:8000/product/getcategory/${window.location.href.substring(
@@ -52,22 +54,35 @@ const Category = () => {
         <>
             <Header />
             <div className='category'>
-                <div className='category__sort'>
-                    <h2 className='category__sort-title'>Sorted by</h2>
+                {
+                    categorytemp.length !== 0 ?
+                        <div className='category__sort'>
+                            <h2 className='category__sort-title'>Sorted by</h2>
 
-                    <div className='category__sort-filter'>
+                            <div className='category__sort-filter'>
 
-                        <button className='category__sort-filter-wrap' onClick={() => handleLH()}>
-                            <div className='category__sort-filter-wrap-icon category__sort-filter-wrap-icon-lh'></div>
-                            <p className='category__sort-filter-hl-title'>Price Low - High</p>
-                        </button>
+                                <button className='category__sort-filter-wrap' onClick={() => handleLH()}>
+                                    <div className='category__sort-filter-wrap-icon category__sort-filter-wrap-icon-lh'></div>
+                                    <p className='category__sort-filter-hl-title'>Price Low - High</p>
+                                </button>
 
-                        <button className='category__sort-filter-wrap' onClick={() => handleHL()}>
-                            <div className='category__sort-filter-wrap-icon category__sort-filter-wrap-icon-hl'></div>
-                            <p className='category__sort-filter-hl-title'>Price High - Low</p>
-                        </button>
-                    </div>
-                </div>
+                                <button className='category__sort-filter-wrap' onClick={() => handleHL()}>
+                                    <div className='category__sort-filter-wrap-icon category__sort-filter-wrap-icon-hl'></div>
+                                    <p className='category__sort-filter-hl-title'>Price High - Low</p>
+                                </button>
+                            </div>
+                        </div>
+                        : null
+                }
+
+                {
+                    categorytemp.length === 0 ?
+                        (<div className="category__list-empty">
+                            <img src="https://media.itsnicethat.com/original_images/giphy-2021-gifs-and-clips-animation-itsnicethat-02.gif" alt="" className='category__list-empty-image' />
+                            <p className='category__list-empty-text'>Empty</p>
+                        </div>)
+                        : null
+                }
 
                 <div className="category__product-list" style={{ maxHeight: More ? undefined : '410px' }}>
 
@@ -84,8 +99,8 @@ const Category = () => {
                                         </div>
                                         <h3 style={{ color: "#000" }}>{value.nameproducts}</h3>
                                         <div className='format'>
-                                            <p>{value.size[0].pricesize - ((value.size[0].pricesize * value.discount) / 100)}&nbsp;đ</p>
-                                            <p>{value.size[0].pricesize}&nbsp;đ</p>
+                                            <p>{formatter.format(value.size[0].pricesize - ((value.size[0].pricesize * value.discount) / 100))}&nbsp;</p>
+                                            <p>{formatter.format(value.size[0].pricesize)}&nbsp;</p>
                                         </div>
                                         <div className='promotion' style={{ color: "#000" }}>
                                             {value.promotion}
@@ -105,29 +120,29 @@ const Category = () => {
                                     </div>
                                 </Link>
 
-                                // <SwiperSlide key={index} >
-                                // </SwiperSlide>
                             )
                         }) : null
                     }
-                    {/* </Swiper> */}
                 </div>
-
-                <div className='category__btn-show'>
-                    <button onClick={() => setMore(!More)}>
-                        <span>
-                            {
-                                More ? 'Collagse' : 'See More'
-                            }
-                        </span>
-                        <div>
-                            {
-                                More ? <FaAngleUp /> : <FaAngleDown />
-                            }
+                {
+                    categorytemp.length >= 6
+                        ?
+                        <div className='category__btn-show'>
+                            <button onClick={() => setMore(!More)}>
+                                <span>
+                                    {
+                                        More ? 'Collagse' : 'See More'
+                                    }
+                                </span>
+                                <div>
+                                    {
+                                        More ? <FaAngleUp /> : <FaAngleDown />
+                                    }
+                                </div>
+                            </button>
                         </div>
-                    </button>
-                </div>
-
+                        : null
+                }
             </div>
 
             <Footer />

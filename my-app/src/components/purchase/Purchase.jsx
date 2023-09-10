@@ -5,141 +5,60 @@ import ReactPaginate from 'react-paginate';
 import { GrFormClose } from "react-icons/gr";
 import Orderdetail from '../orderdetail/Orderdetail';
 import Modelcancel from '../modelcancel/Modelcancel';
-
-
-const datas = [
-    {
-        id: 1,
-        img: "./iphone.webp",
-        name: "iPhone 14 Pro Max 128GB | Chính hãng VN/A",
-        color: "Xanh Lam",
-        quantity: 1,
-        datetime: "21-10-2022 15:27",
-        price: 4000000,
-        status: "cancel"
-    },
-    {
-        id: 2,
-        img: "./iphone.webp",
-        name: "iPhone 12 Pro 64GB | Chính hãng VN/A",
-        color: "Đen",
-        quantity: 3,
-        datetime: "23-05-2022 01:42",
-        price: 8000000,
-        status: "cancel"
-    },
-    {
-        id: 3,
-        img: "./iphone.webp",
-        name: "iPhone 12 Pro 64GB | Chính hãng VN/A",
-        color: "Đen",
-        quantity: 2,
-        datetime: "25-09-2022 03:28",
-        price: 8000000,
-        status: "preparing"
-    },
-    {
-        id: 4,
-        img: "./iphone.webp",
-        name: "iPhone 10 64GB | Chính hãng VN/A",
-        color: "Xanh Đen",
-        quantity: 2,
-        datetime: "01-04-2023 07:27",
-        price: 3500000,
-        status: "preparing"
-    },
-    {
-        id: 5,
-        img: "./iphone.webp",
-        name: "iPhone 13 Pro 128GB | Chính hãng VN/A",
-        color: "Trắng Xanh",
-        quantity: 3,
-        datetime: "18-03-2022 05:19",
-        price: 6500000,
-        status: "preparing"
-    },
-    {
-        id: 6,
-        img: "./iphone.webp",
-        name: "iPhone 10 64GB | Chính hãng VN/A",
-        color: "Trắng Xanh",
-        quantity: 4,
-        datetime: "03-02-2022 13:27",
-        price: 9500000,
-        status: "cancel"
-    },
-    {
-        id: 7,
-        img: "./iphone.webp",
-        name: "iPhone 14 Pro Max 128GB | Chính hãng VN/A",
-        color: "Xanh Lam",
-        quantity: 1,
-        datetime: "25-05-2022 15:27",
-        price: 4000000,
-        status: "cancel"
-    },
-    {
-        id: 8,
-        img: "./iphone.webp",
-        name: "iPhone 12 Pro 64GB | Chính hãng VN/A",
-        color: "Đen",
-        quantity: 2,
-        datetime: "01-03-2022 01:42",
-        price: 8000000,
-        status: "arrived"
-    },
-    {
-        id: 9,
-        img: "./iphone.webp",
-        name: "iPhone 14 Pro Max 128GB | Chính hãng VN/A",
-        color: "Đỏ Đô",
-        quantity: 1,
-        datetime: "05-02-2022 13:33",
-        price: 3500000,
-        status: "arrived"
-    },
-    {
-        id: 10,
-        img: "./iphone.webp",
-        name: "iPhone 12 Pro 64GB | Chính hãng VN/A",
-        color: "Xanh Lam",
-        quantity: 2,
-        datetime: "01-03-2022 01:42",
-        price: 5500000,
-        status: "arrived"
-    },
-    {
-        id: 11,
-        img: "./iphone.webp",
-        name: "iPhone 10 64GB | Chính hãng VN/A",
-        color: "Xanh Đen",
-        quantity: 2,
-        datetime: "01-04-2023 07:27",
-        price: 3500000,
-        status: "cancel"
-    },
-    {
-        id: 12,
-        img: "./iphone.webp",
-        name: "iPhone 13 Pro 128GB | Chính hãng VN/A",
-        color: "Trắng Xanh",
-        quantity: 3,
-        datetime: "18-03-2022 05:19",
-        price: 6500000,
-        status: "preparing"
-    },
-
-]
+import { ToastContainer, toast } from "react-toastify"
+import axios from 'axios';
 
 const Purchase = () => {
+
+    const [datas, Setdatas] = useState([])
+    const [ivseedetail, setIvSeeDetail] = useState([])
     const [cancel, setCancel] = useState(-1);
-    const [statusSee, setStatusSee] = useState(1);
+    const [statusSee, setStatusSee] = useState(-1);
     const [statuscrr, setStatuscrr] = useState(1);
     const [dataapi, setDataApi] = useState(datas);
     const [currentPage, setCurrentPage] = useState(0);
     const setStatus = (index) => {
         setStatuscrr(index);
     }
+    const accessToken = localStorage.getItem("accessToken")
+    const getCheckout = async () => {
+        const response = await axios.get("http://localhost:8000/invoice/getcheckout", {
+            headers: {
+                Authorization: "Bearer " + accessToken,
+            },
+        })
+            .then((data) => {
+                Setdatas(data.data.result)
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        return response;
+    }
+
+    const deleteInvoice = async (idiv) => {
+        const response = await axios.post('http://localhost:8000/invoice/detelecheckout', { idiv },
+            {
+                headers: {
+                    Authorization: "Bearer " + accessToken,
+                },
+            }
+        )
+            .then((result) => {
+                toast(result.data.message)
+                getCheckout();
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+    useEffect(() => {
+        getCheckout()
+    }, [])
+
+    useEffect(() => {
+        setDataApi(datas)
+    }, [datas])
 
     const [currentItems, setcurrentItems] = useState([]) // list item in current page
     const [pageCount, setpageCount] = useState(0)
@@ -155,37 +74,42 @@ const Purchase = () => {
     const handlePageClick = (event) => {
         const newOffset = (event.selected * itemsPerPage) % datas.length;
         setItemOffset(newOffset);
-        // console.log(event.selected);
         setCurrentPage(event.selected)
     };
 
     const handleData = (str) => {
-        if (str === '') { setDataApi(datas); }
-        else { setDataApi(datas.filter((data) => data.status === str)) }
+        if (str === '')
+            setDataApi(datas);
+        else
+            setDataApi(datas.filter((data) => data[0].statusiv === str))
         setItemOffset(0)
         setCurrentPage(0)
-
-        console.log(currentPage);
     }
 
-    const getStatusSee = (index) => {
+    const getStatusSee = (index, data) => {
         setStatusSee(index);
+        if (data) {
+            setIvSeeDetail(data)
+        }
     }
-
     const handleNo = () => {
         setCancel(-1)
     }
 
     const handleYes = (data) => {
+        if (data)
+            deleteInvoice(data[0].idiv)
+        setStatus(1);
+        setItemOffset(0)
+        setCurrentPage(0)
         setCancel(!cancel)
-        datas[data.id - 1].status = 'cancel';
-        setDataApi(datas)
     }
 
     return (
         <>
+            <ToastContainer />
             {
-                (statusSee === 1 ?
+                (statusSee === -1 ?
                     (<div className='purchase'>
                         <p className='purchase__name'>ORDER MANAGEMENT</p>
 
@@ -196,78 +120,62 @@ const Purchase = () => {
                                     handleData('');
                                 }}
                                 className={statuscrr === 1 ? "purchase__status-common purchase__status-common-active" : "purchase__status-common"}>
-                                All
+                                All invoice
                             </button>
 
                             <button
                                 onClick={() => {
                                     setStatus(2);
-                                    handleData('preparing');
+                                    handleData('Paid');
                                 }}
                                 className={statuscrr === 2 ? "purchase__status-common purchase__status-common-active" : "purchase__status-common"}>
-                                Confirmed
+                                Paid
                             </button>
 
                             <button
                                 onClick={() => {
                                     setStatus(3);
-                                    handleData('delivering');
+                                    handleData('UnPaid');
                                 }}
                                 className={statuscrr === 3 ? "purchase__status-common purchase__status-common-active" : "purchase__status-common"}>
-                                Being transported
+                                UnPaid
                             </button>
 
-                            <button
-                                onClick={() => {
-                                    setStatus(4);
-                                    handleData('arrived');
-                                }}
-                                className={statuscrr === 4 ? "purchase__status-common purchase__status-common-active" : "purchase__status-common"}>
-                                Received
-                            </button>
-
-                            <button
-                                onClick={() => {
-                                    setStatus(5);
-                                    handleData('cancel');
-                                }}
-                                className={statuscrr === 5 ? "purchase__status-common purchase__status-common-active" : "purchase__status-common"}>
-                                Cancelled
-                            </button>
                         </div>
 
                         <div className="purchase__title">
-                            <div className="purchase__title-des purchase-title-pro">PRODUCT</div>
+                            <div className="purchase__title-des purchase-title-pro">ID</div>
                             <div className="purchase__title-des purchase-title-date">DATE TIME</div>
-                            <div className="purchase__title-des purchase-title-price">PRICE</div>
+                            <div className="purchase__title-des purchase-title-price">TOTAL PRICE</div>
                             <div className="purchase__title-des purchase-title-status">STATUS</div>
+                            <div className="purchase__title-des purchase-title-action">ACTION</div>
                         </div>
 
                         <div className="purchase__list">
                             {
                                 currentItems.length >= 1 ?
-                                    currentItems.map((data) => (
+                                    currentItems.map((data, i) => (
+                                        <div className='purchase__list-item' key={i}>
+                                            <p className="purchase__list-item-id">{data[0]?.idiv}</p>
 
-                                        <div className="purchase__list-item" key={data.id}>
-                                            <div className="purchase__list-item-pro">
-                                                <img src={data.img} alt="" className='purchase__list-item-pro-img' />
-                                                <div className="purchase__list-item-pro-detail">
-                                                    <p className="purchase__list-item-pro-detail-namepro">{data.name}</p>
-                                                    <p className="purchase__list-item-pro-detail-color">Color: {data.color}</p>
-                                                    <p className="purchase__list-item-pro-detail-quantity">x{data.quantity}</p>
-                                                </div>
+                                            <div className="purchase__list-item-time">
+                                                {(new Date(data[0].ivday).getFullYear() + '-' + (new Date(data[0].ivday).getMonth() + 1) + '-' + new Date(data[0].ivday).getDate())}
+                                                
+                                                <br /> 
+                                                
+                                                {(new Date(data[0].ivday).getHours() + ":" + new Date(data[0].ivday).getMinutes() + ":" + new Date(data[0].ivday).getSeconds())}
                                             </div>
 
-                                            <div className="purchase__list-item-time">{data.datetime}</div>
-                                            <div className="purchase__list-item-price">{data.price}</div>
-                                            <div className={`purchase__list-item-status purchase__list-item-status-${data.status}`}>{data.status}</div>
+                                            <div className="purchase__list-data-price">{(data[0].totalprice).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</div>
+                                            <div className={`purchase__list-item-status purchase__list-item-status-${data[0].statusiv}`}>{data[0].statusiv}</div>
                                             <div className="purchase__list-item-btn">
                                                 <button
-                                                    onClick={() => getStatusSee(2)}
+                                                    onClick={() => getStatusSee(i, data)}
                                                     className='purchase__list-item-btn-detail'>See detail</button>
                                             </div>
-                                            {data.status === 'preparing' ? <GrFormClose className='purchase__list-item-icon' onClick={() => setCancel(data.id)} /> : null}
-                                            {cancel === data.id ? <Modelcancel parentCallbackNo={handleNo} parentCallbackYes={handleYes} dataFromParent={data} /> : null}
+
+                                            {data[0].statusiv === 'UnPaid' ? <GrFormClose className='purchase__list-item-icon' onClick={() => setCancel(i)} /> : null}
+                                            {cancel === i ? <Modelcancel parentCallbackNo={handleNo} parentCallbackYes={handleYes} dataFromParent={data} /> : null}
                                         </div>
                                     ))
                                     :
@@ -300,11 +208,8 @@ const Purchase = () => {
                             nextClassName='purchase__next'
                             previousClassName='purchase__prev'
                         />
-                    </div>) : <Orderdetail parentCallback={getStatusSee} />)
-
+                    </div>) : <Orderdetail dataFromParent={ivseedetail} parentCallback={getStatusSee} />)
             }
-
-
         </>
     )
 }

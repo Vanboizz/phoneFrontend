@@ -69,6 +69,7 @@ export default function App() {
             />
           </Route>
           <Route path="/admin/productlist" element={<ProductList />}></Route>
+          
         </Routes>
       </div>
     </Router>

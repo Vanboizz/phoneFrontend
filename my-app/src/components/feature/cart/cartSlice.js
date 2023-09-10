@@ -131,7 +131,7 @@ export const cartSlice = createSlice({
       state.totalPriceCart = state.cart.reduce(
         (prev, curr) =>
           prev +
-          curr.quantity * ((curr.size[0].pricesize * curr.discount) / 100),
+          curr.quantity * (curr.size[0].pricesize - ((curr.size[0].pricesize * curr.discount) / 100)),
         0
       );
       state.quantityCart = state.cart.reduce(
@@ -153,7 +153,7 @@ export const cartSlice = createSlice({
       state.totalPriceCart = state.cart.reduce(
         (prev, curr) =>
           prev +
-          curr.quantity * ((curr.size[0].pricesize * curr.discount) / 100),
+          curr.quantity * (curr.size[0].pricesize - ((curr.size[0].pricesize * curr.discount) / 100)),
         0
       );
       state.quantityCart = state.cart.reduce(
@@ -203,7 +203,7 @@ export const cartSlice = createSlice({
         state.totalPriceCart = state.cart.reduce(
           (prev, curr) =>
             prev +
-            curr.quantity * ((curr.size[0].pricesize * curr.discount) / 100),
+            curr.quantity * (curr.size[0].pricesize - ((curr.size[0].pricesize * curr.discount) / 100) ),
           0
         );
       })

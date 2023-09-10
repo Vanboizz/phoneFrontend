@@ -5,7 +5,7 @@ import { HiIdentification } from "react-icons/hi";
 import { MdOutlinePayment } from "react-icons/md";
 import { GiCardboardBoxClosed } from "react-icons/gi";
 
-const Statusorder = () => {
+const Statusorder = ({active_payment}) => {
     return (
         <div className='status-order'>
 
@@ -23,8 +23,8 @@ const Statusorder = () => {
                 </div>
                 <p className='choose__text'>Order information</p>
             </div>
-
-            <div className='status-order__choose'>
+        
+            <div className={`status-order__choose ${active_payment}`}>
                 <div className='choose__icon'>
                     <MdOutlinePayment className='status-order__icon' />
 

@@ -3,15 +3,11 @@ import "../relative/Relative.css"
 import { FaStar, FaPlusCircle } from 'react-icons/fa'
 import { Link } from "react-router-dom"
 import { Swiper, SwiperSlide } from "swiper/react";
-
 import "swiper/css";
 import "swiper/css/navigation";
-
 import { useDispatch, useSelector } from 'react-redux';
 import { getProducts } from '../feature/products/productsSlice';
 import { Grid, Navigation } from 'swiper';
-
-
 
 const Relative = () => {
     const products = useSelector((state) => state.products)
@@ -45,8 +41,8 @@ const Relative = () => {
                                             </div>
                                             <h3 style={{ color: "#000" }}>{value.nameproducts}</h3>
                                             <div className='format'>
-                                                <p>{(value.size[0].pricesize * value.discount) / 100}&nbsp;đ</p>
-                                                <p>{value.size[0].pricesize}&nbsp;đ</p>
+                                                <p>{((value.size[0].pricesize * value.discount) / 100).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                                                <p>{(value.size[0].pricesize).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
                                             </div>
                                             <div className='promotion' style={{ color: "#000" }}>
                                                 {value.promotion}

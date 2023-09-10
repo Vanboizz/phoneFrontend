@@ -35,7 +35,6 @@
 .info__name-pro:hover {
     cursor: pointer;
     text-decoration: underline;
-
 }
 
 .change-quantity {
@@ -107,13 +106,11 @@
     right: 0;
     top: 0;
     font-size: 30px;
-    /* color: #707070; */
 }
 
 .info__icon path {
     stroke: #757575;
 }
-
 
 .info__icon:hover {
     opacity: 0.5;

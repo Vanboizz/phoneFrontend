@@ -2,21 +2,24 @@ import React from 'react'
 import "../userprofile/UserProfile.css"
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getUser, updateUser } from '../feature/user/userSlice'
-
+import { getUser } from '../feature/user/userSlice'
+import { ToastContainer, toast } from "react-toastify"
+import axios from 'axios'
 
 const UserProfile = () => {
 
-    const { user, accessToken } = useSelector(state => state.user)
     const dispatch = useDispatch()
-    const [fullname, setFullName] = useState(user ? user[0].fullname : 'x')
+    const { user, accessToken } = useSelector(state => state.user)
+    const [fullname, setFullName] = useState('')
+    const [name, setName] = useState('')
 
-    const [email, setEmail] = useState(user ? user[0].email : '')
-    const [phonenumber, setPhonenumber] = useState(user ? user[0].phonenumber : '')
+    const [email, setEmail] = useState('')
+    const [phonenumber, setPhonenumber] = useState('')
+
     const [dates, setDates] = useState([]);
 
     const [months, setMonths] = useState([]);
-    const [monthchoose, setMonthChoose] = useState();
+    const [monthchoose, setMonthChoose] = useState('');
 
     const [years, setYears] = useState([]);
     const [yearchoose, setYearChoose] = useState('');
@@ -24,7 +27,8 @@ const UserProfile = () => {
     const [inputDate, setInputDate] = useState('0')
     const [inputMonth, setInputMonth] = useState('0')
     const [inputYear, setInputYear] = useState('0')
-    const [gender, setGender] = useState('Female')
+
+    const [gender, setGender] = useState(user ? user[0].gender : 'Female')
 
 
     const getDate = (d) => {
@@ -45,9 +49,6 @@ const UserProfile = () => {
         }
         setMonths(tempmonth)
     }
-    useEffect(() => {
-        getMonth(12)
-    }, [])
 
     const handleMonth = (e) => {
         switch (parseInt(e.target.value)) {
@@ -86,13 +87,21 @@ const UserProfile = () => {
             }
             setYears(tempYear)
         }
+        getMonth(12)
         getYear()
+        setInputDate()
+        dispatch(getUser(accessToken))
     }, [])
 
     useEffect(() => {
         setFullName(user ? user[0].fullname : '')
+        setName(user ? user[0].fullname : '')
         setEmail(user ? user[0].email : '')
         setPhonenumber(user ? user[0].phonenumber : '')
+        setInputDate(user ? user[0].days : '0')
+        setInputMonth(user ? user[0].months : '0')
+        setInputYear(user ? user[0].years : '0')
+        setGender(user ? user[0].gender : 'Female')
     }, [user])
 
     const checkLeapYear = (y) => {
@@ -106,19 +115,43 @@ const UserProfile = () => {
         }
     }
 
-
-    useEffect(() => {
-        dispatch(getUser(accessToken))
-    }, [])
-
-    const handleUpdateProfile = (e) => {
-        e.preventDefault();
-        dispatch(updateUser({ fullname: fullname, email: email, phonenumber: phonenumber, gender: gender, days: inputDate, months: inputMonth, years: inputYear, accessToken }))
+    const updateUser = async () => {
+        const response = await axios.post(
+            "http://localhost:8000/auth/user/updateUser",
+            {
+                fullname: fullname,
+                email: email,
+                phonenumber: phonenumber,
+                gender: gender,
+                days: inputDate,
+                months: inputMonth,
+                years: inputYear
+            },
+            {
+                headers: {
+                    Authorization: "Bearer " + accessToken,
+                },
+            }
+        );
+        return response
     }
 
+    const handleUpdateProfile = async(e) => {
+        e.preventDefault();
+        if (inputDate === '0' || inputMonth === '0' || inputYear === '0')
+            toast.error("The date of birth has not been filled in")
+        else {
+            toast("Successfully updated")
+            const res = await updateUser();
+            if (res.status===200){
+                dispatch(getUser(accessToken))
+            }
+        }
+    }
     return (
         <div className='userprofile'>
-            <p className='userprofile__name'>{user ? user[0].fullname : null}</p>
+            <ToastContainer />
+            <p className='userprofile__name'>{name}</p>
 
             <form action="" onSubmit={handleUpdateProfile}>
                 <div className='userprofile__form'>
@@ -128,6 +161,7 @@ const UserProfile = () => {
                         value={fullname}
                         onChange={(e) => setFullName(e.target.value)}
                         className='userprofile__form-input' type="text" name='fullname'
+                        required
                     />
                 </div>
 
@@ -139,6 +173,7 @@ const UserProfile = () => {
                         type="text" name='email'
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        required
                     />
                 </div>
 
@@ -150,6 +185,7 @@ const UserProfile = () => {
                         type="text" name='phonenumber'
                         onChange={(e) => setPhonenumber(e.target.value)}
                         value={phonenumber}
+                        required
                     />
                 </div>
 
@@ -158,14 +194,13 @@ const UserProfile = () => {
                     <label className='userprofile__form-text'>GENDER</label>
 
                     <div className='userprofile__form-choose'>
-                        {/* remainer gender */}
                         <div className="choose__male">
-                            <input name='gender' type="radio" value="Male" className='pick-up__input' onChange={e => setGender(e.target.value)} />
+                            <input name='gender' type="radio" value="Male" className='pick-up__input' checked={gender === "Male"} onChange={e => setGender(e.target.value)} />
                             <label htmlFor="html" className='pick-up__text'>Male</label>
                         </div>
 
                         <div className="choose__female">
-                            <input name='gender' type="radio" value="Female" className='delivery__input' defaultChecked onChange={(e) => setGender(e.target.value)} />
+                            <input name='gender' type="radio" value="Female" className='delivery__input' checked={gender === "Female"} onChange={(e) => setGender(e.target.value)} />
                             <label htmlFor="html" className='delivery__text'>Female</label>
                         </div>
                     </div>
@@ -175,7 +210,7 @@ const UserProfile = () => {
                     <label className='userprofile__form-text'>DATE OF BIRTH</label>
 
                     <div className='userprofile__form-birth'>
-                        <select onChange={(e) => setInputDate(e.target.value)} name="date" id="date-select" className='userprofile__form-birth-input'>
+                        <select value={user ? inputDate : '0'} onChange={(e) => setInputDate(e.target.value)} name="date" id="date-select" className='userprofile__form-birth-input' required>
                             <option value="0" placeholder=''>Date</option>
                             {
                                 dates
@@ -186,7 +221,7 @@ const UserProfile = () => {
                             }
                         </select>
 
-                        <select name="month" id="month-select" className='userprofile__form-birth-input'
+                        <select value={user ? inputMonth : '0'} required name="month" id="month-select" className='userprofile__form-birth-input'
                             onChange={(e) => {
                                 handleMonth(e)
                                 setInputMonth(e.target.value)
@@ -201,13 +236,12 @@ const UserProfile = () => {
                             }
                         </select>
 
-                        <select name="year" id="year-select" className='userprofile__form-birth-input'
+                        <select value={user ? inputYear : '0'} required name="year" id="year-select" className='userprofile__form-birth-input'
                             onChange={(e) => {
                                 handleYear(e)
                                 setInputYear(e.target.value)
-
                             }}>
-                            <option value="0" placeholder=''>Year</option>
+                            <option value='0' placeholder=''>Year</option>
                             {
                                 years
                                     ? years.map((year, index) => (
@@ -219,7 +253,7 @@ const UserProfile = () => {
                     </div>
                 </div>
                 <div className='userprofile__form'>
-                    <button type="submit" className='userprofile__form-update'> UPDATE INFOMATION</button>
+                    <button type="submit" className='userprofile__form-update'>UPDATE INFOMATION</button>
                 </div>
             </form>
         </div>

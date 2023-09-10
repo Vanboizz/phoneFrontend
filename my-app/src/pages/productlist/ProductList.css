@@ -1,5 +1,5 @@
-.productlist { 
-    margin: 30px 150px;
+.productlist {
+    margin: 96px 150px;
 }
 
 .productlist__title {
@@ -16,7 +16,7 @@
 
 .productlist__search-input {
     width: 83%;
-    padding: 0px 20px;
+    padding: 10px 20px;
     font-size: 15px;
     border: 1px solid #c3c3c3;
     border-radius: 5px;
@@ -42,20 +42,20 @@
 }
 
 .productlist__detail {
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     border-radius: 10px;
 }
 
 .productlist__detail-title {
     display: grid;
-    grid-template-columns: 2fr 1fr 2fr 1fr 1fr 1fr 2fr;
+    grid-template-columns: 0.5fr 2.5fr 1fr 1fr 2fr 1fr 1fr 1fr;
     text-align: center;
     font-weight: 600;
     padding: 20px 0px;
-    background-color: #ddddddb0;
-    border-radius: 10px 10px 0px 0px;
+    border-radius: 10px;
     border-bottom: 1px solid #ccc;
-}   
+    color: white;
+    background-color: #1A94FF;
+}
 
 .productlist__detail-title-common {
     display: flex;
@@ -69,18 +69,24 @@
     display: block
 }
 
+.productlist__detail-title-price {
+    color: #eb2c42;
+    font-weight: 700;
+}
+
 .productlist__detail-product {
     display: grid;
-    grid-template-columns: 20% 10% 70%;
+    grid-template-columns: 5% 25% 10% 50% 10%;
     text-align: center;
     align-items: center;
-    border-bottom: 1px solid #d2d2d2;
-    border-radius: 5px;
+    border: 1px solid #d2d2d2;
+    border-radius: 7px;
+    margin-top: 30px;
 }
 
 .productlist__detail-product-size {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 2fr;
+    grid-template-columns: 1fr 2fr 1fr 1fr;
     align-items: center;
     border-bottom: 1px solid #ccc;
 }
@@ -95,7 +101,7 @@
     align-items: center;
     height: 100%;
     border-right: 1px solid #ccc;
-    padding: 0px 20px;
+    padding: 0px 40px;
 }
 
 
@@ -122,12 +128,17 @@
 }
 
 .productlist__detail-product-common-pen {
-    margin-right: 40px;
+    color: black;
+
 }
 
+.productlist__detail-product-common-trash {
+    margin-left: 15px;
+    color: black;
+}
 
 .productlist__detail-title-namecolor,
-.productlist__detail-title-quantity, 
+.productlist__detail-title-quantity,
 .productlist__detail-title-action {
     line-height: 3.5;
-} 
+}

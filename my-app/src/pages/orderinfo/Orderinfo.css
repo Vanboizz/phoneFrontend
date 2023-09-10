@@ -8,7 +8,6 @@
     margin-bottom: 185px;
 }
 
-
 .order-info__customer .customer__text {
     font-size: 17px;
     font-weight: 600;
@@ -17,7 +16,6 @@
 .order-info__customer .customer__personnal {
     display: flex;
     flex-direction: column;
-
 }
 
 .personnal__inp {
@@ -121,6 +119,7 @@
 
 .mg-bt-5 {
     margin-bottom: 7px;
+    gap: 8px;
 }
 
 .order-info input[type='radio']:checked:before,

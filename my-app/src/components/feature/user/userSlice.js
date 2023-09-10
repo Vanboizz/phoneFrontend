@@ -162,7 +162,6 @@ export const userSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
-        console.log(action);
         state.isLoading = false;
         state.success = true;
         state.user = action.payload;
