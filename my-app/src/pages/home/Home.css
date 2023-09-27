@@ -14,16 +14,12 @@
 }
 
 .home .related-tag {
-  background-color: #f3f4f6;
-  border: 1px solid #e5e7eb;
+  background-color: #f2f2f2;
   border-radius: 10px;
-  color: #444;
   float: right;
   font-size: 13px;
   height: 34px;
   padding: 5px 20px;
-  white-space: nowrap;
-  text-decoration: none;
   display: flex;
   align-items: center;
 }
@@ -42,6 +38,10 @@
   border-radius: 1rem;
   padding: 1.2rem;
   height: 400px;
+}
+
+.home .item:hover {
+  border: #1a94ff 2px solid;
 }
 
 .home .item .discount {

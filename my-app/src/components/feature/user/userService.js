@@ -90,7 +90,6 @@ const getUser = async (accessToken) => {
 };
 
 // Updateuser
-
 const updateUser = async ({
   fullname,
   email,
@@ -121,6 +120,21 @@ const updateUser = async ({
   return response.data;
 };
 
+const updateDetailAddress = async (data) => {
+  console.log(data);
+  const response = await axios.post("http://localhost:8000/auth/user/updatedetailaddress",
+    {
+      data
+    },
+    {
+      headers: {
+        Authorization: "Bearer " + data?.accessToken,
+      },
+    }
+  )
+  return response.data;
+}
+
 const createNewPassword = async ({
   curpass,
   newpass,
@@ -148,6 +162,7 @@ const userService = {
   changePassword,
   getUser,
   updateUser,
+  updateDetailAddress,
   createNewPassword,
 };
 

@@ -82,7 +82,7 @@ export const getUser = createAsyncThunk(
   "/getuser",
   async (accessToken, thunkAPI) => {
     try {
-      return userService.getUser(accessToken );
+      return userService.getUser(accessToken);
     } catch (error) {
       const message =
         (error.respone && error.respone.data && error.respone.data.message) ||
@@ -108,9 +108,25 @@ export const updateUser = createAsyncThunk(
   }
 );
 
+export const updateDetailAddress = createAsyncThunk(
+  "/updateDetailAddress",
+  async (data, thunkAPI) => {
+    try {
+      return userService.updateDetailAddress(data);
+    }
+    catch (error) {
+      const message =
+        (error.respone && error.respone.data && error.respone.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const createNewPassword = createAsyncThunk(
   "/createnewpassword",
-  async ({curpass, newpass, accessToken}, thunkAPI) => {
+  async ({ curpass, newpass, accessToken }, thunkAPI) => {
     try {
       return userService.createNewPassword({ curpass, newpass, accessToken });
     } catch (error) {
@@ -221,7 +237,7 @@ export const userSlice = createSlice({
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.success = true;
-      }) 
+      })
       .addCase(updateUser.rejected, (state, action) => {
         state.isError = true;
       })
@@ -236,7 +252,7 @@ export const userSlice = createSlice({
         state.success = true;
         state.success2 = true;
         state.isError = false;
-      }) 
+      })
       .addCase(createNewPassword.rejected, (state, action) => {
         state.success = false;
         state.success2 = false;

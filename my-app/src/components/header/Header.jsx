@@ -3,9 +3,11 @@ import "../header/Header.css"
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser, logout } from "../feature/user/userSlice"
 import { FaSearch, FaUserCircle } from "react-icons/fa";
-import { FiLogOut } from "react-icons/fi";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Button, Dropdown } from 'antd';
+import { DownOutlined, UserOutlined } from '@ant-design/icons'
+import { FiLogOut } from "react-icons/fi";
 
 const Header = (props) => {
   const { quantityCart } = useSelector((state) => state.cart);
@@ -15,29 +17,62 @@ const Header = (props) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [category, setCategory] = useState([])
-
   useEffect(() => {
     if (accessToken) {
       dispatch(getUser(accessToken))
     }
-
     axios.get("http://localhost:8000/product/getcategory")
       .then(res => {
         setCategory(res.data)
       })
       .catch(error => console.log(error))
-
   }, [])
+
+  var itemsCate = category.map(item => (
+    {
+      key: item.idcate,
+      label: (
+        <a href={`http://localhost:3000/category/${item.idcate}`} >
+          {item.namecate}
+        </a>
+      )
+    }
+  ))
+
+  var itemsUser = [
+    {
+      key: '1',
+      label: (
+        <div className='wrapper-user'>
+          <FaUserCircle className='option__subnav-profile' />
+          <a onClick={() => { navigate('/profile') }}>My profile</a>
+        </div>
+      ),
+    },
+    {
+      key: '2',
+      label: (
+        <div className='wrapper-user'>
+          <FiLogOut className='option__subnav-profile'/>
+          <a onClick={() => dispatch(logout())}>Log out</a>
+        </div>
+      ),
+    }
+  ];
 
   return (
     <header>
-      <div className="logo" onClick={() => navigate("/home")}>
+      <div className='container-search'>
+        <div className="logo" onClick={() => navigate("/home")}>
+        </div>
+
+        <div className="search">
+          <FaSearch className="search__icon-search" />
+          <input onChange={(e) => props.parentCallback(e.target.value)} className='search__input-search' type="text" placeholder="Find what that on Smartphone..." />
+        </div>
       </div>
 
-      <div className="search">
-        <FaSearch className="search__icon-search" />
-        <input onChange={(e) => props.parentCallback(e.target.value)} className='search__input-search' type="text" placeholder="Find what that on Smartphone..." />
-      </div>
+
 
       <ul className="list-option">
         <li className='list-option__item'>
@@ -54,28 +89,16 @@ const Header = (props) => {
           </a>
         </li>
 
-        <li className='list-option__item list-option__item-phone'>
-
+        <li>
           <div>
-            <a className='list-option__option'>
-              <div className="option__icon-phone option__phone"></div>
-              <p>Phone</p>
-            </a>
-            <ul className='option__subnav option__subnav-phone'>
-              {
-                category ?
-                  category.map((cateitem, index) => (
-                    <li key={index}>
-                      <a href={`http://localhost:3000/category/${cateitem.idcate}`}>{cateitem.namecate}</a>
-                    </li>
-
-                  ))
-                  : null
-              }
-            </ul>
+            <Dropdown menu={{ items: itemsCate }} placement="bottom" arrow>
+              <Button className='dropdown-phone'>
+                <DownOutlined />
+                Phone
+              </Button>
+            </Dropdown>
           </div>
         </li>
-
         <li className='list-option__item'>
           <a className='list-option__option' onClick={() => navigate("/cart")}>
             <div className="option__icon-cart option__cart option_contain-circle">
@@ -85,32 +108,21 @@ const Header = (props) => {
           </a>
         </li>
 
-        <li className='list-option__item list-option__item-login'>
+        <li className='list-option__item-login'>
           {
             accessToken
               ?
-              <div>
+              <div >
                 {
                   <>
-                    <a className='list-option__option list-option__login'>
-                      <span className="option__icon-user option__user"></span>
-                      <p>{user && user.length > 0 ? user[0].fullname : "Login"}</p>
-                      <div className="option__icon-arrow-user option__phone">
-                      </div>
-                    </a>
-                    {
-
-                      <ul className='option__subnav option__subnav-pro'>
-                        <li>
-                          <FaUserCircle className='option__subnav-profile' />
-                          <a href="/profile">My profile</a>
-                        </li>
-                        <li>
-                          <FiLogOut />
-                          <a href="" onClick={() => dispatch(logout())}>Log out</a>
-                        </li>
-                      </ul>
-                    }
+                    <Dropdown menu={{ items: itemsUser }} placement="bottom" arrow>
+                      <Button className='dropdown-user'>
+                        <span className="option__icon-user option__user"></span>
+                        {/* <UserOutlined /> */}
+                        {user && user.length > 0 ? user[0].fullname : "Login"}
+                        <DownOutlined />
+                      </Button>
+                    </Dropdown>
                   </>
                 }
               </div>
@@ -121,6 +133,27 @@ const Header = (props) => {
               </a>
           }
         </li>
+
+        {/* <li className='list-option__item-login'>
+          <a className='list-option__option list-option__login'>
+            <span className="option__icon-user option__user"></span>
+            <p className='list-option__login-name'>{user && user.length > 0 ? user[0].fullname : "Login"}</p>
+            <div className="option__icon-arrow-user option__phone">
+            </div>
+          </a>
+          {
+            <ul className='option__subnav option__subnav-pro'>
+              <li>
+                <FaUserCircle className='option__subnav-profile' />
+                <a href="/profile">My profile</a>
+              </li>
+              <li>
+                <FiLogOut />
+                <a href="" onClick={() => dispatch(logout())}>Log out</a>
+              </li>
+            </ul>
+          }
+        </li> */}
 
       </ul>
     </header>

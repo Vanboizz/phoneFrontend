@@ -32,7 +32,7 @@ const HeaderManager = (props) => {
   }
 
   return (
-    <header>
+    <header className='header-manager'>
       <div className='container'>
         <div className="logo">
         </div>

@@ -3,7 +3,7 @@ import "../changepassword/ChangePassword.css"
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { changePassword } from '../../components/feature/user/userSlice'
-import { ToastContainer, toast } from "react-toastify"
+import {toast } from "react-toastify"
 import { useNavigate } from 'react-router-dom'
 
 const initial = {
@@ -43,7 +43,6 @@ const ChangePassword = () => {
   }
   return (
     <>
-      <ToastContainer />
       <div className='grid-container'>
         <h1>Change Password</h1>
         <div className='grid-content'>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { forgotPassword } from '../../components/feature/user/userSlice'
-import { ToastContainer, toast } from "react-toastify"
+import { toast } from "react-toastify"
 import Header from '../../components/header/Header'
 
 const ForgotPassword = () => {
@@ -31,8 +31,7 @@ const ForgotPassword = () => {
 
   return (
     <>
-      <ToastContainer />
-      <Header/>
+      <Header />
       <div className='grid-container'>
         <h1>Forgot Password</h1>
         <div className='grid-content'>

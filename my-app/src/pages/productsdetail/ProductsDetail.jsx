@@ -18,7 +18,7 @@ import Relative from '../../components/relative/Relative';
 import { useDispatch } from 'react-redux';
 import { addCart } from "../../components/feature/cart/cartSlice"
 import Header from "../../components/header/Header"
-import { ToastContainer, toast } from "react-toastify"
+import { toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 
 const addressData = [
@@ -427,8 +427,6 @@ const ProductsDetail = () => {
                 </div>
                 <Relative />
             </div >
-            <ToastContainer />
-
         </>
 
     )

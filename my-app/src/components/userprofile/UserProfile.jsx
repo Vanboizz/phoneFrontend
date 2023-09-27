@@ -3,7 +3,7 @@ import "../userprofile/UserProfile.css"
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getUser } from '../feature/user/userSlice'
-import { ToastContainer, toast } from "react-toastify"
+import { toast } from "react-toastify"
 import axios from 'axios'
 
 const UserProfile = () => {
@@ -150,7 +150,6 @@ const UserProfile = () => {
     }
     return (
         <div className='userprofile'>
-            <ToastContainer />
             <p className='userprofile__name'>{name}</p>
 
             <form action="" onSubmit={handleUpdateProfile}>

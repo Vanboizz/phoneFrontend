@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import "../adminregister/AdminRegister.css"
 import { FaFacebook, FaGoogle } from "react-icons/fa"
 import axios from 'axios'
-import { ToastContainer, toast } from "react-toastify"
+import { toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom'
 import Header from '../../components/header/Header'
@@ -85,7 +85,6 @@ const AdminRegister = () => {
                     </div>
                 </div>
             </div>
-            <ToastContainer />
         </>
     )
 }

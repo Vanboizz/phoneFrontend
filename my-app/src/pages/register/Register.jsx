@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from "react-redux"
 import { registerUser, reset } from '../../components/feature/user/userSlice'
 import { useNavigate } from "react-router-dom"
-import { ToastContainer, toast } from "react-toastify"
+import {toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import Header from '../../components/header/Header'
 
@@ -103,7 +103,6 @@ const Register = () => {
                     </div>
                 </div>
             </div>
-            <ToastContainer />
         </>
     )
 }
