@@ -3,6 +3,7 @@ import productsService from "./productsService";
 
 const initialState = {
   products: [],
+  productsById: {},
   categoryId: [],
   isError: false,
   isSuccess: false,
@@ -13,6 +14,18 @@ const initialState = {
 export const getProducts = createAsyncThunk("/", async (_, thunkApi) => {
   try {
     return productsService.getProducts();
+  } catch (error) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkApi.rejectWithValue(message);
+  }
+});
+
+export const getProductsById = createAsyncThunk("/getProductsById", async ({ accessToken }, thunkApi) => {
+  try {
+    return productsService.getProductsById({ accessToken });
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
@@ -96,6 +109,21 @@ export const productsSlice = createSlice({
         state.isSuccess = false;
         state.message = "Dont get data";
       })
+      .addCase(getProductsById.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getProductsById.fulfilled, (state, action) => {
+        state.isSuccess = true;
+        state.isLoading = false;
+        state.data = action.payload;
+        state.message = "";
+      })
+      .addCase(getProductsById.rejected, (state, action) => {
+        state.isError = true;
+        state.message = action.payload;
+        state.isSuccess = false;
+        state.message = "Dont get data";
+      })
       .addCase(addProducts.pending, (state) => {
         state.isLoading = true;
         state.isSuccess = false;
@@ -126,7 +154,7 @@ export const productsSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
       })
-      
+
       .addCase(getCategoryById.pending, (state) => {
         state.isLoading = true;
       })

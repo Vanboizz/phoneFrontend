@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import '../cart/Cart.css'
 import { GrFormClose } from "react-icons/gr";
 import { AiOutlineMinus } from "react-icons/ai";
@@ -7,12 +7,12 @@ import Templatecart from '../../components/templatecart/Templatecart';
 import Header from '../../../src/components/header/Header'
 import Totalcart from '../../components/totalcart/Totalcart';
 import { useDispatch, useSelector } from 'react-redux';
-import { decreaseItemQuantity, decreaseQuantity, deleteCart, increaseItemQuantity, increaseQuantity } from '../../components/feature/cart/cartSlice';
+import { decreaseItemQuantity, decreaseQuantity, deleteCart, getCart, increaseItemQuantity, increaseQuantity } from '../../components/feature/cart/cartSlice';
 import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
     const { cart } = useSelector(state => state.cart)
-    const { accessToken } = useSelector((state) => state.user)
+    const accessToken = localStorage.getItem("accessToken")
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const handle_order = () => {
@@ -26,7 +26,7 @@ const Cart = () => {
     return (
         <>
             <Header></Header>
-            <Templatecart text__my='My Cart' text__btn='PROCEED TO ORDER' text_back='/home'>
+            <Templatecart text__my='My Cart' text__btn='PROCEED TO ORDER' text_back='/'>
                 <div className="product">
                     {
                         cart ? cart.map((value, index) => (

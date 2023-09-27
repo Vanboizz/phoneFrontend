@@ -3,6 +3,7 @@ import "../header/Header.css"
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser, logout } from "../feature/user/userSlice"
 import { FaSearch, FaUserCircle } from "react-icons/fa";
+import { BsList } from "react-icons/bs"
 import { FiLogOut } from "react-icons/fi";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -31,7 +32,7 @@ const Header = (props) => {
 
   return (
     <header>
-      <div className="logo" onClick={() => navigate("/home")}>
+      <div className="logo" onClick={() => navigate("/")}>
       </div>
 
       <div className="search">
@@ -48,7 +49,7 @@ const Header = (props) => {
         </li>
 
         <li className='list-option__item'>
-          <a className='list-option__option' href='/home'>
+          <a className='list-option__option' href='/'>
             <div className="option__icon-home option__home"></div>
             <p>Home</p>
           </a>
@@ -106,8 +107,12 @@ const Header = (props) => {
                           <a href="/profile">My profile</a>
                         </li>
                         <li>
+                          <BsList className='option__subnav-profile' />
+                          <a href="/listfavourite">Favourite</a>
+                        </li>
+                        <li>
                           <FiLogOut />
-                          <a href="" onClick={() => dispatch(logout())}>Log out</a>
+                          <span onClick={() => dispatch(logout())}>Log out</span>
                         </li>
                       </ul>
                     }
