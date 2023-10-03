@@ -5,6 +5,17 @@ const getProducts = async () => {
   return response.data;
 };
 
+const getProductsById = async ({ accessToken }) => {
+  const response = await
+    axios.get
+      (`http://localhost:8000/product/getproductdetail/${window.location.href.substring(window.location.href.lastIndexOf("/") + 1)}`, {
+        headers: {
+          Authorization: "Bearer " + accessToken
+        },
+      });
+  return response.data
+};
+
 const addProducts = async ({ product }) => {
   const response = await axios.post(
     "http://localhost:8000/product/addproduct",
@@ -40,6 +51,7 @@ const getCategoryById = async () => {
 
 const productsService = {
   getProducts,
+  getProductsById,
   addProducts,
   getCategoryById,
   updateProducts,

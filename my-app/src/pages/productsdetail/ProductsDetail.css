@@ -239,7 +239,7 @@
   display: flex;
 }
 
-.product-detail form {
+.product-detail .form-format form {
   display: flex;
   gap: 0.8rem;
   position: relative;
@@ -397,4 +397,77 @@
   margin-top: 2px;
   max-width: calc(100% - 20px);
   margin-left: 5px;
+}
+
+.product-detail .outline-heart {
+  color: #1a94ff;
+  font-size: 24px;
+}
+
+.product-detail .fill-heart {
+  color: #1a94ff;
+  font-size: 24px;
+}
+
+.product-detail .icon button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.product-detail .review {
+  margin-top: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.1),
+    0 2px 6px 2px rgba(60, 64, 67, 0.15);
+  margin-bottom: 15px;
+  padding: 1rem;
+  width: 64%;
+}
+
+.product-detail .review h4 {
+  margin-bottom: 1.5rem;
+}
+
+.product-detail .review .box-review {
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  height: 160px;
+}
+
+.product-detail .review .box-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.5;
+  margin-right: 10%;
+  border-right: 1px solid #e5e7eb;
+  width: 24%;
+}
+
+.product-detail .review .box-star {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  line-height: 1.5;
+  width: 44%;
+}
+
+.product-detail .review .box-experience {
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+}
+
+.product-detail .review .button-review-container {
+  text-align: center;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
 }

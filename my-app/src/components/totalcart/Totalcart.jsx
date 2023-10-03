@@ -21,7 +21,7 @@ const Totalcart = ({ text__btn, handle__checkout }) => {
                     {text__btn}
                 </button>
 
-                <a href='/home' className='btn-submit__add-product'>
+                <a href='/' className='btn-submit__add-product'>
                     CHOOSE ADD THE OTHER
                     PRODUCT
                 </a>

@@ -1,25 +1,25 @@
 import React, { useEffect, useState, } from 'react'
 import "../productsdetail/ProductsDetail.css"
 import { FaStar, FaAngleDown, FaAngleUp, FaCartPlus, FaMobileAlt, FaRegHandPointRight } from 'react-icons/fa'
-import { AiOutlineCheck } from "react-icons/ai";
-
+import { AiOutlineCheck, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { Swiper, SwiperSlide } from "swiper/react";
-
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
 import "swiper/css/thumbs";
-
 import { FreeMode, Navigation, Thumbs } from "swiper";
-import { useLocation, useNavigate } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import Relative from '../../components/relative/Relative';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addCart } from "../../components/feature/cart/cartSlice"
 import Header from "../../components/header/Header"
 import { toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
+import { addFavorite, deleteFavorite } from '../../components/feature/favorite/favoriteSlice';
+import { getProducts, getProductsById } from '../../components/feature/products/productsSlice';
+import ModalReview from '../../components/modalreview/ModalReview';
+
 
 const addressData = [
     {
@@ -75,20 +75,50 @@ const ProductsDetail = () => {
     const [district, setDistrict] = useState([])
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
     const [isMore, setIsMore] = useState(false)
-    const location = useLocation()
-    const product = location.state.product
-    const [data, setData] = useState(product.size[0].color)
-    const [idSize, setIdSize] = useState(product.size[0].idsize);
-    const [idColor, setIdColor] = useState();
-    const [idImage, setIdImage] = useState(product.image[0].idimage)
-    const [priceSize, setPriceSize] = useState(product.size[0].pricesize)
-    const [nameSize, setNameSize] = useState(product.size[0].namesize)
-    const [idProducts, setIdProducts] = useState(product.idproducts)
-    const accessToken = localStorage.getItem("accessToken")
     const dispatch = useDispatch()
+    const productsById = useSelector(state => state.products)
+    const [data, setData] = useState(null)
+    const [idSize, setIdSize] = useState(null);
+    const [idColor, setIdColor] = useState();
+    const [priceSize, setPriceSize] = useState(null)
+    const [nameSize, setNameSize] = useState()
+    const [isHeart, setIsHeart] = useState()
+    const accessToken = localStorage.getItem("accessToken")
     const navigate = useNavigate()
+    const [isModal, setIsModal] = useState(false)
+
+    const handleAddToCart = (e) => {
+        e.preventDefault()
+        if (!accessToken) {
+            navigate("/login")
+        } else {
+            const selectedProduct = productsById.data?.size.find((size) => {
+                return size.color.some((item) => item.idcolor === idColor && item.quantity > 0);
+            });
+            if (selectedProduct) {
+                dispatch(addCart({ idproducts: productsById.data?.idproducts, idsize: idSize, idcolor: idColor, idimage: productsById.data?.image[0].idimage, accessToken }))
+                navigate("/cart")
+                window.location.reload()
+            } else {
+                toast("The product is out of stock")
+            }
+        }
+    }
+
+    const handleAddFavorite = (e) => {
+        e.preventDefault()
+        dispatch(addFavorite({ accessToken, idproducts: productsById.data?.idproducts, idimage: productsById.data?.image[0].idimage }))
+        setIsHeart(true)
+    }
+
+    const handleDeleteFavorite = (e) => {
+        e.preventDefault()
+        dispatch(deleteFavorite({ accessToken, idproducts: productsById.data?.idproducts }))
+        setIsHeart(false)
+    }
 
     useEffect(() => {
+        dispatch(getProductsById({ accessToken }))
         axios.get("https://provinces.open-api.vn/api/p/")
             .then((response) => {
                 setProvince(response.data)
@@ -96,9 +126,6 @@ const ProductsDetail = () => {
             .catch(error => {
                 console.log(error);
             })
-    }, [])
-
-    useEffect(() => {
         if (selectedProvince) {
             axios.get(`https://provinces.open-api.vn/api/p/${selectedProvince}?depth=2`)
                 .then((response) => {
@@ -110,49 +137,40 @@ const ProductsDetail = () => {
         }
     }, [selectedProvince])
 
-    const handleClick = (e) => {
-        e.preventDefault()
-        if (accessToken && idColor) {
-            dispatch(addCart({ idproducts: idProducts, idsize: idSize, idcolor: idColor, idimage: idImage, accessToken }))
-            navigate("/cart")
-            window.location.reload()
-        }
-        if (!idColor) {
-            toast("The Product is out of stock")
-        }
+    const handleOpenModal = (e) => {
+        e.stopPropagation()
+        setIsModal(true)
     }
 
-    const handleBuyNow = (e) => {
-        e.preventDefault()
-        if (accessToken && idColor) {
-            dispatch(addCart({ idproducts: idProducts, idsize: idSize, idcolor: idColor, idimage: idImage, accessToken }))
-            navigate("/cart")
-            window.location.reload()
+    useEffect(() => {
+        if (productsById.data?.size?.length > 0) {
+            setIdSize(productsById.data.size[0].idsize);
+            setPriceSize(productsById.data?.size[0].pricesize)
+            setData(productsById.data?.size[0].color)
+            setNameSize(productsById.data?.size[0].namesize)
+            setIdColor(productsById.data.size[0].color[0].idcolor)
+            setIsHeart(productsById?.data?.isHeart)
         }
-        if (!idColor) {
-            toast("The Product is out of stock")
-        }
-    }
+    }, [productsById])
 
-    const formatter = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'VND',
-      
-      });
     return (
         <>
             <Header />
             <div className='product-detail'>
                 <div className='format-child'>
                     <div>
-                        <h1>{product.nameproducts} <span>{nameSize}</span> </h1>
+                        <h1>{productsById.data?.nameproducts} <span>{nameSize}</span> </h1>
                     </div>
                     <div className='icon'>
-                        <FaStar className='star' />
-                        <FaStar className='star' />
-                        <FaStar className='star' />
-                        <FaStar className='star' />
-                        <FaStar className='star' />
+                        {
+                            isHeart ?
+                                <button onClick={handleDeleteFavorite}>
+                                    <AiFillHeart className='fill-heart' />
+                                </button> :
+                                <button onClick={handleAddFavorite}>
+                                    <AiOutlineHeart className='outline-heart' />
+                                </button>
+                        }
                     </div>
                 </div>
                 <hr />
@@ -165,11 +183,11 @@ const ProductsDetail = () => {
                                 modules={[FreeMode, Navigation, Thumbs]}
                             >
                                 {
-                                    product ? (product.image.map((value, index) => (
+                                    productsById.data?.image?.map((value, index) => (
                                         <SwiperSlide key={index}>
                                             <img src={value.avt} />
                                         </SwiperSlide>
-                                    ))) : null
+                                    ))
                                 }
                             </Swiper>
                         </div>
@@ -184,24 +202,26 @@ const ProductsDetail = () => {
                                 className="mySwiper"
                             >
                                 {
-                                    product ? (product.image.map((value, index) => (
+                                    productsById.data?.image?.map((value, index) => (
                                         <SwiperSlide key={index}>
                                             <img style={{ width: "100%", height: "100%" }} src={value.avt} />
                                         </SwiperSlide>
-                                    ))) : null
+                                    ))
                                 }
                             </Swiper>
                         </div>
                     </div>
                     <div className='middle-container'>
                         <div className='box-price'>
-                            <p className='price-show'>{(priceSize - ((priceSize * product.discount) / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;</p>
-                            <p className='price-through'>{(priceSize).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;</p>
+                            <p className='price-show'>
+                                {priceSize && (priceSize - ((priceSize * productsById.data?.discount) / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;
+                            </p>
+                            <p className='price-through'>{priceSize && (priceSize).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;</p>
                         </div>
-                        <div>
-                            <form >
+                        <div className='form-format'>
+                            <form>
                                 {
-                                    product ? (product.size.map((value) => (
+                                    productsById.data?.size?.map((value) => (
                                         <label className='item-linked' key={value.idsize} htmlFor={value.idsize} style={
                                             {
                                                 border: value.idsize === idSize ? "1.4px solid #1a94ff" : "",
@@ -218,7 +238,7 @@ const ProductsDetail = () => {
                                                     {value.namesize}
                                                 </p>
                                                 <p className="price">
-                                                    {(value.pricesize - ((value.pricesize * product.discount) / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;
+                                                    {(value?.pricesize - ((value?.pricesize * productsById.data?.discount) / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;
                                                 </p>
                                             </div>
                                             <input type="radio" name="size" id={value.idsize} value={value.idsize}
@@ -230,20 +250,19 @@ const ProductsDetail = () => {
                                                         setNameSize(value.namesize)
                                                     }
                                                 }}
-
                                             />
                                         </label>
-                                    ))) : null
+                                    ))
                                 }
                             </form>
                         </div>
                         <div className='choose-color'>
                             <p>Choose color to see price</p>
                         </div>
-                        <div>
+                        <div className='form-format'>
                             <form>
                                 {
-                                    data ? data.map((item) => (
+                                    data?.map((item) => (
                                         <label key={item.idcolor} className='item-linked' style={
                                             {
                                                 border: item.idcolor === idColor ? "1.4px solid #1a94ff" : "",
@@ -256,7 +275,7 @@ const ProductsDetail = () => {
                                             <div className='content'>
                                                 <p className='name'>
                                                     {
-                                                        item.idcolor === idColor ? (
+                                                        item.idcolor === idColor && item.quantity > 0 ? (
                                                             <AiOutlineCheck style={{ color: "#fff", backgroundColor: "#1a94ff", fontWeight: "bold", position: "absolute", left: "0", top: "0" }} />
                                                         ) :
                                                             null
@@ -264,11 +283,11 @@ const ProductsDetail = () => {
                                                     {item.namecolor}
                                                 </p>
                                                 {
-                                                    product ? product.size.map((value) => (
+                                                    productsById.data ? productsById.data.size.map((value) => (
                                                         <div key={value.idsize}>
                                                             {
                                                                 value.idsize === idSize ? <p className='price'>
-                                                                    {(value.pricesize - ((value.pricesize * product.discount) / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;
+                                                                    {(value.pricesize - ((value.pricesize * productsById.data.discount) / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;
                                                                 </p> : null
                                                             }
                                                         </div>
@@ -282,13 +301,12 @@ const ProductsDetail = () => {
                                                 value={item.namecolor}
                                                 checked={item.idcolor === idColor}
                                                 onChange={(e) => {
-
                                                     setIdColor(item.idcolor)
                                                 }}
                                                 disabled={item.quantity === 0 ? true : false}
                                             />
                                         </label>
-                                    )) : null
+                                    ))
                                 }
                             </form>
                         </div>
@@ -296,14 +314,12 @@ const ProductsDetail = () => {
                         </div>
                         <div className='format-button'>
                             <div >
-                                <button onClick={handleBuyNow}>BUY NOW</button>
+                                <button onClick={handleAddToCart}>BUY NOW</button>
                             </div>
-                            <button className='cart' onClick={handleClick}>
+                            <button className='cart' onClick={handleAddToCart}>
                                 <FaCartPlus style={{ fontSize: "1.2rem" }} />
                                 <span className='btnadd'>ADD TO CART</span>
                             </button>
-
-
                         </div>
                         <div className='promotion'>
                             <div className='promotion-title'>
@@ -320,12 +336,10 @@ const ProductsDetail = () => {
                                             </li>
                                         ))
                                     }
-
-
                                 </ul>
                             </div>
                         </div>
-                    </div>
+                    </div >
                     <div className='right-container'>
                         <div className='is-flex'>
                             <select value={selectedProvince} onChange={(e) => setSelectedProvince(e.target.value)} className="box-on-stock-option"
@@ -398,37 +412,129 @@ const ProductsDetail = () => {
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className='description'>
-                    <h3>Description</h3>
-                    <hr />
-                    <div style={{ maxHeight: isMore ? undefined : "200px", overflow: 'hidden' }}>
-                        <p>
+                </div >
+                <div className='review'>
+                    <div>
+                        <h4>Reviews & comments {productsById.data?.nameproducts}
                             {
-                                product.description
+                                productsById?.data?.size.map((size, index) => (
+                                    <span key={index}> {size.namesize}</span>
+                                ))
                             }
-                        </p>
+                        </h4>
                     </div>
-                    <div className='btn-show'>
-                        <button onClick={() => setIsMore(!isMore)}>
-                            <span>
-                                {
-                                    isMore ? 'Collagse' : 'See More'
-                                }
-                            </span>
-                            <div>
-                                {
-                                    isMore ? <FaAngleUp /> : <FaAngleDown />
-                                }
+                    <div className='box-review'>
+                        <div className='box-score'>
+                            <p style={{ fontSize: "1.5rem", fontWeight: "bold" }}>4.7/5</p>
+                            <div style={{ display: "flex", gap: "0.8rem", height: "24px" }}>
+                                <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
                             </div>
-                        </button>
+                            <p style={{ textDecoration: "underline", color: "#1a94ff", fontWeight: "bold" }}>50 review</p>
+                        </div>
+                        <div className='box-star'>
+                            <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+                                <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
+                                    <span style={{ fontWeight: "bold" }}>5</span>
+                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                </div>
+                                <progress max={50} value={36}></progress>
+                                <span style={{ fontSize: "14px" }}>36 review</span>
+                            </div>
+                            <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+                                <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
+                                    <span style={{ fontWeight: "bold" }}>4</span>
+                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                </div>
+                                <progress max={50} value={36}></progress>
+                                <span style={{ fontSize: "14px" }}>36 review</span>
+                            </div>
+                            <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+                                <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
+                                    <span style={{ fontWeight: "bold" }}>3</span>
+                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                </div>
+                                <progress max={50} value={36}></progress>
+                                <span style={{ fontSize: "14px" }}>36 review</span>
+                            </div>
+                            <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+                                <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
+                                    <span style={{ fontWeight: "bold" }}>2</span>
+                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                </div>
+                                <progress max={50} value={36}></progress>
+                                <span style={{ fontSize: "14px" }}>36 review</span>
+                            </div>
+                            <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+                                <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
+                                    <span style={{ fontWeight: "bold" }}>1</span>
+                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                </div>
+                                <progress max={50} value={0}></progress>
+                                <span style={{ fontSize: "14px" }}>36 review</span>
+                            </div>
+                        </div>
                     </div>
-                    <hr />
+                    <div className='box-experience'>
+                        <div style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "10px" }}>Evaluation based on experience</div>
+                        <div style={{ display: "flex", justifyContent: "space-between", lineHeight: "1.5" }}>
+                            <div>Performance</div>
+                            <div style={{ display: "flex", gap: "1rem" }}>
+                                <div style={{ display: "flex", gap: "0.4rem" }}>
+                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                </div>
+                                <div style={{ fontWeight: "bold" }}>4/5</div>
+                                <div>(1)</div>
+                            </div>
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "space-between", lineHeight: "1.5" }}>
+                            <div>Battery life</div>
+                            <div style={{ display: "flex", gap: "1rem" }}>
+                                <div style={{ display: "flex", gap: "0.4rem" }}>
+                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                </div>
+                                <div style={{ fontWeight: "bold" }}>4/5</div>
+                                <div>(1)</div>
+                            </div>
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "space-between", lineHeight: "1.5" }}>
+                            <div>Camera quanlity</div>
+                            <div style={{ display: "flex", gap: "1rem" }}>
+                                <div style={{ display: "flex", gap: "0.4rem" }}>
+                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                </div>
+                                <div style={{ fontWeight: "bold" }}>4/5</div>
+                                <div>(1)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='button-review-container'>
+                        <p style={{ margin: "0.4rem 0" }}>How do you rate this product?</p>
+                        <div >
+                            <button style={{ backgroundColor: "#1a94ff", border: "none", borderRadius: "5px", padding: "10px 30px", color: "white", fontWeight: "bold", margin: "10px auto", cursor: "pointer" }} onClick={handleOpenModal}>
+                                Evaluate now
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <Relative />
+                {isModal && <ModalReview productsById={productsById} isModal={isModal} setIsModal={setIsModal} />}
             </div >
         </>
-
     )
 }
 

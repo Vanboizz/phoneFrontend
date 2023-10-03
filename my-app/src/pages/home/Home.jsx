@@ -17,7 +17,6 @@ import { Button } from 'antd';
 
 const Home = () => {
     const products = useSelector((state) => state.products)
-
     const dispatch = useDispatch()
     const [category, setCategory] = useState([])
     const [inputhome, setInputHome] = useState('')
@@ -36,11 +35,6 @@ const Home = () => {
     const setInput = (childdata) => {
         setInputHome(childdata)
     }
-
-    const formatter = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'VND',
-    });
 
     return (
         <div style={{ marginTop: "32px" }}>
@@ -74,51 +68,51 @@ const Home = () => {
                         className="mySwiper"
                     >
                         {
-                            products.data ? profilter = products.data
-                                .filter((product) => {
+                            Array.isArray(products.data) ? profilter =
+                                products.data.filter((product) => {
                                     if (inputhome === '')
                                         return product;
                                     else if (product.nameproducts.toLowerCase().includes(inputhome.toLowerCase()))
                                         return product;
                                 })
-                                .map((value, index) => {
-                                    return (
-                                        <SwiperSlide key={index} style={{}}>
-                                            <Link to={`/productsdetail/${value.idproducts}`} state={{ product: value }}>
-                                                <div className='item' key={index} onClick={() => window.location.replace(`/productsdetail/${value.idproducts}`)}>
-                                                    <div className='discount'>
-                                                        <p >Giảm <span>{value.discount}%</span></p>
-                                                    </div>
-                                                    <div className='url'>
-                                                        <img key={index} src={value.image[0].avt} alt="" />
-                                                    </div>
-                                                    <h3 style={{ color: "#000" }}>{value.nameproducts}</h3>
-                                                    <div className='format'>
-
-                                                        <p>{(value.size[0].pricesize - ((value.size[0].pricesize * value.discount) / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;</p>
-                                                        <p>{(value.size[0].pricesize).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;</p>
-                                                    </div>
-                                                    <div className='promotion' style={{ color: "#000" }}>
-                                                        {value.promotion}
-                                                    </div>
-                                                    <div className='icon'>
-                                                        <div>
-                                                            <FaStar className='star' />
-                                                            <FaStar className='star' />
-                                                            <FaStar className='star' />
-                                                            <FaStar className='star' />
-                                                            <FaStar className='star' />
+                                    .map((value, index) => {
+                                        return (
+                                            <SwiperSlide key={index} style={{}}>
+                                                <Link to={`/productsdetail/${value.idproducts}`}>
+                                                    <div className='item' key={index} onClick={() => window.location.replace(`/productsdetail/${value.idproducts}`)}>
+                                                        <div className='discount'>
+                                                            <p >Giảm <span>{value.discount}%</span></p>
                                                         </div>
-                                                        <button>
-                                                            <FaPlusCircle className='circle' />
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </Link>
+                                                        <div className='url'>
+                                                            <img key={index} src={value.image[0].avt} alt="" />
+                                                        </div>
+                                                        <h3 style={{ color: "#000" }}>{value.nameproducts}</h3>
+                                                        <div className='format'>
 
-                                        </SwiperSlide>
-                                    )
-                                }) : null
+                                                            <p>{(value.size[0].pricesize - ((value.size[0].pricesize * value.discount) / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;</p>
+                                                            <p>{(value.size[0].pricesize).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;</p>
+                                                        </div>
+                                                        <div className='promotion' style={{ color: "#000" }}>
+                                                            {value.promotion}
+                                                        </div>
+                                                        <div className='icon'>
+                                                            <div>
+                                                                <FaStar className='star' />
+                                                                <FaStar className='star' />
+                                                                <FaStar className='star' />
+                                                                <FaStar className='star' />
+                                                                <FaStar className='star' />
+                                                            </div>
+                                                            <button>
+                                                                <FaPlusCircle className='circle' />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </Link>
+
+                                            </SwiperSlide>
+                                        )
+                                    }) : null
                         }
                     </Swiper>
                     {

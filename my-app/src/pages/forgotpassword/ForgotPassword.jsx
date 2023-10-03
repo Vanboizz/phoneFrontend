@@ -32,7 +32,7 @@ const ForgotPassword = () => {
   return (
     <>
       <Header />
-      <div className='grid-container'>
+      <div className='grid-containerforgot'>
         <h1>Forgot Password</h1>
         <div className='grid-content'>
           <form action="">

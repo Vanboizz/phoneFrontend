@@ -3,11 +3,12 @@ import "../header/Header.css"
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser, logout } from "../feature/user/userSlice"
 import { FaSearch, FaUserCircle } from "react-icons/fa";
+import { BsList } from "react-icons/bs"
+import { FiLogOut } from "react-icons/fi";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button, Dropdown } from 'antd';
 import { DownOutlined, UserOutlined } from '@ant-design/icons'
-import { FiLogOut } from "react-icons/fi";
 
 const Header = (props) => {
   const { quantityCart } = useSelector((state) => state.cart);
@@ -53,17 +54,27 @@ const Header = (props) => {
       key: '2',
       label: (
         <div className='wrapper-user'>
-          <FiLogOut className='option__subnav-profile'/>
+          <BsList className='option__subnav-profile' />
+          <a onClick={() => { navigate('/listfavourite') }} >Favourite</a>
+        </div>
+      ),
+    },
+    {
+      key: '3',
+      label: (
+        <div className='wrapper-user'>
+          <FiLogOut className='option__subnav-profile' />
           <a onClick={() => dispatch(logout())}>Log out</a>
         </div>
       ),
-    }
+    },
+
   ];
 
   return (
     <header>
       <div className='container-search'>
-        <div className="logo" onClick={() => navigate("/home")}>
+        <div className="logo" onClick={() => navigate("/")}>
         </div>
 
         <div className="search">
@@ -83,7 +94,7 @@ const Header = (props) => {
         </li>
 
         <li className='list-option__item'>
-          <a className='list-option__option' href='/home'>
+          <a className='list-option__option' href='/'>
             <div className="option__icon-home option__home"></div>
             <p>Home</p>
           </a>
@@ -108,10 +119,11 @@ const Header = (props) => {
           </a>
         </li>
 
-        <li className='list-option__item-login'>
-          {
-            accessToken
-              ?
+
+        {
+          accessToken
+            ?
+            <li className='list-option__item-login'>
               <div >
                 {
                   <>
@@ -126,13 +138,19 @@ const Header = (props) => {
                   </>
                 }
               </div>
-              :
+            </li>
+
+            :
+
+            <li className='list-option__item'>
               <a className='list-option__option list-option__login' href='/login'>
                 <span className="option__icon-user option__user"></span>
                 <p>Login</p>
               </a>
-          }
-        </li>
+            </li>
+
+        }
+
 
         {/* <li className='list-option__item-login'>
           <a className='list-option__option list-option__login'>

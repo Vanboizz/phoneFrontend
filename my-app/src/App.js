@@ -23,6 +23,7 @@ import PrivateRouteAdmin from "./components/hook/PrivateRouteAdmin";
 import ProductList from "./pages/productlist/ProductList";
 import Category from "./pages/category/Category";
 import { ToastContainer } from "react-toastify";
+import ListFavourite from "./pages/listfavourite/ListFavourite";
 
 export default function App() {
 
@@ -48,20 +49,22 @@ export default function App() {
               element={<ChangePassword />}
             ></Route>
             {/* Visitor */}
-            <Route path="/home" element={<Home />}></Route>
+            <Route path="/" element={<Home />}></Route>
             <Route path="/category/:id" element={<Category />}></Route>
             <Route path="/cart" element={<Cart />}></Route>
+            <Route
+              path="/productsdetail/:id"
+              element={<ProductsDetail />}
+            ></Route>
             {/* user */}
             <Route path="/" element={<PrivateRoute />}>
-              <Route
-                path="/productsdetail/:id"
-                element={<ProductsDetail />}
-              ></Route>
+
               <Route path="/profile" element={<Profile />}></Route>
               <Route path="/orderinfo" element={<Orderinfo />}></Route>
               <Route path="/detailbill" element={<Detailbill />}></Route>
               <Route path="/cartthanks" element={<Cartthanks />}></Route>
               <Route path="/profile" element={<Profile />}></Route>
+              <Route path="/listfavourite" element={<ListFavourite />}></Route>
             </Route>
 
             {/* admin */}

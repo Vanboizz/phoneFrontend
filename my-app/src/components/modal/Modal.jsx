@@ -127,7 +127,7 @@ const Modal = ({ size, setOpenModal, onSubmit }) => {
                                                 key: key,
                                                 data: e.target.value
                                             }
-                                        })} required min={1} max={10} />
+                                        })} required min={0} max={10} />
                                     </div>
                                     <div className='action'>
                                         <label htmlFor="">Action:</label>

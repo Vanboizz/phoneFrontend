@@ -22,7 +22,7 @@ const Login = () => {
 
     useEffect(() => {
         if (accessToken && user?.role != 'admin') {
-            navigate("/home")
+            navigate("/")
         } else if (accessToken && user?.role === 'admin') {
             navigate("/admin/productlist")
         }
