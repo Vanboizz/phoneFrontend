@@ -1,7 +1,7 @@
 import React, { useEffect, useState, } from 'react'
 import "../productsdetail/ProductsDetail.css"
 import { FaStar, FaAngleDown, FaAngleUp, FaCartPlus, FaMobileAlt, FaRegHandPointRight } from 'react-icons/fa'
-import { AiOutlineCheck, AiOutlineHeart, AiFillHeart, AiOutlineClockCircle } from "react-icons/ai";
+import { AiOutlineCheck, AiOutlineHeart, AiFillHeart, AiOutlineClockCircle, AiOutlineSend } from "react-icons/ai";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -21,6 +21,9 @@ import { getProducts, getProductsById } from '../../components/feature/products/
 import ModalReview from '../../components/modalreview/ModalReview';
 import { getUser } from '../../components/feature/user/userSlice';
 import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'; // Import plugin
+import ListComment from '../../components/ListComment/ListComment';
+dayjs.extend(relativeTime);
 
 
 const addressData = [
@@ -116,6 +119,8 @@ const ProductsDetail = () => {
     const [listEvaluate, setListEvaluate] = useState([])
     const [statisticsOfReview, setStatisticsOfReview] = useState([])
     const [selectedStar, setSelectedStar] = useState(null)
+    const [comment, setComment] = useState("")
+    const [listComment, setListComment] = useState([])
 
     const handleAddToCart = (e) => {
         e.preventDefault()
@@ -179,6 +184,17 @@ const ProductsDetail = () => {
             try {
                 const response = await axios.get(`http://localhost:8000/evaluate/getEvaluate/${productsById.data.idproducts}`);
                 setStatisticsOfReview(response.data.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
+
+    const getListComments = async () => {
+        if (productsById && productsById.data) {
+            try {
+                const response = await axios.get(`http://localhost:8000/comment/getComment/${productsById.data.idproducts}`);
+                setListComment(response.data.data);
             } catch (error) {
                 console.log(error);
             }
@@ -270,11 +286,36 @@ const ProductsDetail = () => {
 
     useEffect(() => {
         getListEvaluate()
+        getListComments()
     }, [selectedStar, productsById])
 
     useEffect(() => {
         getStatisticsOfReview()
     }, [productsById])
+
+    const handleSubmitComments = (e) => {
+        e.preventDefault()
+        if (productsById && productsById.data) {
+            axios.post("http://localhost:8000/comment/addComment", {
+                idproducts: productsById.data.idproducts,
+                comment: comment,
+                parentId: null
+            }
+                , {
+                    headers: {
+                        Authorization: "Bearer " + accessToken
+                    },
+                }
+            )
+                .then(() => {
+                    getListComments()
+                    setComment("")
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        }
+    }
 
     return (
         <>
@@ -786,6 +827,46 @@ const ProductsDetail = () => {
                             </div>
                     }
 
+                </div>
+                <div className='comment'>
+                    <h3>Answer and Question</h3>
+                    <form action="" style={{ margin: "12px 0" }} onSubmit={handleSubmitComments}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                            <div>
+                                <p style={{ backgroundColor: "#168d8d", color: "white", height: "32px", width: "32px", borderRadius: "50%", fontWeight: "bold", display: "flex", justifyContent: "center", alignItems: "center" }}>N</p>
+                            </div>
+                            <div>
+                                <textarea
+                                    name='review'
+                                    value={comment}
+                                    onChange={(e) => setComment(e.target.value)}
+                                    style={{
+                                        borderRadius: "8px",
+                                        resize: "vertical",
+                                        display: "block",
+                                        boxShadow: "0 0 10px 0 rgba(60,64,67,.1), 0 2px 6px 2px rgba(60,64,67,.15)",
+                                        border: "0",
+                                        padding: "8px",
+                                        width: "650px"
+                                    }}
+                                    placeholder='Please leave your questions'
+                                    required>
+                                </textarea>
+                            </div>
+                            <div>
+                                <button type='submit' style={{ border: "none", backgroundColor: "#1a94ff", color: "white", fontWeight: "bold", display: "flex", alignItems: "center", padding: "8px", cursor: "pointer", fontSize: "16px", borderRadius: "8px" }}>
+                                    <AiOutlineSend size={24} />
+                                    Send
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    {
+                        listComment.map((value, index) => (
+                            value.parentId === null &&
+                            <ListComment comment={value} key={index} accessToken={accessToken} productsById={productsById} />
+                        ))
+                    }
                 </div>
                 {isModal && <ModalReview getListEvaluate={getListEvaluate} productsById={productsById} isModal={isModal} setIsModal={setIsModal} />}
             </div >
