@@ -13,8 +13,7 @@ const Chat = () => {
             <div className='chat__with'>
                 <img src="https://www.w3schools.com/howto/img_avatar.png" alt="" />
                 <div className="chat__with-right">
-                    <p style={{ fontWeight: 600 }}>{`Chat with ${name}`}</p>
-                    <span>{`${quantity} members, ${quantity} online`}</span>
+                    <p style={{ fontWeight: 600, fontSize: 18 }}>{`Chat with ${name}`}</p>
                 </div>
             </div>
 
