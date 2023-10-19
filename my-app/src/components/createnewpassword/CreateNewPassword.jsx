@@ -3,7 +3,7 @@ import "../createnewpassword/CreateNewPassword.css"
 import { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { createNewPassword, reset } from '../feature/user/userSlice';
-import { ToastContainer, toast } from "react-toastify"
+import { toast } from 'react-toastify';
 import axios from 'axios';
 
 const CreateNewPassword = () => {
@@ -33,7 +33,7 @@ const CreateNewPassword = () => {
             }
         )
             .then((result) => {
-                toast(result.data.message)
+                toast.success(result.data.message)
             })
             .catch(error => {
                 toast.error(error.response.data.message)
@@ -54,7 +54,6 @@ const CreateNewPassword = () => {
     
     return (
         <>
-            <ToastContainer />
             <div className='createnewpassword'>
                 <p className='createnewpassword__name'>CREATE NEW PASSWORD</p>
 

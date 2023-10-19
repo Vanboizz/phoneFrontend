@@ -9,6 +9,7 @@ import Header from "../../components/header/Header"
 import Footer from "../../components/footer/Footer"
 import axios from 'axios'
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa'
+import { Button } from 'antd';
 
 const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -19,7 +20,6 @@ const Category = () => {
     const [category, setCategory] = useState([])
     const [More, setMore] = useState(false)
     const [categorytemp, setCategorytemp] = useState([])
-
     useEffect(() => {
         axios.get(`http://localhost:8000/product/getcategory/${window.location.href.substring(
             window.location.href.lastIndexOf("/") + 1
@@ -61,15 +61,15 @@ const Category = () => {
 
                             <div className='category__sort-filter'>
 
-                                <button className='category__sort-filter-wrap' onClick={() => handleLH()}>
+                                <Button  className='category__sort-filter-wrap' onClick={() => handleLH()}>
                                     <div className='category__sort-filter-wrap-icon category__sort-filter-wrap-icon-lh'></div>
                                     <p className='category__sort-filter-hl-title'>Price Low - High</p>
-                                </button>
+                                </Button>
 
-                                <button className='category__sort-filter-wrap' onClick={() => handleHL()}>
+                                <Button className='category__sort-filter-wrap' onClick={() => handleHL()}>
                                     <div className='category__sort-filter-wrap-icon category__sort-filter-wrap-icon-hl'></div>
                                     <p className='category__sort-filter-hl-title'>Price High - Low</p>
-                                </button>
+                                </Button>
                             </div>
                         </div>
                         : null
@@ -128,7 +128,7 @@ const Category = () => {
                     categorytemp.length >= 6
                         ?
                         <div className='category__btn-show'>
-                            <button onClick={() => setMore(!More)}>
+                            <Button onClick={() => setMore(!More)}>
                                 <span>
                                     {
                                         More ? 'Collagse' : 'See More'
@@ -139,7 +139,7 @@ const Category = () => {
                                         More ? <FaAngleUp /> : <FaAngleDown />
                                     }
                                 </div>
-                            </button>
+                            </Button>
                         </div>
                         : null
                 }

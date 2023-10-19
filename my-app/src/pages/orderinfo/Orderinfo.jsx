@@ -7,7 +7,6 @@ import Totalcart from '../../components/totalcart/Totalcart'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../../components/feature/user/userSlice';
-import { ToastContainer } from "react-toastify"
 import { setDataOrder } from '../../components/feature/cart/cartSlice';
 import { useNavigate } from 'react-router-dom'
 
@@ -16,12 +15,15 @@ const Orderinfo = () => {
     const [province, setProvince] = useState([])
     const [district, setDistrict] = useState([])
     const [wards, setWards] = useState([])
+    const dataUser = useSelector(state => state?.user)
     const [selectedProvince, setSelectedProvince] = useState()
     const [selectedDistrict, setSelectedDistrict] = useState()
     const [selectedWard, setSelectedWard] = useState()
-    const { user, accessToken } = useSelector((state) => state.user)
+    const { user, accessToken } = useSelector((state) => state?.user)
     const navigate = useNavigate()
     const dispatch = useDispatch()
+
+
     useEffect(() => {
         if (accessToken) {
             dispatch(getUser({ accessToken }))
@@ -31,12 +33,39 @@ const Orderinfo = () => {
     useEffect(() => {
         axios.get("https://provinces.open-api.vn/api/p/")
             .then((response) => {
-                setProvince(response.data)
+                setProvince(response?.data)
             })
             .catch(error => {
                 console.log(error);
             })
     }, [])
+
+    useEffect(() => {
+        if (dataUser?.user[0]?.province && province) {
+            const checkPro = province.find(item => item?.name === dataUser?.user[0]?.province)
+            if (checkPro) {
+                setSelectedProvince(checkPro?.code)
+            }
+        }
+    }, [province])
+
+    useEffect(() => {
+        if (dataUser?.user[0]?.district && district) {
+            const checkDis = district.find(item => item?.name === dataUser?.user[0]?.district)
+            if (checkDis) {
+                setSelectedDistrict(checkDis?.code)
+            }
+        }
+    }, [district])
+
+    useEffect(() => {
+        if (dataUser?.user[0]?.wards && wards) {
+            const checkWard = wards.find(item => item?.name === dataUser?.user[0]?.wards)
+            if (checkWard) {
+                setSelectedWard(checkWard?.code)
+            }
+        }
+    }, [wards])
 
     useEffect(() => {
         if (selectedProvince) {
@@ -47,6 +76,7 @@ const Orderinfo = () => {
                 .catch(error => {
                     console.log(error);
                 })
+            setSelectedWard(0)
         }
     }, [selectedProvince])
 
@@ -87,7 +117,6 @@ const Orderinfo = () => {
     if (user) {
         return (
             <>
-                <ToastContainer />
                 <Header></Header>
                 <Templatecart text__my='Order information' text__btn='CONTINUES' text_back='/cart'>
                     <Statusorder />
@@ -147,7 +176,15 @@ const Orderinfo = () => {
                                                 ))
                                             }
                                         </select>
-                                        <input placeholder='Detailed address' name='detailaddress' id='detailaddress' type="text" className='detail__input' required />
+                                        <input
+                                            placeholder='Detailed address'
+                                            name='detailaddress'
+                                            id='detailaddress'
+                                            type="text"
+                                            className='detail__input'
+                                            required
+                                            defaultValue={dataUser?.user[0]?.address ? dataUser?.user[0]?.address : ''}
+                                        />
                                     </div>
                                 </div>
                             </div>

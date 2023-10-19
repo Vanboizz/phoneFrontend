@@ -6,7 +6,7 @@ import { IoIosArrowBack, IoIosClose } from "react-icons/io"
 import { GrFormAdd } from "react-icons/gr"
 import { useDispatch } from 'react-redux';
 import { addProducts } from '../../components/feature/products/productsSlice';
-import { ToastContainer, toast } from "react-toastify"
+import { toast } from "react-toastify"
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import HeaderManager from '../../components/headermanager/HeaderManager'
@@ -175,7 +175,6 @@ const ProductsModifier = () => {
         <>
             <HeaderManager />
             <div className='container-modify'>
-                <ToastContainer />
                 <div>
                     <h1 className='container-modify__title'>
                         Products Modifier

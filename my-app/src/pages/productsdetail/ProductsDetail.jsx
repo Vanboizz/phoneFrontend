@@ -14,7 +14,7 @@ import Relative from '../../components/relative/Relative';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCart } from "../../components/feature/cart/cartSlice"
 import Header from "../../components/header/Header"
-import { ToastContainer, toast } from "react-toastify"
+import { toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import { addFavorite, deleteFavorite } from '../../components/feature/favorite/favoriteSlice';
 import { getProducts, getProductsById } from '../../components/feature/products/productsSlice';
@@ -577,33 +577,6 @@ const ProductsDetail = () => {
                         </div>
                     </div>
                 </div >
-                {/* <div className='description' >
-                    <h3>Description</h3>
-                    <hr />
-                    <div style={{ maxHeight: isMore ? undefined : "200px", overflow: 'hidden' }}>
-                        <p>
-                            {
-                                productsById.data?.description
-                            }
-                        </p>
-                    </div>
-                    <div className='btn-show'>
-                        <button onClick={() => setIsMore(!isMore)}>
-                            <span>
-                                {
-                                    isMore ? 'Collagse' : 'See More'
-                                }
-                            </span>
-                            <div>
-                                {
-                                    isMore ? <FaAngleUp /> : <FaAngleDown />
-                                }
-                            </div>
-                        </button>
-                    </div>
-                    <hr />
-                </div> */}
-                {/* <Relative /> */}
                 <div className='review'>
                     <div>
                         <h4>Reviews & comments {productsById.data?.nameproducts}
@@ -870,7 +843,6 @@ const ProductsDetail = () => {
                 </div>
                 {isModal && <ModalReview getListEvaluate={getListEvaluate} productsById={productsById} isModal={isModal} setIsModal={setIsModal} />}
             </div >
-            <ToastContainer />
         </>
     )
 }

@@ -21,6 +21,10 @@
   height: 400px;
 }
 
+.product-detail .relative .item:hover {
+  border: 2px #1a94ff solid;
+}
+
 .product-detail .relative .item .discount {
   position: absolute;
   top: 0;

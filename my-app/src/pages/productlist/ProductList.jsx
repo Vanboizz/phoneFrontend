@@ -7,7 +7,7 @@ import { BiTrash } from "react-icons/bi";
 import { Link, useNavigate } from 'react-router-dom';
 import HeaderManager from '../../components/headermanager/HeaderManager';
 import Modelcancel from '../../components/modelcancel/Modelcancel';
-import { ToastContainer, toast } from "react-toastify"
+import { toast } from "react-toastify"
 import axios from 'axios';
 
 const ProductList = () => {
@@ -64,7 +64,6 @@ const ProductList = () => {
 
     return (
         <>
-            <ToastContainer />
             <HeaderManager />
             <div className='productlist'>
 

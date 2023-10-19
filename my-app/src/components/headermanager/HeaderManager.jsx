@@ -5,6 +5,8 @@ import { getUser, logout } from "../feature/user/userSlice"
 import { FiLogOut } from "react-icons/fi";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Button, Dropdown } from 'antd';
+import { DownOutlined, UserOutlined } from '@ant-design/icons';
 
 const HeaderManager = (props) => {
   const { user } = useSelector((state) => state.user)
@@ -13,6 +15,19 @@ const HeaderManager = (props) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [category, setCategory] = useState([])
+  var itemsUser = [
+    {
+      key: '1',
+      label: (
+        <div className='wrapper-user'>
+          <FiLogOut className='option__subnav-profile' />
+          <a onClick={() => dispatch(logout())}>Log out</a>
+        </div>
+      ),
+    },
+
+  ];
+
 
   useEffect(() => {
     if (accessToken) {
@@ -32,7 +47,7 @@ const HeaderManager = (props) => {
   }
 
   return (
-    <header>
+    <header className='header-manager'>
       <div className='container'>
         <div className="logo">
         </div>
@@ -44,24 +59,17 @@ const HeaderManager = (props) => {
           {
             accessToken
               ?
-              <div>
+              <div >
                 {
                   <>
-                    <a className='list-option__option list-option__login'>
-                      <span className="option__icon-user option__user"></span>
-                      <p>{user && user.length > 0 ? user[0].fullname : "Login"}</p>
-                      <div className="option__icon-arrow-user option__phone">
-                      </div>
-                    </a>
-                    {
-
-                      <ul className='option__subnav option__subnav-pro'>
-                        <li>
-                          <FiLogOut />
-                          <a href="" onClick={() => handleLogout()}>Log out</a>
-                        </li>
-                      </ul>
-                    }
+                    <Dropdown menu={{ items: itemsUser }} placement="bottom" arrow>
+                      <Button className='dropdown-user'>
+                        <span className="option__icon-user option__user"></span>
+                        {/* <UserOutlined /> */}
+                        {user && user.length > 0 ? user[0].fullname : "Login"}
+                        <DownOutlined />
+                      </Button>
+                    </Dropdown>
                   </>
                 }
               </div>

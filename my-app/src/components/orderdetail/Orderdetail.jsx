@@ -16,6 +16,7 @@ const Orderdetail = (props) => {
     const [totalproduct, setTotalProduct] = useState(0)
     const [totaldiscount, setTotalDiscount] = useState(0)
     const user = useSelector(state => state.user)
+    console.log(user);
     const accessToken = localStorage.getItem('accessToken')
     const dispatch = useDispatch()
 
@@ -133,17 +134,17 @@ const Orderdetail = (props) => {
 
                 <div className="orderdetail__cusinfo-row">
                     <AiOutlineUser className='orderdetail__cusinfo-row-icon' />
-                    <p className="orderdetail__cusinfo-row-name">{user.user[0].fullname}</p>
+                    <p className="orderdetail__cusinfo-row-name">{user?.user[0]?.fullname}</p>
                 </div>
 
                 <div className="orderdetail__cusinfo-row">
                     <BsTelephone className='orderdetail__cusinfo-row-phone' />
-                    <p className="orderdetail__cusinfo-row-name">{user.user[0].phonenumber}</p>
+                    <p className="orderdetail__cusinfo-row-name">{user?.user[0]?.phonenumber}</p>
                 </div>
 
                 <div className="orderdetail__cusinfo-row">
                     <GrLocation className='orderdetail__cusinfo-row-icon' />
-                    <p className="orderdetail__cusinfo-row-name">HCM</p>
+                    <p className="orderdetail__cusinfo-row-name">{user?.user[0]?.province}</p>
                 </div>
 
             </div>

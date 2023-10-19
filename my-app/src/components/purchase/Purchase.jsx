@@ -5,7 +5,7 @@ import ReactPaginate from 'react-paginate';
 import { GrFormClose } from "react-icons/gr";
 import Orderdetail from '../orderdetail/Orderdetail';
 import Modelcancel from '../modelcancel/Modelcancel';
-import { ToastContainer, toast } from "react-toastify"
+import {toast } from "react-toastify"
 import axios from 'axios';
 
 const Purchase = () => {
@@ -107,7 +107,6 @@ const Purchase = () => {
 
     return (
         <>
-            <ToastContainer />
             {
                 (statusSee === -1 ?
                     (<div className='purchase'>

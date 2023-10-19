@@ -9,13 +9,14 @@ import "swiper/css/grid";
 import "../home/Home.css"
 import "swiper/css/navigation";
 import { Grid, Navigation } from "swiper"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Header from "../../components/header/Header"
 import Footer from "../../components/footer/Footer"
 import axios from 'axios'
 import { HiChat } from 'react-icons/hi';
 import PopupChat from '../../components/popupchat/PopupChat'
 
+import { Button } from 'antd';
 
 const Home = () => {
     const products = useSelector((state) => state.products)
@@ -23,6 +24,7 @@ const Home = () => {
     const [category, setCategory] = useState([])
     const [inputhome, setInputHome] = useState('')
     const [isPopupChat, setIsPopupChat] = useState(false)
+    const navigate = useNavigate()
     var profilter = [];
 
     useEffect(() => {
@@ -55,9 +57,9 @@ const Home = () => {
                         <div>
                             {
                                 category.map(value => (
-                                    <Link to={`/category/${value.idcate}`} className='related-tag' key={value.idcate}>
+                                    <Button onClick={() => { navigate(`/category/${value.idcate}`) }} className='related-tag' key={value.idcate}>
                                         {value.namecate}
-                                    </Link>
+                                    </Button>
                                 ))
                             }
                         </div>

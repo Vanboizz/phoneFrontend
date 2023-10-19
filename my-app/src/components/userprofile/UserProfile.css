@@ -6,13 +6,27 @@
     padding: 0 150px;
 }
 
+.userprofile .wrapper-upload {
+    text-align: center;
+}
+
 .userprofile__name {
-    text-transform:uppercase;
+    text-transform: uppercase;
     color: #1A94FF;
     font-size: 32px;
     font-weight: 600;
     text-align: center;
     margin-bottom: 30px;
+}
+
+.userprofile .row-one { 
+    display: flex;
+    gap: 20px;
+    width: 100%;
+}
+
+.userprofile .row-one .userprofile__form {
+    width: 100%;
 }
 
 .userprofile__form {
