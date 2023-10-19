@@ -1,7 +1,7 @@
 import axios from "axios";
 // Gọi api thông qua axios
 //Register
-const registerUser = async ({ fullname, phonenumber, email, password }) => {
+const registerUser = async ({ firstname, lastname, avatar, phonenumber, email, password }) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -10,7 +10,9 @@ const registerUser = async ({ fullname, phonenumber, email, password }) => {
   const response = await axios.post(
     "http://localhost:8000/auth/user/register",
     {
-      fullname: fullname,
+      firstname: firstname,
+      lastname: lastname,
+      avatar: avatar[0]?.thumbUrl,
       phonenumber: phonenumber,
       email: email,
       password: password,

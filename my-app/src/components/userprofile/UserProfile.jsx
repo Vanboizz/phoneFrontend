@@ -5,12 +5,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getUser } from '../feature/user/userSlice'
 import { toast } from "react-toastify"
 import axios from 'axios'
+import { Controller, useForm } from 'react-hook-form'
+import { Upload } from 'antd'
+import { PlusOutlined } from '@ant-design/icons'
 
 const UserProfile = () => {
 
     const dispatch = useDispatch()
     const { user, accessToken } = useSelector(state => state.user)
+    console.log(user);
     const [fullname, setFullName] = useState('')
+    const [firstname, setFirstName] = useState('')
+    const [lastname, setLastName] = useState('')
     const [name, setName] = useState('')
 
     const [email, setEmail] = useState('')
@@ -20,15 +26,23 @@ const UserProfile = () => {
 
     const [months, setMonths] = useState([]);
     const [monthchoose, setMonthChoose] = useState('');
+    const [fileList, setFileList] = useState([]);
 
     const [years, setYears] = useState([]);
     const [yearchoose, setYearChoose] = useState('');
 
-    const [inputDate, setInputDate] = useState('0')
-    const [inputMonth, setInputMonth] = useState('0')
-    const [inputYear, setInputYear] = useState('0')
+    const [inputDate, setInputDate] = useState()
+    const [inputMonth, setInputMonth] = useState()
+    const [inputYear, setInputYear] = useState()
 
-    const [gender, setGender] = useState(user ? user[0].gender : 'Female')
+    const [gender, setGender] = useState()
+
+    const {
+        register,
+        setValue,
+        handleSubmit,
+        control
+    } = useForm()
 
 
     const getDate = (d) => {
@@ -77,6 +91,18 @@ const UserProfile = () => {
         }
     }
 
+    const uploadButton = (
+        <div className='uploads_button'>
+            <PlusOutlined className='uploads_button-icon' />
+            <div style={{ marginTop: 8 }}>Upload</div>
+        </div>
+    );
+
+    const isImageValid = (file) => {
+        const acceptedFormats = ['.png', '.jpg'];
+        const fileExtension = file.name.slice(((file.name.lastIndexOf(".") - 1) >>> 0) + 2);
+        return acceptedFormats.includes('.' + fileExtension.toLowerCase());
+    };
     useEffect(() => {
         const getYear = () => {
             const temp = new Date();
@@ -90,19 +116,7 @@ const UserProfile = () => {
         getMonth(12)
         getYear()
         setInputDate()
-        dispatch(getUser(accessToken))
     }, [])
-
-    useEffect(() => {
-        setFullName(user ? user[0].fullname : '')
-        setName(user ? user[0].fullname : '')
-        setEmail(user ? user[0].email : '')
-        setPhonenumber(user ? user[0].phonenumber : '')
-        setInputDate(user ? user[0].days : '0')
-        setInputMonth(user ? user[0].months : '0')
-        setInputYear(user ? user[0].years : '0')
-        setGender(user ? user[0].gender : 'Female')
-    }, [user])
 
     const checkLeapYear = (y) => {
         return ((y % 4 === 0) && (y % 100 !== 0 || y % 400 === 0)) ? true : false
@@ -115,145 +129,262 @@ const UserProfile = () => {
         }
     }
 
-    const updateUser = async () => {
-        const response = await axios.post(
-            "http://localhost:8000/auth/user/updateUser",
-            {
-                fullname: fullname,
-                email: email,
-                phonenumber: phonenumber,
-                gender: gender,
-                days: inputDate,
-                months: inputMonth,
-                years: inputYear
-            },
-            {
-                headers: {
-                    Authorization: "Bearer " + accessToken,
-                },
-            }
-        );
-        return response
-    }
+    // const updateUser = async () => {
+    //     const response = await axios.post(
+    //         "http://localhost:8000/auth/user/updateUser",
+    //         {
+    //             fullname: fullname,
+    //             email: email,
+    //             phonenumber: phonenumber,
+    //             gender: gender,
+    //             days: inputDate,
+    //             months: inputMonth,
+    //             years: inputYear
+    //         },
+    //         {
+    //             headers: {
+    //                 Authorization: "Bearer" + accessToken,
+    //             },
+    //         }
+    //     );
+    //     return response
+    // }
 
-    const handleUpdateProfile = async(e) => {
-        e.preventDefault();
-        if (inputDate === '0' || inputMonth === '0' || inputYear === '0')
-            toast.error("The date of birth has not been filled in")
-        else {
-            toast("Successfully updated")
-            const res = await updateUser();
-            if (res.status===200){
-                dispatch(getUser(accessToken))
-            }
-        }
+    const handleUpdateProfile = async (data) => {
+        // e.preventDefault();
+        console.log(data);
+        // if (inputDate === '0' || inputMonth === '0' || inputYear === '0')
+        //     toast.error("The date of birth has not been filled in")
+        // else {
+        //     toast("Successfully updated")
+        //     const res = await updateUser();
+        //     if (res.status === 200) {
+        //         dispatch(getUser(accessToken))
+        //     }
+        // }
     }
     return (
         <div className='userprofile'>
             <p className='userprofile__name'>{name}</p>
 
-            <form action="" onSubmit={handleUpdateProfile}>
-                <div className='userprofile__form'>
-                    <label className='userprofile__form-text'>FULL NAME</label>
-                    <input
-                        placeholder='Add full name'
-                        value={fullname}
-                        onChange={(e) => setFullName(e.target.value)}
-                        className='userprofile__form-input' type="text" name='fullname'
-                        required
-                    />
-                </div>
+            <form action="" onSubmit={handleSubmit(handleUpdateProfile)}>
+                <Controller
+                    name="avatar" // Tên của trường trong data
+                    control={control}
+                    defaultValue={[]} // Giá trị mặc định của fileList
+                    render={({ field }) => (
+                        <>
+                            {/* <Upload
+                                accept='.png, .jpg'
+                                action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                                listType="picture-circle"
+                                fileList={fileList}
+                                customRequest={async ({ file, onSuccess, onError }) => {
+                                    onSuccess();
+                                }}
+                                beforeUpload={(file) => {
+                                    if (!isImageValid(file)) {
+                                        toast.error(
+                                            'Chỉ chấp nhận các file ảnh có định dạng .png hoặc .jpg',
+                                            {
+                                                position: 'top-right',
+                                                autoClose: 3000,
+                                                style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                                            }
+                                        );
+                                        return false;
+                                    }
+                                    return true;
+                                }}
+                                onChange={(info) => {
+                                    const { fileList } = info;
+                                    const validFiles = fileList.filter(file => isImageValid(file));
+                                    setFileList(validFiles)
+                                    field.onChange(validFiles);
+                                }}
+                                className='wrapper-upload'
+                            >
+                                {field?.value?.length >= 1 ? null : uploadButton}
+                            </Upload> */}
 
-                <div className='userprofile__form'>
-                    <label className='userprofile__form-text'>EMAIL</label>
-                    <input
-                        placeholder='Add email'
-                        className='userprofile__form-input'
-                        type="text" name='email'
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                </div>
+                            <div className='row-one'>
+                                <div className='userprofile__form'>
+                                    <label className='userprofile__form-text'>FIRST NAME</label>
+                                    <input
+                                        {...register('firstname')}
+                                        name='firstname'
+                                        placeholder='Add first name'
+                                        className='userprofile__form-input'
+                                        type="text"
+                                        required
+                                        defaultValue={user ? user[0]?.firstname : ''}
+                                    />
+                                </div>
 
-                <div className='userprofile__form'>
-                    <label className='userprofile__form-text'>PHONE NUMBER</label>
-                    <input
-                        placeholder='Add phone number'
-                        className='userprofile__form-input'
-                        type="text" name='phonenumber'
-                        onChange={(e) => setPhonenumber(e.target.value)}
-                        value={phonenumber}
-                        required
-                    />
-                </div>
+                                <div className='userprofile__form'>
+                                    <label className='userprofile__form-text'>LAST NAME</label>
+                                    <input
+                                        {...register('lastname')}
+                                        name='lastname'
+                                        placeholder='Add last name'
+                                        defaultValue={user ? user[0]?.lastname : ''}
+                                        className='userprofile__form-input'
+                                        type="text"
+                                        required
+                                    />
+                                </div>
+                            </div>
 
-                <div className="userprofile__form">
+                            <div className='userprofile__form'>
+                                <label className='userprofile__form-text'>EMAIL</label>
+                                <input
+                                    placeholder='Add email'
+                                    className='userprofile__form-input'
+                                    type="text"
+                                    name='email'
+                                    defaultValue={user ? user[0]?.email : ''}
+                                    {...register('email')}
+                                    required
+                                />
+                            </div>
 
-                    <label className='userprofile__form-text'>GENDER</label>
+                            <div className='userprofile__form'>
+                                <label className='userprofile__form-text'>PHONE NUMBER</label>
+                                <input
+                                    placeholder='Add phone number'
+                                    className='userprofile__form-input'
+                                    type="text"
+                                    name='phonenumber'
+                                    {...register('phonenumber')}
+                                    defaultValue={user ? user[0]?.phonenumber : ''}
+                                    required
+                                />
+                            </div>
 
-                    <div className='userprofile__form-choose'>
-                        <div className="choose__male">
-                            <input name='gender' type="radio" value="Male" className='pick-up__input' checked={gender === "Male"} onChange={e => setGender(e.target.value)} />
-                            <label htmlFor="html" className='pick-up__text'>Male</label>
-                        </div>
+                            <div className="userprofile__form">
 
-                        <div className="choose__female">
-                            <input name='gender' type="radio" value="Female" className='delivery__input' checked={gender === "Female"} onChange={(e) => setGender(e.target.value)} />
-                            <label htmlFor="html" className='delivery__text'>Female</label>
-                        </div>
-                    </div>
-                </div>
+                                <label className='userprofile__form-text'>GENDER</label>
 
-                <div className='userprofile__form'>
-                    <label className='userprofile__form-text'>DATE OF BIRTH</label>
+                                <div className='userprofile__form-choose'>
+                                    <div className="choose__male">
+                                        <input
+                                            name='gender'
+                                            {...register('gender')}
+                                            type="radio"
+                                            value="Male"
+                                            className='pick-up__input'
+                                            checked={user ? user[0]?.gender === "male" : false}
+                                            onChange={e => setGender(e.target.value)}
+                                        />
+                                        <label htmlFor="html" className='pick-up__text'>Male</label>
+                                    </div>
 
-                    <div className='userprofile__form-birth'>
-                        <select value={user ? inputDate : '0'} onChange={(e) => setInputDate(e.target.value)} name="date" id="date-select" className='userprofile__form-birth-input' required>
-                            <option value="0" placeholder=''>Date</option>
-                            {
-                                dates
-                                    ? dates.map((date, index) => (
-                                        <option key={index} value={date} placeholder=''>{date}</option>
-                                    ))
-                                    : null
-                            }
-                        </select>
+                                    <div className="choose__female">
+                                        <input
+                                            name='gender'
+                                            type="radio"
+                                            {...register('gender')}
+                                            value="Female"
+                                            className='delivery__input'
+                                            
+                                            checked={user ? user[0]?.gender === "female" : false}
+                                            onChange={(e) => setGender(e.target.value)}
+                                        />
+                                        <label htmlFor="html" className='delivery__text'>Female</label>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <select value={user ? inputMonth : '0'} required name="month" id="month-select" className='userprofile__form-birth-input'
-                            onChange={(e) => {
-                                handleMonth(e)
-                                setInputMonth(e.target.value)
-                            }}>
-                            <option value="0" placeholder=''>Month</option>
-                            {
-                                months
-                                    ? months.map((month, index) => (
-                                        <option key={index} value={month} placeholder=''>{month}</option>
-                                    ))
-                                    : null
-                            }
-                        </select>
+                            <div className='userprofile__form'>
+                                <label className='userprofile__form-text'>DATE OF BIRTH</label>
 
-                        <select value={user ? inputYear : '0'} required name="year" id="year-select" className='userprofile__form-birth-input'
-                            onChange={(e) => {
-                                handleYear(e)
-                                setInputYear(e.target.value)
-                            }}>
-                            <option value='0' placeholder=''>Year</option>
-                            {
-                                years
-                                    ? years.map((year, index) => (
-                                        <option key={index} value={year} placeholder=''>{year}</option>
-                                    ))
-                                    : null
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div className='userprofile__form'>
-                    <button type="submit" className='userprofile__form-update'>UPDATE INFOMATION</button>
-                </div>
+                                <div className='userprofile__form-birth'>
+                                    <select
+                                        name="date"
+                                        id="date-select"
+                                        className='userprofile__form-birth-input'
+                                        required
+                                        {...register('date')}
+
+                                    >
+                                        <option value="0" placeholder=''>Date</option>
+                                        {
+                                            dates
+                                                ? dates.map((date, index) => (
+                                                    <option
+                                                        key={index}
+                                                        value={date}
+                                                        placeholder=''
+                                                        selected={
+                                                            user ? user[0]?.days === date : false
+                                                        }
+                                                    >{date}</option>
+                                                ))
+                                                : null
+                                        }
+                                    </select>
+
+                                    <select
+                                        required
+                                        name="month"
+                                        id="month-select"
+                                        className='userprofile__form-birth-input'
+                                        {...register('month')}
+                                        onChange={(e) => {
+                                            handleMonth(e)
+                                        }}>
+                                        <option value="0" placeholder=''>Month</option>
+                                        {
+                                            months
+                                                ? months.map((month, index) => (
+                                                    <option
+                                                        selected={
+                                                            user ? user[0]?.months === month : false
+                                                        }
+                                                        key={index}
+                                                        value={month}
+                                                        placeholder=''>
+                                                        {month}</option>
+                                                ))
+                                                : null
+                                        }
+                                    </select>
+
+                                    <select
+                                        required
+                                        {...register('year')}
+                                        name="year"
+                                        id="year-select"
+                                        className='userprofile__form-birth-input'
+                                        onChange={(e) => {
+                                            handleYear(e)
+                                        }}>
+                                        <option value='0' placeholder=''>Year</option>
+                                        {
+                                            years
+                                                ? years.map((year, index) => (
+                                                    <option
+                                                        key={index}
+                                                        value={year}
+                                                        placeholder=''
+                                                        selected={
+                                                            user ? user[0]?.years === year : false
+                                                        }
+                                                    >{year}
+                                                    </option>
+                                                ))
+                                                : null
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className='userprofile__form'>
+                                <button type="submit" className='userprofile__form-update'>UPDATE INFOMATION</button>
+                            </div>
+                        </>
+                    )}
+                />
             </form>
         </div>
     )

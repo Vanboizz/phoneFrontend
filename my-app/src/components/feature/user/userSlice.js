@@ -15,13 +15,15 @@ const initialState = {
 
 export const registerUser = createAsyncThunk(
   "/register",
-  async ({ fullname, phonenumber, email, password }, thunkAPI) => {
+  async ({ firstname, lastname, avatar, phonenumber, email, password }, thunkAPI) => {
     try {
       return userService.registerUser({
-        fullname,
-        phonenumber,
-        email,
-        password,
+        firstname, 
+        lastname, 
+        avatar, 
+        phonenumber, 
+        email, 
+        password
       });
     } catch (error) {
       const message =

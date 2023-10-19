@@ -40,7 +40,7 @@ const Login = () => {
     return (
         <>
             <Header />
-            <div className='grid-container'>
+            <div className='grid-containerlogin'>
                 <h1>Login</h1>
                 <div className='grid-content'>
                     <form action="">

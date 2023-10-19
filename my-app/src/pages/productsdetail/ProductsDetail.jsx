@@ -1,7 +1,7 @@
 import React, { useEffect, useState, } from 'react'
 import "../productsdetail/ProductsDetail.css"
 import { FaStar, FaAngleDown, FaAngleUp, FaCartPlus, FaMobileAlt, FaRegHandPointRight } from 'react-icons/fa'
-import { AiOutlineCheck, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { AiOutlineCheck, AiOutlineHeart, AiFillHeart, AiOutlineClockCircle } from "react-icons/ai";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -19,6 +19,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { addFavorite, deleteFavorite } from '../../components/feature/favorite/favoriteSlice';
 import { getProducts, getProductsById } from '../../components/feature/products/productsSlice';
 import ModalReview from '../../components/modalreview/ModalReview';
+import { getUser } from '../../components/feature/user/userSlice';
+import dayjs from 'dayjs'
 
 
 const addressData = [
@@ -68,6 +70,29 @@ const promotion = [
     "New old collection: High price - Quick procedure - Best subsidy"
 ]
 
+const listStar = [
+    {
+        number: 5,
+        image: <FaStar style={{ color: "#ffbf00", fontSize: "16px" }} />
+    },
+    {
+        number: 4,
+        image: <FaStar style={{ color: "#ffbf00", fontSize: "16px" }} />
+    },
+    {
+        number: 3,
+        image: <FaStar style={{ color: "#ffbf00", fontSize: "16px" }} />
+    },
+    {
+        number: 2,
+        image: <FaStar style={{ color: "#ffbf00", fontSize: "16px" }} />
+    },
+    {
+        number: 1,
+        image: <FaStar style={{ color: "#ffbf00", fontSize: "16px" }} />
+    },
+]
+
 const ProductsDetail = () => {
     const [selectedProvince, setSelectedProvince] = useState()
     const [selectedDistrict, setSelectedDistrict] = useState()
@@ -86,6 +111,11 @@ const ProductsDetail = () => {
     const accessToken = localStorage.getItem("accessToken")
     const navigate = useNavigate()
     const [isModal, setIsModal] = useState(false)
+    const user = useSelector(state => state.user)
+    // console.log(user && user.user && user.user[0].fullname);
+    const [listEvaluate, setListEvaluate] = useState([])
+    const [statisticsOfReview, setStatisticsOfReview] = useState([])
+    const [selectedStar, setSelectedStar] = useState(null)
 
     const handleAddToCart = (e) => {
         e.preventDefault()
@@ -107,15 +137,101 @@ const ProductsDetail = () => {
 
     const handleAddFavorite = (e) => {
         e.preventDefault()
-        dispatch(addFavorite({ accessToken, idproducts: productsById.data?.idproducts, idimage: productsById.data?.image[0].idimage }))
-        setIsHeart(true)
+        if (accessToken) {
+            dispatch(addFavorite({ accessToken, idproducts: productsById.data?.idproducts, idimage: productsById.data?.image[0].idimage }))
+            setIsHeart(true)
+            toast("You have added the product to your favorites list")
+        }
+        else {
+            toast("Please log in")
+        }
     }
 
     const handleDeleteFavorite = (e) => {
         e.preventDefault()
         dispatch(deleteFavorite({ accessToken, idproducts: productsById.data?.idproducts }))
         setIsHeart(false)
+        toast("You have deleted your favorite product")
     }
+
+    const handleOpenModal = (e) => {
+        e.stopPropagation()
+        setIsModal(true)
+    }
+
+    const getListEvaluate = async () => {
+        if (productsById && productsById.data) {
+            try {
+                const response = await axios.get(`http://localhost:8000/evaluate/getEvaluate/${productsById.data.idproducts}`, {
+                    params: {
+                        starRating: selectedStar
+                    }
+                });
+                setListEvaluate(response.data.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    };
+
+    const getStatisticsOfReview = async () => {
+        if (productsById && productsById.data) {
+            try {
+                const response = await axios.get(`http://localhost:8000/evaluate/getEvaluate/${productsById.data.idproducts}`);
+                setStatisticsOfReview(response.data.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
+
+    const calculateAverage = (list, property, number) => {
+        let total = 0;
+
+        for (let i = 0; i < list.length; i++) {
+            total += list[i][property][number];
+        }
+
+        return total / list.length;
+    };
+
+    const averageRating = calculateAverage(statisticsOfReview, 'starnumber', 'number');
+    const averagePerformance = calculateAverage(statisticsOfReview, 'performance', 'number');
+    const averageBatteryLife = calculateAverage(statisticsOfReview, 'batterylife', 'number');
+    const averageCameraQuantity = calculateAverage(statisticsOfReview, 'cameraquantity', 'number');
+
+    const renderStars = (averageValue) => {
+        const stars = [];
+        for (let i = 0; i < 5; i++) {
+            if (averageValue >= i + 0.5) {
+                stars.push(
+                    <FaStar
+                        key={i}
+                        style={{ color: "#ffbf00", fontSize: "14px" }}
+                    />
+                );
+            } else {
+                stars.push(
+                    <FaStar
+                        key={i}
+                        fill='rgba(145,158,171,.522)'
+                        style={{ fontSize: "14px" }}
+                    />
+                );
+            }
+        }
+        return stars;
+    };
+
+    const countStars = (targetStarNumber) => {
+        const starCount = statisticsOfReview.filter(value => value.starnumber.number === targetStarNumber.starnumber).length;
+        return starCount;
+    };
+
+    const filteredEvaluations =
+        selectedStar ?
+            listEvaluate.filter((evaluate) => evaluate.starnumber.number === selectedStar) :
+            listEvaluate
 
     useEffect(() => {
         dispatch(getProductsById({ accessToken }))
@@ -137,11 +253,6 @@ const ProductsDetail = () => {
         }
     }, [selectedProvince])
 
-    const handleOpenModal = (e) => {
-        e.stopPropagation()
-        setIsModal(true)
-    }
-
     useEffect(() => {
         if (productsById.data?.size?.length > 0) {
             setIdSize(productsById.data.size[0].idsize);
@@ -151,6 +262,18 @@ const ProductsDetail = () => {
             setIdColor(productsById.data.size[0].color[0].idcolor)
             setIsHeart(productsById?.data?.isHeart)
         }
+    }, [productsById])
+
+    useEffect(() => {
+        dispatch(getUser(accessToken))
+    }, [productsById])
+
+    useEffect(() => {
+        getListEvaluate()
+    }, [selectedStar, productsById])
+
+    useEffect(() => {
+        getStatisticsOfReview()
     }, [productsById])
 
     return (
@@ -423,116 +546,221 @@ const ProductsDetail = () => {
                             }
                         </h4>
                     </div>
-                    <div className='box-review'>
-                        <div className='box-score'>
-                            <p style={{ fontSize: "1.5rem", fontWeight: "bold" }}>4.7/5</p>
-                            <div style={{ display: "flex", gap: "0.8rem", height: "24px" }}>
-                                <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
-                                <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
-                                <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
-                                <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
-                                <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
-                            </div>
-                            <p style={{ textDecoration: "underline", color: "#1a94ff", fontWeight: "bold" }}>50 review</p>
-                        </div>
-                        <div className='box-star'>
-                            <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-                                <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
-                                    <span style={{ fontWeight: "bold" }}>5</span>
-                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                    {
+                        listEvaluate.length > 0 || selectedStar !== null ? <div>
+                            <div className='box-review'>
+                                <div className='box-score'>
+                                    <p style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{averageRating.toFixed(2)}/5</p>
+                                    <div style={{ display: "flex", gap: "0.8rem", height: "24px" }}>
+                                        {renderStars(averageRating)}
+                                    </div>
+                                    <p style={{ textDecoration: "underline", color: "#1a94ff", fontWeight: "bold" }}>{statisticsOfReview.length} reviews</p>
                                 </div>
-                                <progress max={50} value={36}></progress>
-                                <span style={{ fontSize: "14px" }}>36 review</span>
-                            </div>
-                            <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-                                <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
-                                    <span style={{ fontWeight: "bold" }}>4</span>
-                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                <div className='box-star'>
+                                    {
+                                        [1, 2, 3, 4, 5].map((star, index) => {
+                                            const starExistsInList = statisticsOfReview.some(value => value.starnumber.number === star);
+                                            return (
+                                                <div key={index} style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+                                                    <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                                                        <span style={{ fontWeight: "bold" }}>{star}</span>
+                                                        <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                                    </div>
+                                                    <progress max={statisticsOfReview.length}
+                                                        value={starExistsInList ? countStars({ starnumber: star }) / statisticsOfReview.length : 0}></progress>
+                                                    <span style={{ fontSize: "14px" }}>
+                                                        {starExistsInList ? countStars({ starnumber: star }) : 0} review
+                                                    </span>
+                                                </div>
+                                            );
+                                        })
+                                    }
                                 </div>
-                                <progress max={50} value={36}></progress>
-                                <span style={{ fontSize: "14px" }}>36 review</span>
                             </div>
-                            <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-                                <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
-                                    <span style={{ fontWeight: "bold" }}>3</span>
-                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                            <div className='box-experience'>
+                                <div style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "10px" }}>Evaluation based on experience</div>
+                                <div style={{ display: "flex", justifyContent: "space-between", lineHeight: "1.5" }}>
+                                    <div>Performance</div>
+                                    <div style={{ display: "flex", gap: "1rem" }}>
+                                        <div style={{ display: "flex", gap: "0.4rem" }}>
+                                            {renderStars(averagePerformance)}
+
+                                        </div>
+                                        <div style={{ fontWeight: "bold" }}>{averagePerformance.toFixed(2)}/5</div>
+                                        <div>({statisticsOfReview.length})</div>
+                                    </div>
                                 </div>
-                                <progress max={50} value={36}></progress>
-                                <span style={{ fontSize: "14px" }}>36 review</span>
-                            </div>
-                            <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-                                <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
-                                    <span style={{ fontWeight: "bold" }}>2</span>
-                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                <div style={{ display: "flex", justifyContent: "space-between", lineHeight: "1.5" }}>
+                                    <div>Battery life</div>
+                                    <div style={{ display: "flex", gap: "1rem" }}>
+                                        <div style={{ display: "flex", gap: "0.4rem" }}>
+                                            {renderStars(averageBatteryLife)}
+                                        </div>
+                                        <div style={{ fontWeight: "bold" }}>{averageBatteryLife.toFixed(2)}/5</div>
+                                        <div>({statisticsOfReview.length})</div>
+                                    </div>
                                 </div>
-                                <progress max={50} value={36}></progress>
-                                <span style={{ fontSize: "14px" }}>36 review</span>
-                            </div>
-                            <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
-                                <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
-                                    <span style={{ fontWeight: "bold" }}>1</span>
-                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                <div style={{ display: "flex", justifyContent: "space-between", lineHeight: "1.5" }}>
+                                    <div>Camera quanlity</div>
+                                    <div style={{ display: "flex", gap: "1rem" }}>
+                                        <div style={{ display: "flex", gap: "0.4rem" }}>
+                                            {renderStars(averageCameraQuantity)}
+                                        </div>
+                                        <div style={{ fontWeight: "bold" }}>{averageCameraQuantity.toFixed(2)}/5</div>
+                                        <div>({statisticsOfReview.length})</div>
+                                    </div>
                                 </div>
-                                <progress max={50} value={0}></progress>
-                                <span style={{ fontSize: "14px" }}>36 review</span>
                             </div>
-                        </div>
-                    </div>
-                    <div className='box-experience'>
-                        <div style={{ fontWeight: "bold", fontSize: "16px", marginBottom: "10px" }}>Evaluation based on experience</div>
-                        <div style={{ display: "flex", justifyContent: "space-between", lineHeight: "1.5" }}>
-                            <div>Performance</div>
-                            <div style={{ display: "flex", gap: "1rem" }}>
-                                <div style={{ display: "flex", gap: "0.4rem" }}>
-                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
-                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
-                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
-                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
-                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                            <div className='button-review-container'>
+                                <p style={{ margin: "0.4rem 0" }}>How do you rate this product?</p>
+                                <div >
+                                    <button style={{ backgroundColor: "#1a94ff", border: "none", borderRadius: "5px", padding: "10px 30px", color: "white", fontWeight: "bold", margin: "10px auto", cursor: "pointer" }} onClick={handleOpenModal}>
+                                        Evaluate now
+                                    </button>
                                 </div>
-                                <div style={{ fontWeight: "bold" }}>4/5</div>
-                                <div>(1)</div>
                             </div>
-                        </div>
-                        <div style={{ display: "flex", justifyContent: "space-between", lineHeight: "1.5" }}>
-                            <div>Battery life</div>
-                            <div style={{ display: "flex", gap: "1rem" }}>
-                                <div style={{ display: "flex", gap: "0.4rem" }}>
-                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
-                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
-                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
-                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
-                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
+                            <div>
+                                <h3>Sort by</h3>
+                                <ul style={{ display: "flex", gap: "10px", margin: "10px 0" }}>
+                                    <li onClick={() => setSelectedStar(null)}
+                                        style={{
+                                            backgroundColor: selectedStar === null ? "#1a94ff" : "#fff",
+                                            padding: "4px 12px",
+                                            cursor: "pointer",
+                                            borderRadius: "15px",
+                                            border: " 1px solid #637381",
+                                            listStyle: "none",
+                                            color: selectedStar === null ? "#fff" : "#637381"
+                                        }}
+                                    >
+                                        All
+                                    </li>
+                                    {
+                                        listStar.map((star, index) => (
+                                            <li onClick={() => setSelectedStar(star.number)} key={index}
+                                                style={{
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    gap: "4px",
+                                                    backgroundColor: selectedStar === star.number ? "#1a94ff" : "#fff",
+                                                    padding: "4px 8px",
+                                                    cursor: "pointer",
+                                                    borderRadius: "15px",
+                                                    border: " 1px solid #637381",
+                                                }}>
+                                                <p style={{ color: selectedStar === star.number ? "#fff" : "#637381" }}>{star.number}</p>
+                                                <div>
+                                                    {star.image}
+                                                </div>
+                                            </li>
+                                        ))
+                                    }
+                                </ul>
+                            </div>
+                            <div>
+                                <ul style={{ margin: "24px 0", listStyleType: "none" }}>
+                                    {
+                                        filteredEvaluations.length > 0 ? filteredEvaluations.map((evaluate, index) => (
+                                            <li key={index} style={{
+                                                borderBottom: "1px solid rgba(145,158,171,.239)", marginBottom: "15px", paddingBottom: "15px"
+                                            }}>
+                                                <div style={{ display: "flex", gap: "8px" }}>
+                                                    <p style={{ backgroundColor: "#303014", color: "#fff", fontWeight: "bold", borderRadius: "50%", height: "32px", width: "32px", display: "flex", alignItems: "center", justifyContent: "center" }}>N</p>
+                                                    <div>
+                                                        <div style={{ display: "flex", gap: "8px" }}>
+                                                            <span style={{ fontWeight: "bold" }}>Tan000</span>
+                                                            <div style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "12px" }}>
+                                                                <p>
+                                                                    <AiOutlineClockCircle />
+                                                                </p>
+                                                                {dayjs(evaluate.evaluateday).format('YYYY/MM/DD  h:mm A')}
+                                                            </div>
+                                                        </div>
+                                                        <span style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "13px", marginTop: "4px", color: "#229a16", fontWeight: "bolder" }}>
+                                                            <div>
+                                                                <AiOutlineClockCircle />
+                                                            </div>
+                                                            Purchased at TSP
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div style={{ marginLeft: "40px", padding: "10px 15px 0 0" }}>
+                                                    <div style={{ display: "flex", fontSize: "12px", gap: "10px", alignItems: "center" }}>
+                                                        <div style={{
+                                                            display: "flex",
+                                                            borderRight: "1px solid rgba(145,158,171,.239)",
+                                                            paddingRight: "10px"
+                                                        }}>
+                                                            {
+                                                                Array.from({ length: 5 }).map((value, index) => {
+                                                                    if (evaluate.starnumber.number - (index + 1) >= 0) {
+                                                                        return (
+                                                                            <FaStar key={index} style={{ color: "#ffbf00", fontSize: "14px" }} />
+                                                                        )
+                                                                    }
+                                                                    return (
+                                                                        <FaStar key={index} fill='rgba(145,158,171,.522)' style={{ fontSize: "14px" }} />
+                                                                    )
+                                                                })
+                                                            }
+                                                        </div>
+                                                        <div style={{
+                                                            boxShadow: "0 0 0 0.5px rgba(145,158,171,.239)",
+                                                            color: "#637381", padding: "3px 10px"
+                                                        }}>{evaluate.performance.value}</div>
+                                                        <div style={{
+                                                            boxShadow: "0 0 0 0.5px rgba(145,158,171,.239)",
+                                                            color: "#637381", padding: "3px 10px"
+                                                        }}>
+                                                            {evaluate.batterylife.value}
+                                                        </div>
+                                                        <div style={{
+                                                            boxShadow: "0 0 0 0.5px rgba(145,158,171,.239)",
+                                                            color: "#637381", padding: "3px 10px"
+                                                        }}>
+                                                            {evaluate.cameraquantity.value}
+                                                        </div>
+                                                    </div>
+                                                    <div style={{ fontSize: "12px", marginTop: "15px" }}>
+                                                        <p>
+                                                            {evaluate.review}
+                                                        </p>
+                                                    </div>
+                                                    <div style={{ marginTop: "15px", gap: "15px", display: "flex" }}>
+                                                        {
+                                                            evaluate.images.map((image, i) => (
+                                                                <img key={i} style={{ borderRadius: "10px", height: "60px", maxHeight: "60px", objectFit: "cover", width: "60px" }} src={image} alt="" />
+                                                            ))
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        )) :
+                                            <p style={{ margin: "0.4rem 0", textAlign: "center" }}>
+                                                There are currently no satisfactory reviews.
+                                            </p>
+                                    }
+                                </ul>
+                            </div>
+                        </div> :
+                            <div className='button-review-container'>
+                                <p style={{ margin: "0.4rem 0" }}>
+                                    There are currently no reviews.
+                                </p>
+                                <p>
+                                    Will you be the first to review this product?
+
+                                </p>
+                                <div >
+                                    <button style={{ backgroundColor: "#1a94ff", border: "none", borderRadius: "5px", padding: "10px 30px", color: "white", fontWeight: "bold", margin: "10px auto", cursor: "pointer" }} onClick={handleOpenModal}>
+                                        Evaluate now
+                                    </button>
                                 </div>
-                                <div style={{ fontWeight: "bold" }}>4/5</div>
-                                <div>(1)</div>
                             </div>
-                        </div>
-                        <div style={{ display: "flex", justifyContent: "space-between", lineHeight: "1.5" }}>
-                            <div>Camera quanlity</div>
-                            <div style={{ display: "flex", gap: "1rem" }}>
-                                <div style={{ display: "flex", gap: "0.4rem" }}>
-                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
-                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
-                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
-                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
-                                    <FaStar style={{ color: "#ffbf00", fontSize: "14px" }} />
-                                </div>
-                                <div style={{ fontWeight: "bold" }}>4/5</div>
-                                <div>(1)</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='button-review-container'>
-                        <p style={{ margin: "0.4rem 0" }}>How do you rate this product?</p>
-                        <div >
-                            <button style={{ backgroundColor: "#1a94ff", border: "none", borderRadius: "5px", padding: "10px 30px", color: "white", fontWeight: "bold", margin: "10px auto", cursor: "pointer" }} onClick={handleOpenModal}>
-                                Evaluate now
-                            </button>
-                        </div>
-                    </div>
+                    }
+
                 </div>
-                {isModal && <ModalReview productsById={productsById} isModal={isModal} setIsModal={setIsModal} />}
+                {isModal && <ModalReview getListEvaluate={getListEvaluate} productsById={productsById} isModal={isModal} setIsModal={setIsModal} />}
             </div >
         </>
     )

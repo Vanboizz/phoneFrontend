@@ -25,7 +25,6 @@ const initial = {
 const Register = () => {
     const navigate = useNavigate()
     const [state, setState] = useState(initial)
-    const { success, message, isError } = useSelector((state) => state.user)
     const dispatch = useDispatch()
     const { register, handleSubmit, control } = useForm()
     const { firstname, lastname, phonenumber, email, password, retypepassword } = state
@@ -40,20 +39,6 @@ const Register = () => {
         dispatch(reset())
     }, [])
 
-    useEffect(() => {
-        if (success) {
-            toast(message)
-            setTimeout(() => {
-                navigate("/login")
-            }, 3000)
-            setState("")
-        }
-        if (isError) {
-            toast(message)
-            setState("")
-        }
-    }, [success, isError])
-
     const submitForm = (data) => {
         console.log(data);
         if (data.password !== data.retypepassword) {
@@ -62,58 +47,51 @@ const Register = () => {
             return;
         }
         data.email = data.email.toLowerCase();
-        // dispatch(registerUser(data))
+        dispatch(registerUser(data)).then((res) => {
+            if (res?.payload?.success) {
+                toast.success(
+                    'Register successfully',
+                    {
+                        position: 'top-right',
+                        autoClose: 3000,
+                        style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                    }
+                );
+                navigate("/login")
+            }
+            else {
+                toast.error(
+                    'Register fail',
+                    {
+                        position: 'top-right',
+                        autoClose: 3000,
+                        style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                    }
+                );
+            }
+        })
     }
 
-    const beforeUpload = (file) => {
-        // console.log(file.type.startsWith('image/'));
-        const isImage = file.type.startsWith('image/');
-        const isPNG = file.type === 'image/png';
-
-        console.log(isImage);
-        console.log(isPNG);
-
-        if (isImage || isPNG) {
-            console.log('tren');
-            return true; // Allow upload
-        }
-        else {
-            console.log('duoi');
-            message.error('You can only upload PNG or image files!');
-            return false; // Prevent upload
-        }
-
-
+    const isImageValid = (file) => {
+        const acceptedFormats = ['.png', '.jpg'];
+        const fileExtension = file.name.slice(((file.name.lastIndexOf(".") - 1) >>> 0) + 2);
+        return acceptedFormats.includes('.' + fileExtension.toLowerCase());
     };
+
     const uploadButton = (
         <div className='uploads_button'>
             <PlusOutlined className='uploads_button-icon' />
             <div style={{ marginTop: 8 }}>Upload</div>
         </div>
     );
+
     return (
         <>
             <Header />
             <div className='grid-containerregis'>
                 <h1>Register</h1>
-
-
-
                 <div className='grid-content'>
-
                     <form onSubmit={handleSubmit(submitForm)}>
-
-                        {/* <Upload
-                            action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                            listType="picture-circle"
-                            fileList={fileList}
-                            beforeUpload={beforeUpload}
-                            onChange={handleChange}
-                            className='wrapper-upload'
-                        >
-                            {fileList.length >= 1 ? null : uploadButton}
-                        </Upload> */}
-
                         <Controller
                             name="avatar" // Tên của trường trong data
                             control={control}
@@ -121,42 +99,52 @@ const Register = () => {
                             render={({ field }) => (
                                 <>
                                     <Upload
+                                        accept='.png, .jpg'
                                         action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                                         listType="picture-circle"
-                                        // fileList={fileList}
-                                        customRequest={({ file, onSuccess }) => {
-                                            // Xử lý logic tải lên và gọi onSuccess khi xong
+                                        fileList={fileList}
+                                        customRequest={async ({ file, onSuccess, onError }) => {
                                             onSuccess();
                                         }}
                                         beforeUpload={(file) => {
-                                            // Xử lý kiểm tra loại file
-                                            // Nếu hợp lệ, trả về true; ngược lại, trả về false để ngăn không cho tải lên
-                                            return beforeUpload(file);
+                                            if (!isImageValid(file)) {
+                                                toast.error(
+                                                    'Chỉ chấp nhận các file ảnh có định dạng .png hoặc .jpg',
+                                                    {
+                                                        position: 'top-right',
+                                                        autoClose: 3000,
+                                                        style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                                                    }
+                                                );
+                                                return false;
+                                            }
+                                            return true;
                                         }}
                                         onChange={(info) => {
-                                            // Xử lý khi fileList thay đổi
                                             const { fileList } = info;
-                                            field.onChange(fileList);
+                                            const validFiles = fileList.filter(file => isImageValid(file));
+                                            setFileList(validFiles)
+                                            field.onChange(validFiles);
                                         }}
                                         className='wrapper-upload'
                                     >
-                                        {fileList.length >= 1 ? null : uploadButton}
+                                        {field?.value?.length >= 1 ? null : uploadButton}
                                     </Upload>
-                                    {/* Bạn có thể render thêm các trường khác tại đây */}
+
                                     <div className='row-one'>
                                         <input
                                             {...register('firstname')}
+                                            name='firstname'
                                             type="text"
                                             placeholder='First Name'
-                                            name='firstname'
                                             value={firstname || ""}
                                             onChange={handleInputChange}
                                             required />
                                         <input
                                             {...register('lastname')}
+                                            name='lastname'
                                             type="text"
                                             placeholder='Last Name'
-                                            name='lastname'
                                             value={lastname || ""}
                                             onChange={handleInputChange}
                                             required />
