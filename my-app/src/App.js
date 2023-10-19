@@ -22,6 +22,7 @@ import PrivateRouteAdmin from "./components/hook/PrivateRouteAdmin";
 import ProductList from "./pages/productlist/ProductList";
 import Category from "./pages/category/Category";
 import ListFavourite from "./pages/listfavourite/ListFavourite";
+import AdminChatManagement from "./pages/adminchatmanagement/AdminChatManagement";
 
 export default function App() {
   const { accessToken } = useSelector((state) => state.user);
@@ -72,7 +73,7 @@ export default function App() {
             />
           </Route>
           <Route path="/admin/productlist" element={<ProductList />}></Route>
-
+          <Route path="/admin/chat" element={<AdminChatManagement />}></Route>
         </Routes>
       </div>
     </Router>
