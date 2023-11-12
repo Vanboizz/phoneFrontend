@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const addCart = async (idproducts, idsize, idcolor, idimage, accessToken) => {
+const addCart = async (idproducts, idsize, idcolor, idimage, maxquantity, accessToken) => {
   const response = await axios.post(
     "http://localhost:8000/cart/addcart",
     {
@@ -8,6 +8,7 @@ const addCart = async (idproducts, idsize, idcolor, idimage, accessToken) => {
       idsize,
       idcolor,
       idimage,
+      maxquantity,
     },
     {
       headers: {

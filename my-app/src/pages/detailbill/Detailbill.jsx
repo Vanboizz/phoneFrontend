@@ -85,7 +85,8 @@ const Detailbill = () => {
 
     const handle_checkout = () => {
         axios.post("http://localhost:8000/invoice/checkout", {
-            fullname: dataOrder.fullname,
+            firstname: dataOrder.firstname,
+            lastname: dataOrder.lastname,
             email: dataOrder.email,
             address: dataOrder.detailaddress + " " + dataOrder.wards + " " + dataOrder.district + " " + dataOrder.province,
             phonenumber: dataOrder.phonenumber,
@@ -116,7 +117,7 @@ const Detailbill = () => {
                             <div className="detailbill__info-common">
                                 <p>
                                     <span className='info-common-before'>Customer Name:</span>
-                                    {dataOrder.fullname}
+                                    {dataOrder?.firstname + " " + dataOrder?.lastname}
                                 </p>
                             </div>
                             <div className="detailbill__info-common">
@@ -142,17 +143,24 @@ const Detailbill = () => {
                             <div className="detailbill__info-common">
                                 <p>
                                     <span className='info-common-before'>Total Money</span>
-                                    {totalPriceCart.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                    {totalPriceCart.toLocaleString('en-US').replace(/,/g, '.') + '$'}
                                 </p>
                             </div>
                         </div>
                     </div>
-                    <PayPalButtons
+                    {/* <PayPalButtons className='detailbill__paypalbtn'
                         createOrder={() => createOrder()}
                         onApprove={(data) => onApprove(data)}
-                    />
+                    /> */}
                 </Templatecart>
-                <Totalcart text__btn='CONTINUES' handle__checkout={handle_checkout} />
+                <Totalcart
+                    text__btn='CONTINUES'
+                    handle__checkout={handle_checkout}
+                    PayPalButtons={<PayPalButtons className='detailbill__paypalbtn'
+                        createOrder={() => createOrder()}
+                        onApprove={(data) => onApprove(data)}
+                    />}
+                />
             </PayPalScriptProvider>
         </>
     )

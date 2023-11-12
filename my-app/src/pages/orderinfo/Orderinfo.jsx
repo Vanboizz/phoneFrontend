@@ -40,39 +40,42 @@ const Orderinfo = () => {
             })
     }, [])
 
+
+
     useEffect(() => {
         if (dataUser?.user[0]?.province && province) {
             const checkPro = province.find(item => item?.name === dataUser?.user[0]?.province)
-            if (checkPro) {
+            if (checkPro)
                 setSelectedProvince(checkPro?.code)
-            }
+
         }
     }, [province])
 
     useEffect(() => {
         if (dataUser?.user[0]?.district && district) {
+
             const checkDis = district.find(item => item?.name === dataUser?.user[0]?.district)
-            if (checkDis) {
+            if (checkDis)
                 setSelectedDistrict(checkDis?.code)
-            }
+
         }
     }, [district])
 
     useEffect(() => {
         if (dataUser?.user[0]?.wards && wards) {
             const checkWard = wards.find(item => item?.name === dataUser?.user[0]?.wards)
-            if (checkWard) {
+            if (checkWard)
                 setSelectedWard(checkWard?.code)
-            }
+
         }
     }, [wards])
 
     useEffect(() => {
         if (selectedProvince) {
             axios.get(`https://provinces.open-api.vn/api/p/${selectedProvince}?depth=2`)
-                .then((response) => {
+                .then((response) =>
                     setDistrict(response.data.districts)
-                })
+                )
                 .catch(error => {
                     console.log(error);
                 })
@@ -95,7 +98,8 @@ const Orderinfo = () => {
     const handleOrder = (e) => {
         e.preventDefault()
         const data = {
-            fullname: e.target.fullname.value,
+            firstname: e.target.firstname.value,
+            lastname: e.target.lastname.value,
             phonenumber: e.target.phonenumber.value,
             email: e.target.email.value,
             province: province.filter((value) => {
@@ -120,15 +124,46 @@ const Orderinfo = () => {
                 <Header></Header>
                 <Templatecart text__my='Order information' text__btn='CONTINUES' text_back='/cart'>
                     <Statusorder />
-                    <form action="" onSubmit={handleOrder}>
+                    <form action="" onSubmit={handleOrder()}>
                         <div className='order-info'>
                             <div className="order-info__customer">
                                 <p className='customer__text'>Customer Information</p>
                                 <div className='customer__personnal'>
-                                    <input type="text" className='personnal__inp fullname__input' placeholder='Fullname (obligatory)' name='fullname' id='fullname'
-                                        required defaultValue={user[0].fullname} />
-                                    <input type="text" className='personnal__inp phone__input' placeholder='Phone Number (obligatory)' id='phonenumber' name='phonenumber' required defaultValue={user[0].phonenumber} />
-                                    <input type="text" className='personnal__inp email__input' placeholder='Email' name="email" id='email' defaultValue={user[0].email} required />
+                                    <div className='name_user'>
+                                        <input
+                                            type="text"
+                                            className='personnal__inp firstname__input'
+                                            placeholder='Enter firstname'
+                                            name='firstname'
+                                            id='firstname'
+                                            required
+                                            defaultValue={user ? user[0]?.firstname : null} />
+                                        <input
+                                            type="text"
+                                            className='personnal__inp lastname__input'
+                                            placeholder='Enter lastname'
+                                            name='lastname'
+                                            id='lastname'
+                                            required
+                                            defaultValue={user ? user[0].lastname : null}
+                                        />
+                                    </div>
+
+                                    <input
+                                        type="text"
+                                        className='personnal__inp phone__input'
+                                        placeholder='Phone Number (obligatory)'
+                                        id='phonenumber' name='phonenumber'
+                                        required
+                                        defaultValue={user[0].phonenumber} />
+                                    <input
+                                        type="text"
+                                        className='personnal__inp email__input'
+                                        placeholder='Email'
+                                        name="email"
+                                        id='email'
+                                        defaultValue={user[0].email}
+                                        required />
                                 </div>
                             </div>
                             <div className="order-info__delivery-method">
@@ -145,18 +180,34 @@ const Orderinfo = () => {
                                 </div>
                                 <div className="delivery-method__address">
                                     <div className='address__row mg-bt-5'>
-                                        <select name="province" id="province" className='row__province row__common'
+                                        <select
+                                            name="province"
+                                            id="province"
+                                            className='row__province row__common'
                                             required
-                                            value={selectedProvince} onChange={(e) => setSelectedProvince(e.target.value)} >
+                                            value={selectedProvince}
+                                            onChange={(e) => setSelectedProvince(e.target.value)}
+                                        >
+
                                             <option value="">--Province--</option>
                                             {
                                                 province.map((value) => (
-                                                    <option key={value.code} value={value.code} name={value.name}>{value.name}</option>
+                                                    <option
+                                                        key={value.code}
+                                                        value={value.code}
+                                                        name={value.name}>
+                                                        {value.name}
+                                                    </option>
                                                 ))
                                             }
                                         </select>
-                                        <select name="district" id="district" className='row__district row__common'
-                                            value={selectedDistrict} onChange={(e) => setSelectedDistrict(e.target.value)} >
+                                        <select
+                                            name="district"
+                                            id="district"
+                                            className='row__district row__common'
+                                            value={selectedDistrict}
+                                            onChange={(e) => setSelectedDistrict(e.target.value)}
+                                        >
                                             <option value="">--District--</option>
                                             {
                                                 district.map((value) => (
@@ -189,7 +240,7 @@ const Orderinfo = () => {
                                 </div>
                             </div>
                         </div>
-                        <Totalcart text__btn='CONTINUES' />
+                        <Totalcart text__btn='CONTINUES' handle__checkout={() => handleOrder} />
                     </form>
                 </Templatecart>
             </>

@@ -10,7 +10,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import Header from '../../components/header/Header'
 import { PlusOutlined } from '@ant-design/icons'
 import { Upload } from 'antd'
-// import type { UploadFile } from "antd/es/upload/interface";
 
 const initial = {
     firstname: "",
@@ -40,9 +39,15 @@ const Register = () => {
     }, [])
 
     const submitForm = (data) => {
-        console.log(data);
         if (data.password !== data.retypepassword) {
-            toast("Password is not match")
+            toast.error(
+                'Password is not match',
+                {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                }
+            );
             setState("")
             return;
         }
@@ -93,12 +98,14 @@ const Register = () => {
                 <div className='grid-content'>
                     <form onSubmit={handleSubmit(submitForm)}>
                         <Controller
+
                             name="avatar" // Tên của trường trong data
                             control={control}
                             defaultValue={[]} // Giá trị mặc định của fileList
                             render={({ field }) => (
                                 <>
                                     <Upload
+                                        required
                                         accept='.png, .jpg'
                                         action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                                         listType="picture-circle"
@@ -106,6 +113,7 @@ const Register = () => {
                                         customRequest={async ({ file, onSuccess, onError }) => {
                                             onSuccess();
                                         }}
+                                        help={fileList?.length === 0 ? 'Hãy tải lên một hình ảnh' : null}
                                         beforeUpload={(file) => {
                                             if (!isImageValid(file)) {
                                                 toast.error(

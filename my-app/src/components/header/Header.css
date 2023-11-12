@@ -111,7 +111,7 @@ header .list-option .dropdown-user {
   box-shadow: none;
 }
 
-header .list-option .dropdown-user:hover {
+.header .list-option .dropdown-user:hover {
   background: hsla(0, 0%, 100%, 0.2);
   cursor: pointer;
   border-radius: 10px;
@@ -126,6 +126,13 @@ header .list-option__item-login {
   display: flex;
   flex-direction: column;
   width: auto;
+}
+
+header .list-option__item-login .avatar_user {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  margin-right: 3px;
 }
 
 :focus-visible {

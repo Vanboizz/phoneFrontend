@@ -23,11 +23,34 @@ const Login = () => {
     useEffect(() => {
         if (accessToken && user?.role != 'admin') {
             navigate("/")
+            toast.success(
+                'Login Successfully',
+                {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                }
+            );
         } else if (accessToken && user?.role === 'admin') {
-            navigate("/admin/productlist")
+            navigate("/admin/dashboard")
+            toast.success(
+                'Login Successfully',
+                {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                }
+            );
         }
         if (isError) {
-            toast.error(message)
+            toast.error(
+                "Login failed",
+                {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                }
+            );
             setInputEmail("")
             setInputPassword("")
         }

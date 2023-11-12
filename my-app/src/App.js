@@ -25,6 +25,7 @@ import Category from "./pages/category/Category";
 import { ToastContainer } from "react-toastify";
 import ListFavourite from "./pages/listfavourite/ListFavourite";
 import ChatDetail from "./pages/chatdetail/ChatDetail";
+import DashBoard from "./pages/dashboard/DashBoard";
 
 export default function App() {
 
@@ -71,12 +72,11 @@ export default function App() {
 
             {/* admin */}
             <Route path="/admin" element={<PrivateRouteAdmin />}>
-              <Route
-                path="/admin/productsmodifier"
-                element={<ProductsModifier />}
-              />
+              <Route path="/admin/productsmodifier" element={<ProductsModifier />}/>
+              <Route path="/admin/productlist" element={<ProductList />}></Route>
+              <Route path="/admin/dashboard" element={<DashBoard />}></Route>
             </Route>
-            <Route path="/admin/productlist" element={<ProductList />}></Route>
+
 
           </Routes>
         </div>

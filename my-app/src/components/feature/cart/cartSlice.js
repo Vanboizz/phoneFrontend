@@ -13,13 +13,14 @@ const initialState = {
 
 export const addCart = createAsyncThunk(
   "/addcart",
-  async ({ idproducts, idsize, idcolor, idimage, accessToken }, thunkAPI) => {
+  async ({ idproducts, idsize, idcolor, idimage, maxquantity, accessToken }, thunkAPI) => {
     try {
       return cartService.addCart(
         idproducts,
         idsize,
         idcolor,
         idimage,
+        maxquantity,
         accessToken
       );
     } catch (error) {
@@ -174,14 +175,14 @@ export const cartSlice = createSlice({
         state.message = "";
       })
       .addCase(addCart.fulfilled, (state, action) => {
-        const findResult = state.cart.find(
-          (item) => item.idproducts === action.payload.result.idproducts
-        );
-        if (findResult) {
-          findResult.quantity = action.payload.result.quantity;
-        } else {
-          state.cart.push(action.payload.result);
-        }
+        // const findResult = state?.cart?.find(
+        //   (item) => item.idproducts === action.payload.result.idproducts
+        // );
+        // if (findResult) {
+        //   findResult.quantity = action.payload?.result?.quantity;
+        // } else {
+        //   state.cart.push(action?.payload?.result);
+        // }
         state.success = true;
       })
       .addCase(addCart.rejected, (state, action) => {
@@ -194,8 +195,9 @@ export const cartSlice = createSlice({
         state.message = "";
       })
       .addCase(getCart.fulfilled, (state, action) => {
+        console.log(action?.payload);
         state.success = true;
-        state.cart = action.payload;
+        state.cart = action?.payload;
         state.quantityCart = state.cart.reduce(
           (prev, curr) => prev + curr.quantity,
           0
@@ -203,7 +205,7 @@ export const cartSlice = createSlice({
         state.totalPriceCart = state.cart.reduce(
           (prev, curr) =>
             prev +
-            curr.quantity * (curr.size[0].pricesize - ((curr.size[0].pricesize * curr.discount) / 100) ),
+            curr.quantity * (curr.size[0].pricesize - ((curr.size[0].pricesize * curr.discount) / 100)),
           0
         );
       })
@@ -217,11 +219,11 @@ export const cartSlice = createSlice({
         state.message = "";
       })
       .addCase(deleteCart.fulfilled, (state, action) => {
-        state.cart = state.cart.filter(
-          (value) =>
-            value.size[0].color[0].idcolor !==
-            action.payload.size[0].color[0].idcolor
-        );
+        // state.cart = state.cart.filter(
+        //   (value) =>
+        //     value.size[0].color[0].idcolor !==
+        //     action.payload.size[0].color[0].idcolor
+        // );
         state.success = true;
       })
       .addCase(deleteCart.rejected, (state) => {
@@ -272,4 +274,4 @@ export const {
   decreaseItemQuantity,
   setDataOrder,
 } = cartSlice.actions;
-export default cartSlice.reducer;
+export default cartSlice

@@ -85,7 +85,6 @@ const ProductList = () => {
                     <p className='productlist__detail-title-com'>Quantity</p>
                     <p className='productlist__detail-title-com'>Action</p>
                 </div>
-                {console.log(products.data)}
 
                 <div className='productlist__detail'>
                     {

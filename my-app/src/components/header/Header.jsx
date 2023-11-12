@@ -8,6 +8,7 @@ import { FiLogOut } from "react-icons/fi";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button, Dropdown } from 'antd';
+import { Image } from 'antd';
 import { DownOutlined, UserOutlined } from '@ant-design/icons'
 
 const Header = (props) => {
@@ -64,7 +65,10 @@ const Header = (props) => {
       label: (
         <div className='wrapper-user'>
           <FiLogOut className='option__subnav-profile' />
-          <a onClick={() => dispatch(logout())}>Log out</a>
+          <a onClick={() => {
+            navigate('/')
+            dispatch(logout())
+          }}>Log out</a>
         </div>
       ),
     },
@@ -72,7 +76,7 @@ const Header = (props) => {
   ];
 
   return (
-    <header>
+    <header className='header'>
       <div className='container-search'>
         <div className="logo" onClick={() => navigate("/")}>
         </div>
@@ -129,9 +133,11 @@ const Header = (props) => {
                   <>
                     <Dropdown menu={{ items: itemsUser }} placement="bottom" arrow>
                       <Button className='dropdown-user'>
-                        <span className="option__icon-user option__user"></span>
-                        {/* <UserOutlined /> */}
-                        {user && user.length > 0 ? user[0].fullname : "Login"}
+                        <Image
+                          src={user ? user[0]?.avtuser : null}
+                          className='avatar_user'
+                        />
+                        {user && user?.length > 0 ? user[0]?.lastname : "Login"}
                         <DownOutlined />
                       </Button>
                     </Dropdown>

@@ -49,6 +49,10 @@
     color: #818181;
 }
 
+.purchase__list {
+    height: 275px;
+}
+
 .purchase__list-item {
     display: grid;
     grid-template-columns: 1.5fr 2.5fr 2fr 2fr 2fr;

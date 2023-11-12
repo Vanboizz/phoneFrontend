@@ -13,7 +13,7 @@ import { Link, useNavigate } from "react-router-dom"
 import Header from "../../components/header/Header"
 import Footer from "../../components/footer/Footer"
 import axios from 'axios'
-import { Button } from 'antd'; 
+import { Button } from 'antd';
 
 const Home = () => {
     const products = useSelector((state) => state.products)
@@ -49,7 +49,7 @@ const Home = () => {
                     <div>
                         {
                             category.map(value => (
-                                <Button onClick={() => {navigate(`/category/${value.idcate}`)}} className='related-tag' key={value.idcate}>
+                                <Button onClick={() => { navigate(`/category/${value.idcate}`) }} className='related-tag' key={value.idcate}>
                                     {value.namecate}
                                 </Button>
                             ))
@@ -84,13 +84,13 @@ const Home = () => {
                                                             <p >Giảm <span>{value.discount}%</span></p>
                                                         </div>
                                                         <div className='url'>
-                                                            <img key={index} src={value.image[0].avt} alt="" />
+                                                            <img key={index} src={value ? value?.image[0]?.avt : ''} alt="" />
                                                         </div>
                                                         <h3 style={{ color: "#000" }}>{value.nameproducts}</h3>
                                                         <div className='format'>
 
-                                                            <p>{(value.size[0].pricesize - ((value.size[0].pricesize * value.discount) / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;</p>
-                                                            <p>{(value.size[0].pricesize).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;</p>
+                                                            <p>{(value.size[0].pricesize - ((value.size[0].pricesize * value.discount) / 100)).toLocaleString('en-US').replace(/,/g, '.') + '$'}</p>
+                                                            <p>{(value.size[0].pricesize).toLocaleString('en-US').replace(/,/g, '.') + '$'}</p>
                                                         </div>
                                                         <div className='promotion' style={{ color: "#000" }}>
                                                             {value.promotion}

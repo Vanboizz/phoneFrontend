@@ -5,7 +5,6 @@
     margin: 0px 10px;
     border-radius: 10px;
     padding: 15px;
-    margin-bottom: 185px;
 }
 
 .order-info__customer .customer__text {
@@ -16,6 +15,16 @@
 .order-info__customer .customer__personnal {
     display: flex;
     flex-direction: column;
+}
+
+.order-info__customer .customer__personnal .name_user {
+    display: flex;
+    gap: 10px;
+}
+
+.order-info__customer .customer__personnal .name_user .firstname__input,
+.order-info__customer .customer__personnal .name_user .lastname__input {
+    width: 50%;
 }
 
 .personnal__inp {
@@ -115,6 +124,7 @@
     padding: 0px 15px;
     border-radius: 10px;
     font-size: 16px;
+    color: #808080;
 }
 
 .mg-bt-5 {

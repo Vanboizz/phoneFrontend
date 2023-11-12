@@ -134,7 +134,7 @@ const Orderdetail = (props) => {
 
                 <div className="orderdetail__cusinfo-row">
                     <AiOutlineUser className='orderdetail__cusinfo-row-icon' />
-                    <p className="orderdetail__cusinfo-row-name">{user?.user[0]?.fullname}</p>
+                    <p className="orderdetail__cusinfo-row-name">{user?.user[0]?.firstname + " " + user?.user[0]?.lastname}</p>
                 </div>
 
                 <div className="orderdetail__cusinfo-row">

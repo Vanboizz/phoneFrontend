@@ -13,11 +13,8 @@ const CreateNewPassword = () => {
     const message = useState('')
 
     useEffect(() => {
-
         dispatch(reset())
-
     }, [])
-
 
     const createNewPassword = async () => {
         const response = await axios.post(
@@ -33,10 +30,24 @@ const CreateNewPassword = () => {
             }
         )
             .then((result) => {
-                toast.success(result.data.message)
+                toast.success(
+                    result.data.message,
+                    {
+                        position: 'top-right',
+                        autoClose: 3000,
+                        style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                    }
+                );
             })
             .catch(error => {
-                toast.error(error.response.data.message)
+                toast.error(
+                    error.response.data.message,
+                    {
+                        position: 'top-right',
+                        autoClose: 3000,
+                        style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                    }
+                );
             })
     }
 
@@ -45,13 +56,28 @@ const CreateNewPassword = () => {
         e.preventDefault();
 
         if (newUser.curpass === newUser.newpass)
-            toast.error("Current password must be different from newpassword")
+            toast.error(
+                'Current password must be different from newpassword',
+                {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                }
+            );
         else if (newUser.newpass !== newUser.confirmpass)
-            toast.error("Confirm password isn't the same new password")
+
+            toast.error(
+                "Confirm password isn't the same new password",
+                {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                }
+            );
         else
             createNewPassword();
     }
-    
+
     return (
         <>
             <div className='createnewpassword'>
