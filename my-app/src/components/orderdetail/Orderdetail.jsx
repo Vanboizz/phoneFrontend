@@ -57,8 +57,8 @@ const Orderdetail = (props) => {
 
                                     <p className="orderdetail__item-pro-detail-quantity">Quantity: {itemiv.quantity}</p>
                                     <div className='container-price'>
-                                        <p className="orderdetail__item-pro-detail-price">{itemiv.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
-                                        <p className="orderdetail__item-pro-detail-pricesize">{itemiv.pricesize.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                                        <p className="orderdetail__item-pro-detail-price">{itemiv.price.toLocaleString('en-US').replace(/,/g, '.') + '$'}</p>
+                                        <p className="orderdetail__item-pro-detail-pricesize">{itemiv.pricesize.toLocaleString('en-US').replace(/,/g, '.') + '$'}</p>
                                     </div>
 
                                 </div>
@@ -107,12 +107,12 @@ const Orderdetail = (props) => {
 
                 <div className="orderdetail__orderinfo-total">
                     <p className='orderdetail__orderinfo-total-text'>Total product cost:</p>
-                    <p className='orderdetail__orderinfo-total-product'>{totalproduct.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                    <p className='orderdetail__orderinfo-total-product'>{totalproduct.toLocaleString('en-US').replace(/,/g, '.') + '$'}</p>
                 </div>
 
                 <div className="orderdetail__orderinfo-tran-fee">
                     <p className='orderdetail__orderinfo-tran-fee-text'>Total discount:</p>
-                    <p className='orderdetail__orderinfo-tran-fee-price'>{totaldiscount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                    <p className='orderdetail__orderinfo-tran-fee-price'>{totaldiscount.toLocaleString('en-US').replace(/,/g, '.') + '$'}</p>
                 </div>
 
                 <div className="orderdetail__orderinfo-total">
@@ -122,7 +122,7 @@ const Orderdetail = (props) => {
 
                 <div className="orderdetail__orderinfo-total">
                     <p className='orderdetail__orderinfo-total-text-total-price'>Total order value:</p>
-                    <p className='orderdetail__orderinfo-total-price'>{props.dataFromParent[0].totalprice.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                    <p className='orderdetail__orderinfo-total-price'>{props.dataFromParent[0].totalprice.toLocaleString('en-US').replace(/,/g, '.') + '$'}</p>
                 </div>
             </div>
 

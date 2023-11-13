@@ -17,12 +17,12 @@ const Totalcart = ({ text__btn, handle__checkout, styleCart, PayPalButtons }) =>
 
                     <div className='total-cart__title'>
                         <p className='title__text'>Total money temporary:</p>
-                        <p className='title__price'>{(totalPriceCart).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                        <p className='title__price'>{(totalPriceCart).toLocaleString('en-US').replace(/,/g, '.') + '$'}</p>
                     </div>
 
-                    {/* {
+                    {
                         PayPalButtons ? PayPalButtons : null 
-                    } */}
+                    }
                     <div className='total-cart__btn-submit' >
                         <button className='btn-submit__order'
                             onClick={() => handle__checkout()}

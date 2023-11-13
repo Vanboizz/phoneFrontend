@@ -24,6 +24,7 @@ import ProductList from "./pages/productlist/ProductList";
 import Category from "./pages/category/Category";
 import { ToastContainer } from "react-toastify";
 import ListFavourite from "./pages/listfavourite/ListFavourite";
+import AdminChatManagement from "./pages/adminchatmanagement/AdminChatManagement";
 import ChatDetail from "./pages/chatdetail/ChatDetail";
 import DashBoard from "./pages/dashboard/DashBoard";
 
@@ -46,7 +47,6 @@ export default function App() {
             <Route path="/login" element={<Login />}></Route>
             <Route path="/register" element={<Register />}></Route>
             <Route path="/forgotpassword" element={<ForgotPassword />}></Route>
-            <Route path="/chatdetail" element={<ChatDetail />}></Route>
             <Route
               path="/changepassword/:accessToken"
               element={<ChangePassword />}
@@ -76,7 +76,8 @@ export default function App() {
               <Route path="/admin/productlist" element={<ProductList />}></Route>
               <Route path="/admin/dashboard" element={<DashBoard />}></Route>
             </Route>
-
+            <Route path="/admin/productlist" element={<ProductList />}></Route>
+            <Route path="/admin/chatdetail" element={<ChatDetail />}></Route>
 
           </Routes>
         </div>

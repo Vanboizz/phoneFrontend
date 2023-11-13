@@ -165,7 +165,7 @@ const Purchase = () => {
                                                 {(new Date(data[0].ivday).getHours() + ":" + new Date(data[0].ivday).getMinutes() + ":" + new Date(data[0].ivday).getSeconds())}
                                             </div>
 
-                                            <div className="purchase__list-data-price">{(data[0].totalprice).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</div>
+                                            <div className="purchase__list-data-price">{(data[0].totalprice).toLocaleString('en-US').replace(/,/g, '.') + '$'}</div>
                                             <div className={`purchase__list-item-status purchase__list-item-status-${data[0].statusiv}`}>{data[0].statusiv}</div>
                                             <div className="purchase__list-item-btn">
                                                 <button

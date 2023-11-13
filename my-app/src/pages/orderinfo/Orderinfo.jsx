@@ -124,7 +124,7 @@ const Orderinfo = () => {
                 <Header></Header>
                 <Templatecart text__my='Order information' text__btn='CONTINUES' text_back='/cart'>
                     <Statusorder />
-                    <form action="" onSubmit={handleOrder()}>
+                    <form action="" onSubmit={handleOrder}>
                         <div className='order-info'>
                             <div className="order-info__customer">
                                 <p className='customer__text'>Customer Information</p>
@@ -240,7 +240,7 @@ const Orderinfo = () => {
                                 </div>
                             </div>
                         </div>
-                        <Totalcart text__btn='CONTINUES' handle__checkout={() => handleOrder} />
+                        <Totalcart text__btn='CONTINUES' handle__checkout={handleOrder} />
                     </form>
                 </Templatecart>
             </>
