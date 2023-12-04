@@ -116,7 +116,7 @@ const ProductsDetail = () => {
     const [isHeart, setIsHeart] = useState()
     const navigate = useNavigate()
     const [isModal, setIsModal] = useState(false)
-    const user = useSelector(state => state.user)
+    const { user } = useSelector(state => state?.user)
     const [listEvaluate, setListEvaluate] = useState([])
     const [statisticsOfReview, setStatisticsOfReview] = useState([])
     const [selectedStar, setSelectedStar] = useState(null)
@@ -138,7 +138,6 @@ const ProductsDetail = () => {
                     item?.idcolor === idColor
                 )
 
-                console.log(checkItemCart);
                 if (checkItemCart && checkItemCart?.quantity === checkItemCart?.maxquantity) {
                     toast.info(
                         'You can only buy the maximum current quantity',
@@ -183,7 +182,14 @@ const ProductsDetail = () => {
         if (accessToken) {
             dispatch(addFavorite({ accessToken, idproducts: productsById.data?.idproducts, idimage: productsById.data?.image[0].idimage }))
             setIsHeart(true)
-            toast("You have added the product to your favorites list")
+            toast.success(
+                'You have added the product to your favorites list',
+                {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                }
+            );
         }
         else {
             toast("Please log in")
@@ -194,7 +200,14 @@ const ProductsDetail = () => {
         e.preventDefault()
         dispatch(deleteFavorite({ accessToken, idproducts: productsById.data?.idproducts }))
         setIsHeart(false)
-        toast("You have deleted your favorite product")
+        toast.success(
+            'You have deleted your favorite product',
+            {
+                position: 'top-right',
+                autoClose: 3000,
+                style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+            }
+        );
     }
 
     const handleOpenModal = (e) => {
@@ -210,6 +223,7 @@ const ProductsDetail = () => {
                         starRating: selectedStar
                     }
                 });
+                console.log(response.data.data);
                 setListEvaluate(response.data.data);
             } catch (error) {
                 console.log(error);
@@ -327,10 +341,9 @@ const ProductsDetail = () => {
         getListEvaluate()
         getListComments()
     }, [selectedStar, productsById])
-
     useEffect(() => {
         getStatisticsOfReview()
-    }, [productsById])
+    }, [productsById, listEvaluate])
 
     const handleSubmitComments = (e) => {
         e.preventDefault()
@@ -351,7 +364,13 @@ const ProductsDetail = () => {
                     setComment("")
                 })
                 .catch((error) => {
-                    console.log(error);
+                    if (error?.response?.data?.message === "Invalid Token") {
+                        toast.error('You need to log in to do this', {
+                            position: 'top-right',
+                            autoClose: 3000,
+                            style: { color: '#bf0d0d', backgroundColor: '#D7F1FD' },
+                        });
+                    }
                 })
         }
     }
@@ -362,7 +381,7 @@ const ProductsDetail = () => {
             <div className='product-detail'>
                 <div className='format-child'>
                     <div>
-                        <h1>{productsById.data?.nameproducts} <span>{nameSize}</span> </h1>
+                        <h1>{productsById?.data?.nameproducts} <span>{nameSize}</span> </h1>
                     </div>
                     <div className='icon'>
                         {
@@ -700,7 +719,16 @@ const ProductsDetail = () => {
                             <div className='button-review-container'>
                                 <p style={{ margin: "0.4rem 0" }}>How do you rate this product?</p>
                                 <div >
-                                    <button style={{ backgroundColor: "#1a94ff", border: "none", borderRadius: "5px", padding: "10px 30px", color: "white", fontWeight: "bold", margin: "10px auto", cursor: "pointer" }} onClick={handleOpenModal}>
+                                    <button
+                                        style={{
+                                            backgroundColor: "#1a94ff",
+                                            border: "none", borderRadius: "5px",
+                                            padding: "10px 30px",
+                                            color: "white",
+                                            fontWeight: "bold",
+                                            margin: "10px auto",
+                                            cursor: "pointer"
+                                        }} onClick={handleOpenModal}>
                                         Evaluate now
                                     </button>
                                 </div>
@@ -851,7 +879,7 @@ const ProductsDetail = () => {
                     <form action="" style={{ margin: "12px 0" }} onSubmit={handleSubmitComments}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                             <div>
-                                <p style={{ backgroundColor: "#168d8d", color: "white", height: "32px", width: "32px", borderRadius: "50%", fontWeight: "bold", display: "flex", justifyContent: "center", alignItems: "center" }}>N</p>
+                                <img className='img-user' src={user ? user[0]?.avtuser : null} alt="" />
                             </div>
                             <div>
                                 <textarea
@@ -886,7 +914,14 @@ const ProductsDetail = () => {
                         ))
                     }
                 </div>
-                {isModal && <ModalReview getListEvaluate={getListEvaluate} productsById={productsById} isModal={isModal} setIsModal={setIsModal} />}
+                {isModal &&
+                    <ModalReview
+                        getListEvaluate={getListEvaluate}
+                        productsById={productsById}
+                        isModal={isModal}
+                        setIsModal={setIsModal}
+                    />}
+
             </div >
         </>
     )

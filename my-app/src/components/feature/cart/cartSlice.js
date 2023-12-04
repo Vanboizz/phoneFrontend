@@ -97,7 +97,6 @@ export const deleteAllCart = createAsyncThunk(
   "/deleteallcart",
   async ({ accessToken }, thunkAPI) => {
     try {
-      console.log(accessToken);
       return cartService.deleteAllCart(accessToken);
     } catch (error) {
       const message =
@@ -195,7 +194,6 @@ export const cartSlice = createSlice({
         state.message = "";
       })
       .addCase(getCart.fulfilled, (state, action) => {
-        console.log(action?.payload);
         state.success = true;
         state.cart = action?.payload;
         state.quantityCart = state.cart.reduce(

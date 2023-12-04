@@ -415,6 +415,8 @@
   cursor: pointer;
 }
 
+
+
 .product-detail .comment,
 .product-detail .review {
   margin-top: 1rem;
@@ -424,6 +426,10 @@
   margin-bottom: 15px;
   padding: 1rem;
   width: 64%;
+}
+
+.product-detail .comment {
+  background-color: #f1f2f4 !important
 }
 
 .product-detail .review h4 {
@@ -472,3 +478,11 @@
   margin-bottom: 20px;
   padding-bottom: 20px;
 }
+
+.comment .img-user { 
+  border-radius: 50%;
+  border: 1px solid #c3c3c3;
+  width: 35px;
+  height: 35px;
+}
+/* border: "", color: "white", height: "32px", width: "32px", borderRadius: "50%", fontWeight: "bold", display: "flex", justifyContent: "center", alignItems: "center" }}  */

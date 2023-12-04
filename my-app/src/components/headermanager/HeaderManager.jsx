@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button, Dropdown } from 'antd';
 import { Image } from 'antd';
-
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 
 const HeaderManager = (props) => {
@@ -62,15 +61,22 @@ const HeaderManager = (props) => {
       <ul className="list-option">
 
         <li className='list-option__item'>
-          <a className='list-option__option' href='/admin/productlist'>
-            <div className="option__icon-product option__product"></div>
+          <a className='list-option__option' onClick={() => navigate('/admin/chatdetail')}>
+            <div className="option__icon option__chat"></div>
+            <p>Chat</p>
+          </a>
+        </li>
+
+        <li className='list-option__item'>
+          <a className='list-option__option' onClick={() => navigate('/admin/productlist')}>
+            <div className="option__icon option__product"></div>
             <p>Product</p>
           </a>
         </li>
 
         <li className='list-option__item'>
-          <a className='list-option__option' href='/admin/dashboard'>
-            <div className="option__icon-dashboard option__dashboard"></div>
+          <a className='list-option__option' onClick={() => navigate('/admin/dashboard')}>
+            <div className="option__icon option__dashboard"></div>
             <p>Dashboard</p>
           </a>
         </li>

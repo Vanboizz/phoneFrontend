@@ -82,7 +82,6 @@ export const statisticSlice = createSlice({
                 state.cateRenevue = action?.payload
             })
             .addCase(getTopBestSelling.fulfilled, (state, action) => {
-                console.log(action.payload);
                 state.topBestSelling = action?.payload
             })
     }

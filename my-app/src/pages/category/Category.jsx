@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { FaStar, FaPlusCircle } from 'react-icons/fa'
 import "swiper/css";
 import "swiper/css/grid";
@@ -20,6 +20,7 @@ const Category = () => {
     const [category, setCategory] = useState([])
     const [More, setMore] = useState(false)
     const [categorytemp, setCategorytemp] = useState([])
+
     useEffect(() => {
         axios.get(`http://localhost:8000/product/getcategory/${window.location.href.substring(
             window.location.href.lastIndexOf("/") + 1
@@ -61,7 +62,7 @@ const Category = () => {
 
                             <div className='category__sort-filter'>
 
-                                <Button  className='category__sort-filter-wrap' onClick={() => handleLH()}>
+                                <Button className='category__sort-filter-wrap' onClick={() => handleLH()}>
                                     <div className='category__sort-filter-wrap-icon category__sort-filter-wrap-icon-lh'></div>
                                     <p className='category__sort-filter-hl-title'>Price Low - High</p>
                                 </Button>
@@ -99,8 +100,8 @@ const Category = () => {
                                         </div>
                                         <h3 style={{ color: "#000" }}>{value.nameproducts}</h3>
                                         <div className='format'>
-                                            <p>{formatter.format(value.size[0].pricesize - ((value.size[0].pricesize * value.discount) / 100))}&nbsp;</p>
-                                            <p>{formatter.format(value.size[0].pricesize)}&nbsp;</p>
+                                            <p>{(value?.size[0]?.pricesize - ((value?.size[0]?.pricesize * value?.discount) / 100)).toLocaleString('en-US').replace(/,/g, '.') + '$'}&nbsp;</p>
+                                            <p>{(value?.size[0]?.pricesize).toLocaleString('en-US').replace(/,/g, '.') + '$'}&nbsp;</p>
                                         </div>
                                         <div className='promotion' style={{ color: "#000" }}>
                                             {value.promotion}

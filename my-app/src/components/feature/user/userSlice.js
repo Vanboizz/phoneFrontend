@@ -5,6 +5,7 @@ const accessToken = localStorage.getItem("accessToken");
 
 const initialState = {
   user: null,
+  listUser: [],
   accessToken: accessToken ? accessToken : null,
   isError: false,
   success: false,
@@ -18,11 +19,11 @@ export const registerUser = createAsyncThunk(
   async ({ firstname, lastname, avatar, phonenumber, email, password }, thunkAPI) => {
     try {
       return userService.registerUser({
-        firstname, 
-        lastname, 
-        avatar, 
-        phonenumber, 
-        email, 
+        firstname,
+        lastname,
+        avatar,
+        phonenumber,
+        email,
         password
       });
     } catch (error) {
@@ -85,6 +86,21 @@ export const getUser = createAsyncThunk(
   async (accessToken, thunkAPI) => {
     try {
       return userService.getUser(accessToken);
+    } catch (error) {
+      const message =
+        (error.respone && error.respone.data && error.respone.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getUsers = createAsyncThunk(
+  "/getusers",
+  async (accessToken, thunkAPI) => {
+    try {
+      return userService.getUsers(accessToken);
     } catch (error) {
       const message =
         (error.respone && error.respone.data && error.respone.data.message) ||
@@ -232,6 +248,10 @@ export const userSlice = createSlice({
       .addCase(getUser.rejected, (state, action) => {
         state.isError = true;
         state.success = false;
+      })
+      //get users
+      .addCase(getUsers.fulfilled, (state, action) => {
+        state.listUser = action.payload;
       })
       // updateUser
       .addCase(updateUser.pending, (state) => {

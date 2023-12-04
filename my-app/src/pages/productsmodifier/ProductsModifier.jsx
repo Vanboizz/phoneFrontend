@@ -39,20 +39,22 @@ const ProductsModifier = () => {
         const { name, value } = e.target;
         setData({ ...data, [name]: value })
     }
+
+
     useEffect(() => {
-        if (location.state !== null) {
+        if (location?.state !== null) {
             localStorage.setItem('productdetail', JSON.stringify(location?.state?.product))
             setData({ name: productloca?.nameproducts, discount: productloca?.discount, promotion: productloca?.promotion, description: productloca?.description })
             setSelect(productloca?.idcate)
 
             productloca?.image.forEach(element => {
-                preview.push(element.avt)
+                preview?.push(element.avt)
                 setPreview([... new Set(preview)])
             });
 
             setSize(productloca?.size);
         }
-    }, [])
+    }, [location?.state])
 
     const handleAddUnit = (e) => {
         e.preventDefault()
@@ -253,7 +255,7 @@ const ProductsModifier = () => {
                                         <div key={index} className='sizes'>
 
                                             <p>{value.namesize}</p>
-                                            <p>{value.pricesize.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                                            <p>{value.pricesize.toLocaleString('en-US').replace(/,/g, '.') + '$'}</p>
                                             <div className='container-unit__namecolor'>
                                                 {
                                                     value.color.map((color, index) => (

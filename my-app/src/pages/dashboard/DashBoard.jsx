@@ -17,7 +17,6 @@ const DashBoard = () => {
 
     const dispatch = useDispatch()
     const { monthlyRevenue, cateRenevue, topBestSelling } = useSelector(state => state.statistic)
-    console.log(monthlyRevenue);
     const configCate = {
         appendPadding: 10,
         data: cateRenevue,

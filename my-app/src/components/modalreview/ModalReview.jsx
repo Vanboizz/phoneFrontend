@@ -3,6 +3,7 @@ import "../modalreview/ModalReview.css"
 import { AiOutlineClose, AiFillCamera, AiOutlineCloseCircle } from "react-icons/ai"
 import { FaStar } from 'react-icons/fa'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 const ratingLabels = [
     { number: 1, value: "Very bad" },
@@ -135,7 +136,6 @@ const ModalReview = (props) => {
 
     const handleSubmitForm = (e) => {
         e.preventDefault();
-
         const data = {
             idproducts: productsById.data.idproducts,
             starnumber: selectedRating,
@@ -156,6 +156,13 @@ const ModalReview = (props) => {
             })
             .catch(error => {
                 console.log(error);
+                if (error?.response?.data?.error === "Người dùng chưa mua sản phẩm.") {
+                    toast.error('Need to purchase the product before rating', {
+                        position: 'top-right',
+                        autoClose: 3000,
+                        style: { color: '#bf0d0d', backgroundColor: '#D7F1FD' },
+                    });
+                }
             });
     }
 
@@ -301,7 +308,20 @@ const ModalReview = (props) => {
                             )}
                         </div>
                         <div style={{ position: "sticky", bottom: "0", width: "100%", zIndex: "400", backgroundColor: "white" }}>
-                            <button type='submit' style={{ border: "none", backgroundColor: "#1a94ff", color: "white", fontWeight: "bold", textAlign: "center", margin: "10px auto", padding: "10px 30px", borderRadius: "5px", width: "95%", cursor: "pointer" }}>SUBMIT REVIEW</button>
+                            <button
+                                type='submit'
+                                style={{
+                                    border: "none",
+                                    backgroundColor: "#1a94ff",
+                                    color: "white",
+                                    fontWeight: "bold",
+                                    textAlign: "center",
+                                    margin: "10px auto",
+                                    padding: "10px 30px",
+                                    borderRadius: "5px",
+                                    width: "95%",
+                                    cursor: "pointer"
+                                }}>SUBMIT REVIEW</button>
                         </div>
                     </form>
                 </div>

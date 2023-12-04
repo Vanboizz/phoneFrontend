@@ -52,7 +52,7 @@ const Register = () => {
             return;
         }
         data.email = data.email.toLowerCase();
-        dispatch(registerUser(data)).then((res) => {
+        dispatch(registerUser(data)).then(async (res) => {
             if (res?.payload?.success) {
                 toast.success(
                     'Register successfully',
@@ -62,6 +62,9 @@ const Register = () => {
                         style: { color: '$color-default', backgroundColor: '#DEF2ED' },
                     }
                 );
+                
+                // await setDoc(doc(db, "userChats", res?.user?.uid), {})
+
                 navigate("/login")
             }
             else {

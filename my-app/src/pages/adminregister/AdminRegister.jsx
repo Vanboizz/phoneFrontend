@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "../adminregister/AdminRegister.css"
 import { FaFacebook, FaGoogle } from "react-icons/fa"
 import { Controller, useForm } from 'react-hook-form'
@@ -9,6 +9,11 @@ import { useNavigate } from 'react-router-dom'
 import Header from '../../components/header/Header'
 import { Upload } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { doc, setDoc } from "firebase/firestore";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth, db, storage } from "../../firebase";
+import Chat from '../../components/chat/Chat'
 
 
 
@@ -24,16 +29,15 @@ const AdminRegister = () => {
 
     const [state, setState] = useState(initial)
     const { register, handleSubmit, control } = useForm()
-
+    const [fileList, setFileList] = useState([]);
     const { firstname, lastname, email, password, retypepassword } = state
+    const navigate = useNavigate()
     const handleInputChange = (e) => {
         const { name, value } = e.target
         setState({ ...state, [name]: value })
     }
-    const [fileList, setFileList] = useState([]);
 
 
-    const navigate = useNavigate()
 
     const isImageValid = (file) => {
         const acceptedFormats = ['.png', '.jpg'];
@@ -48,7 +52,66 @@ const AdminRegister = () => {
         </div>
     );
 
+    // UseEffect dùng cho Firebase
+    useEffect(() => {
+
+    }, [])
+
+
     const submitForm = async (data) => {
+
+        // try {
+        //     const email = data?.email;
+        //     const displayName = data?.lastname;
+        //     const file = data?.avatar[0]?.thumbUrl;
+        //     const res = await createUserWithEmailAndPassword(auth, data?.email, data?.password)
+        //     const storageRef = ref(storage, displayName);
+        //     const uploadTask = uploadBytesResumable(storageRef, file);
+
+        //     const createAdminChats = await setDoc(doc(db, "adminChats", res?.user?.uid), {
+        //         uid: res?.user?.uid,
+        //         displayName,
+        //         email,
+        //     })
+
+        //     // uploadTask.on(
+        //     //     (error) => {
+        //     //         console.log(error);
+        //     //     },
+        //     //     () => {
+        //     //         console.log('abc');
+        //     //         getDownloadURL(uploadTask.snapshot.ref)
+        //     //             .then(async (downloadURL) => {
+        //     //                 await updateProfile(res.user, {
+        //     //                     displayName,
+        //     //                     photoURL: downloadURL,
+        //     //                 })
+
+        //     //                 await setDoc(doc(db, "users", res?.user?.uid), {
+        //     //                     uid: res?.user?.uid,
+        //     //                     displayName,
+        //     //                     email,
+        //     //                     photoURL: downloadURL,
+        //     //                 })
+
+        //     //                 // await setDoc(doc(db, "userChats", res?.user?.uid), {
+
+        //     //                 // })
+        //     //             })
+        //     //             .catch((error) => {
+        //     //                 console.log(error);
+        //     //             })
+
+        //     //     }
+        //     // );
+
+
+
+        // } catch (error) {
+        //     console.log(error);
+        // }
+
+
         if (data?.password !== data?.retypepassword) {
             toast.error(
                 'Password is not match',
@@ -74,17 +137,21 @@ const AdminRegister = () => {
                         "Content-Type": "application/json",
                     },
                 }
-            ).then(() => {
-                toast.success(
-                    'Successfully register',
-                    {
-                        position: 'top-right',
-                        autoClose: 3000,
-                        style: { color: '$color-default', backgroundColor: '#DEF2ED' },
-                    }
-                );
-                navigate("/login")
-            })
+            )
+                .then(async (res) => {
+                    const email = data?.email;
+                    const displayName = data?.firstname + ' ' + data?.lastname;
+                    await setDoc(doc(db, "adminChats", res?.data?.idAdmin.toString()), {})
+                    toast.success(
+                        'Successfully register',
+                        {
+                            position: 'top-right',
+                            autoClose: 3000,
+                            style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                        }
+                    );
+                    navigate("/login")
+                })
         }
     }
 

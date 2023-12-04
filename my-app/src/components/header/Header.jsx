@@ -125,7 +125,7 @@ const Header = (props) => {
 
 
         {
-          accessToken
+          (accessToken)
             ?
             <li className='list-option__item-login'>
               <div >
@@ -154,7 +154,6 @@ const Header = (props) => {
                 <p>Login</p>
               </a>
             </li>
-
         }
 
 

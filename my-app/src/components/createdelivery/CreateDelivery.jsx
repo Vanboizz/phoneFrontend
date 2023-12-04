@@ -78,6 +78,17 @@ const CreateDelivery = () => {
         form.resetFields();
     };
 
+    useEffect(() => {
+        dispatch(getUser(accessToken))
+        if (user) {
+            form.setFieldsValue({
+                'province': user[0]?.province,
+                'district': user[0]?.district,
+                'ward': user[0]?.wards,
+                'detail_address': user[0]?.address,
+            })
+        }
+    }, [accessToken])
 
     useEffect(() => {
         axios.get("https://provinces.open-api.vn/api/p/")
@@ -89,14 +100,7 @@ const CreateDelivery = () => {
             })
         dispatch(getUser(accessToken))
 
-        if (user) {
-            form.setFieldsValue({
-                'province': user[0]?.province,
-                'district': user[0]?.district,
-                'ward': user[0]?.wards,
-                'detail_address': user[0]?.address,
-            })
-        }
+        
     }, [])
 
     useEffect(() => {
