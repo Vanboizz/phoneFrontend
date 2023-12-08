@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import Relative from '../../components/relative/Relative';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCart } from "../../components/feature/cart/cartSlice"
+import { addCart, getCart } from "../../components/feature/cart/cartSlice"
 import Header from "../../components/header/Header"
 import { toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
@@ -105,25 +105,26 @@ const ProductsDetail = () => {
     const [isMore, setIsMore] = useState(false)
     const dispatch = useDispatch()
     const productsById = useSelector(state => state.products)
+    // const accessToken = localStorage.getItem("accessToken")
+    const { accessToken } = useSelector(state => state?.user)
     const [data, setData] = useState(null)
     const [idSize, setIdSize] = useState(null);
     const [idColor, setIdColor] = useState();
+    const [maxQuantity, setMaxquantity] = useState()
     const [priceSize, setPriceSize] = useState(null)
     const [nameSize, setNameSize] = useState()
     const [isHeart, setIsHeart] = useState()
-    const accessToken = localStorage.getItem("accessToken")
     const navigate = useNavigate()
     const [isModal, setIsModal] = useState(false)
-    const user = useSelector(state => state.user)
-    // console.log(user && user.user && user.user[0].fullname);
+    const { user } = useSelector(state => state?.user)
     const [listEvaluate, setListEvaluate] = useState([])
     const [statisticsOfReview, setStatisticsOfReview] = useState([])
     const [selectedStar, setSelectedStar] = useState(null)
     const [comment, setComment] = useState("")
     const [listComment, setListComment] = useState([])
+    const { cart } = useSelector(state => state.cart)
 
-    const handleAddToCart = (e) => {
-        e.preventDefault()
+    const handleAddToCart = async (number) => {
         if (!accessToken) {
             navigate("/login")
         } else {
@@ -131,11 +132,47 @@ const ProductsDetail = () => {
                 return size.color.some((item) => item.idcolor === idColor && item.quantity > 0);
             });
             if (selectedProduct) {
-                dispatch(addCart({ idproducts: productsById.data?.idproducts, idsize: idSize, idcolor: idColor, idimage: productsById.data?.image[0].idimage, accessToken }))
-                navigate("/cart")
-                window.location.reload()
+                const checkItemCart = cart?.find((item) =>
+                    item?.idproducts === productsById.data?.idproducts &&
+                    item?.idsize === idSize &&
+                    item?.idcolor === idColor
+                )
+
+                if (checkItemCart && checkItemCart?.quantity === checkItemCart?.maxquantity) {
+                    toast.info(
+                        'You can only buy the maximum current quantity',
+                        {
+                            position: 'top-right',
+                            autoClose: 3000,
+                            style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                        }
+                    );
+                } else {
+                    await dispatch(addCart({ idproducts: productsById.data?.idproducts, idsize: idSize, idcolor: idColor, idimage: productsById.data?.image[0].idimage, maxquantity: maxQuantity, accessToken }))
+                        .then(() => {
+                            toast.success(
+                                'Add successfully ',
+                                {
+                                    position: 'top-right',
+                                    autoClose: 3000,
+                                    style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                                }
+                            );
+                            dispatch(getCart({ accessToken })).then(() => {
+                                if (number === 1)
+                                    navigate("/cart")
+                            })
+                        })
+                }
             } else {
-                toast("The product is out of stock")
+                toast.info(
+                    'The product is out of stock',
+                    {
+                        position: 'top-right',
+                        autoClose: 3000,
+                        style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                    }
+                );
             }
         }
     }
@@ -145,7 +182,14 @@ const ProductsDetail = () => {
         if (accessToken) {
             dispatch(addFavorite({ accessToken, idproducts: productsById.data?.idproducts, idimage: productsById.data?.image[0].idimage }))
             setIsHeart(true)
-            toast("You have added the product to your favorites list")
+            toast.success(
+                'You have added the product to your favorites list',
+                {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                }
+            );
         }
         else {
             toast("Please log in")
@@ -156,7 +200,14 @@ const ProductsDetail = () => {
         e.preventDefault()
         dispatch(deleteFavorite({ accessToken, idproducts: productsById.data?.idproducts }))
         setIsHeart(false)
-        toast("You have deleted your favorite product")
+        toast.success(
+            'You have deleted your favorite product',
+            {
+                position: 'top-right',
+                autoClose: 3000,
+                style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+            }
+        );
     }
 
     const handleOpenModal = (e) => {
@@ -172,6 +223,7 @@ const ProductsDetail = () => {
                         starRating: selectedStar
                     }
                 });
+                console.log(response.data.data);
                 setListEvaluate(response.data.data);
             } catch (error) {
                 console.log(error);
@@ -276,6 +328,7 @@ const ProductsDetail = () => {
             setData(productsById.data?.size[0].color)
             setNameSize(productsById.data?.size[0].namesize)
             setIdColor(productsById.data.size[0].color[0].idcolor)
+            setMaxquantity(productsById.data.size[0].color[0].quantity)
             setIsHeart(productsById?.data?.isHeart)
         }
     }, [productsById])
@@ -288,10 +341,9 @@ const ProductsDetail = () => {
         getListEvaluate()
         getListComments()
     }, [selectedStar, productsById])
-
     useEffect(() => {
         getStatisticsOfReview()
-    }, [productsById])
+    }, [productsById, listEvaluate])
 
     const handleSubmitComments = (e) => {
         e.preventDefault()
@@ -312,7 +364,13 @@ const ProductsDetail = () => {
                     setComment("")
                 })
                 .catch((error) => {
-                    console.log(error);
+                    if (error?.response?.data?.message === "Invalid Token") {
+                        toast.error('You need to log in to do this', {
+                            position: 'top-right',
+                            autoClose: 3000,
+                            style: { color: '#bf0d0d', backgroundColor: '#D7F1FD' },
+                        });
+                    }
                 })
         }
     }
@@ -323,7 +381,7 @@ const ProductsDetail = () => {
             <div className='product-detail'>
                 <div className='format-child'>
                     <div>
-                        <h1>{productsById.data?.nameproducts} <span>{nameSize}</span> </h1>
+                        <h1>{productsById?.data?.nameproducts} <span>{nameSize}</span> </h1>
                     </div>
                     <div className='icon'>
                         {
@@ -378,9 +436,9 @@ const ProductsDetail = () => {
                     <div className='middle-container'>
                         <div className='box-price'>
                             <p className='price-show'>
-                                {priceSize && (priceSize - ((priceSize * productsById.data?.discount) / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;
+                                {priceSize && (priceSize - ((priceSize * productsById.data?.discount) / 100)).toLocaleString('en-US').replace(/,/g, '.') + '$'}
                             </p>
-                            <p className='price-through'>{priceSize && (priceSize).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;</p>
+                            <p className='price-through'>{priceSize && (priceSize).toLocaleString('en-US').replace(/,/g, '.') + '$'}</p>
                         </div>
                         <div className='form-format'>
                             <form>
@@ -402,7 +460,7 @@ const ProductsDetail = () => {
                                                     {value.namesize}
                                                 </p>
                                                 <p className="price">
-                                                    {(value?.pricesize - ((value?.pricesize * productsById.data?.discount) / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;
+                                                    {(value?.pricesize - ((value?.pricesize * productsById.data?.discount) / 100)).toLocaleString('en-US').replace(/,/g, '.') + '$'}
                                                 </p>
                                             </div>
                                             <input type="radio" name="size" id={value.idsize} value={value.idsize}
@@ -429,10 +487,15 @@ const ProductsDetail = () => {
                                     data?.map((item) => (
                                         <label key={item.idcolor} className='item-linked' style={
                                             {
-                                                border: item.idcolor === idColor ? "1.4px solid #1a94ff" : "",
-                                                opacity: item.quantity === 0 ? "0.4" : "",
-                                                border: item.quantity === 0 ? "1.4px solid red" : "",
-                                                color: item.quantity === 0 ? "red" : ""
+                                                opacity: item?.quantity === 0 ? "0.4" : "",
+                                                border:
+                                                    item?.quantity === 0
+                                                        ? "1.4px solid red"
+                                                        : item?.idcolor === idColor
+                                                            ? "1.4px solid #1a94ff"
+                                                            : ""
+                                                ,
+                                                color: item?.quantity === 0 ? "red" : ""
                                             }
                                         }
                                         >
@@ -451,7 +514,7 @@ const ProductsDetail = () => {
                                                         <div key={value.idsize}>
                                                             {
                                                                 value.idsize === idSize ? <p className='price'>
-                                                                    {(value.pricesize - ((value.pricesize * productsById.data.discount) / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}&nbsp;
+                                                                    {(value.pricesize - ((value.pricesize * productsById.data.discount) / 100)).toLocaleString('en-US').replace(/,/g, '.') + '$'}
                                                                 </p> : null
                                                             }
                                                         </div>
@@ -465,6 +528,7 @@ const ProductsDetail = () => {
                                                 value={item.namecolor}
                                                 checked={item.idcolor === idColor}
                                                 onChange={(e) => {
+                                                    setMaxquantity(item.quantity)
                                                     setIdColor(item.idcolor)
                                                 }}
                                                 disabled={item.quantity === 0 ? true : false}
@@ -478,9 +542,9 @@ const ProductsDetail = () => {
                         </div>
                         <div className='format-button'>
                             <div >
-                                <button onClick={handleAddToCart}>BUY NOW</button>
+                                <button onClick={() => handleAddToCart(1)}>BUY NOW</button>
                             </div>
-                            <button className='cart' onClick={handleAddToCart}>
+                            <button className='cart' onClick={() => handleAddToCart(2)}>
                                 <FaCartPlus style={{ fontSize: "1.2rem" }} />
                                 <span className='btnadd'>ADD TO CART</span>
                             </button>
@@ -541,7 +605,7 @@ const ProductsDetail = () => {
                                             </div>
                                             <div className='address'>
                                                 <a href=''>
-                                                    &nbsp;-&nbsp;
+                                                    -
                                                     <svg style={{ marginRight: "5px" }} data-v-6d14a780="" height="15" fill='#0864c1' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path data-v-6d14a780="" d="M168.3 499.2C116.1 435 0 279.4 0 192C0 85.96 85.96 0 192 0C298 0 384 85.96 384 192C384 279.4 267 435 215.7 499.2C203.4 514.5 180.6 514.5 168.3 499.2H168.3zM192 256C227.3 256 256 227.3 256 192C256 156.7 227.3 128 192 128C156.7 128 128 156.7 128 192C128 227.3 156.7 256 192 256z"></path></svg>
                                                     {item.address}
                                                 </a>
@@ -655,7 +719,16 @@ const ProductsDetail = () => {
                             <div className='button-review-container'>
                                 <p style={{ margin: "0.4rem 0" }}>How do you rate this product?</p>
                                 <div >
-                                    <button style={{ backgroundColor: "#1a94ff", border: "none", borderRadius: "5px", padding: "10px 30px", color: "white", fontWeight: "bold", margin: "10px auto", cursor: "pointer" }} onClick={handleOpenModal}>
+                                    <button
+                                        style={{
+                                            backgroundColor: "#1a94ff",
+                                            border: "none", borderRadius: "5px",
+                                            padding: "10px 30px",
+                                            color: "white",
+                                            fontWeight: "bold",
+                                            margin: "10px auto",
+                                            cursor: "pointer"
+                                        }} onClick={handleOpenModal}>
                                         Evaluate now
                                     </button>
                                 </div>
@@ -806,7 +879,7 @@ const ProductsDetail = () => {
                     <form action="" style={{ margin: "12px 0" }} onSubmit={handleSubmitComments}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                             <div>
-                                <p style={{ backgroundColor: "#168d8d", color: "white", height: "32px", width: "32px", borderRadius: "50%", fontWeight: "bold", display: "flex", justifyContent: "center", alignItems: "center" }}>N</p>
+                                <img className='img-user' src={user ? user[0]?.avtuser : null} alt="" />
                             </div>
                             <div>
                                 <textarea
@@ -841,7 +914,14 @@ const ProductsDetail = () => {
                         ))
                     }
                 </div>
-                {isModal && <ModalReview getListEvaluate={getListEvaluate} productsById={productsById} isModal={isModal} setIsModal={setIsModal} />}
+                {isModal &&
+                    <ModalReview
+                        getListEvaluate={getListEvaluate}
+                        productsById={productsById}
+                        isModal={isModal}
+                        setIsModal={setIsModal}
+                    />}
+
             </div >
         </>
     )

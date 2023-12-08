@@ -6,6 +6,7 @@ import { FiLogOut } from "react-icons/fi";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button, Dropdown } from 'antd';
+import { Image } from 'antd';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 
 const HeaderManager = (props) => {
@@ -21,7 +22,10 @@ const HeaderManager = (props) => {
       label: (
         <div className='wrapper-user'>
           <FiLogOut className='option__subnav-profile' />
-          <a onClick={() => dispatch(logout())}>Log out</a>
+          <a onClick={() => {
+            dispatch(logout())
+            navigate('/login')
+          }}>Log out</a>
         </div>
       ),
     },
@@ -55,6 +59,29 @@ const HeaderManager = (props) => {
       </div>
 
       <ul className="list-option">
+
+        <li className='list-option__item'>
+          <a className='list-option__option' onClick={() => navigate('/admin/chatdetail')}>
+            <div className="option__icon option__chat"></div>
+            <p>Chat</p>
+          </a>
+        </li>
+
+        <li className='list-option__item'>
+          <a className='list-option__option' onClick={() => navigate('/admin/productlist')}>
+            <div className="option__icon option__product"></div>
+            <p>Product</p>
+          </a>
+        </li>
+
+        <li className='list-option__item'>
+          <a className='list-option__option' onClick={() => navigate('/admin/dashboard')}>
+            <div className="option__icon option__dashboard"></div>
+            <p>Dashboard</p>
+          </a>
+        </li>
+
+
         <li className='list-option__item list-option__item-login'>
           {
             accessToken
@@ -64,10 +91,13 @@ const HeaderManager = (props) => {
                   <>
                     <Dropdown menu={{ items: itemsUser }} placement="bottom" arrow>
                       <Button className='dropdown-user'>
-                        <span className="option__icon-user option__user"></span>
-                        {/* <UserOutlined /> */}
-                        {user && user.length > 0 ? user[0].fullname : "Login"}
-                        <DownOutlined />
+                        {/* <span className="option__icon-user option__user"></span> */}
+                        <Image
+                          src={user ? user[0]?.avtuser : null}
+                          className='avatar_user'
+                        />
+                        {user && user.length > 0 ? user[0]?.lastname : "Login"}
+                        <DownOutlined style={{ color: 'white' }} />
                       </Button>
                     </Dropdown>
                   </>

@@ -26,6 +26,7 @@ import { ToastContainer } from 'react-toastify';
 import ListFavourite from './pages/listfavourite/ListFavourite';
 import AdminChatManagement from './pages/adminchatmanagement/AdminChatManagement';
 import ChatDetail from './pages/chatdetail/ChatDetail';
+import DashBoard from './pages/dashboard/DashBoard';
 
 export default function App() {
   const { accessToken } = useSelector((state) => state.user);
@@ -102,6 +103,12 @@ export default function App() {
                 path='/admin/productsmodifier'
                 element={<ProductsModifier />}
               />
+              <Route
+                path='/admin/productlist'
+                element={<ProductList />}></Route>
+              <Route
+                path='/admin/dashboard'
+                element={<DashBoard />}></Route>
             </Route>
             <Route
               path='/admin/productlist'

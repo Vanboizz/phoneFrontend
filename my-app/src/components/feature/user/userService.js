@@ -91,6 +91,16 @@ const getUser = async (accessToken) => {
   return response.data;
 };
 
+//get users
+const getUsers = async (accessToken) => {
+  const response = await axios.get("http://localhost:8000/auth/user/getusers", {
+    headers: {
+      Authorization: "Bearer " + accessToken,
+    },
+  });
+  return response.data;
+};
+
 // Updateuser
 const updateUser = async ({
   fullname,
@@ -163,6 +173,7 @@ const userService = {
   forgotPassword,
   changePassword,
   getUser,
+  getUsers,
   updateUser,
   updateDetailAddress,
   createNewPassword,

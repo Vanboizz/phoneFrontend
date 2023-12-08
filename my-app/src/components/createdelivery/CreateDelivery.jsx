@@ -2,20 +2,24 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import "../createdelivery/CreateDelivery.css"
 import { Button, Checkbox, Form, Input, Select } from 'antd';
-import { useDispatch } from 'react-redux';
-import { updateDetailAddress } from '../feature/user/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser, updateDetailAddress } from '../feature/user/userSlice';
 import { toast } from 'react-toastify';
+import axios from 'axios'
 
 
 const CreateDelivery = () => {
-    const [provinces, setProvinces] = useState([]);
-    const [provinceid, setProvinceid] = useState('');
 
-    const [districtes, setDistrictes] = useState([]);
-    const [districtid, setDistrictid] = useState('');
-
+    const [province, setProvince] = useState([]);
+    const [district, setDistrict] = useState([]);
     const [wards, setWards] = useState([]);
-    const [wardid, setWardid] = useState('');
+
+    const [selectedProvince, setselectedProvince] = useState();
+    const [selectedDistrict, setselectedDistrict] = useState();
+    const [selectedWard, setSelectedWard] = useState()
+
+
+    const { user } = useSelector(state => state.user)
     const accessToken = localStorage.getItem('accessToken');
 
     const dispatch = useDispatch()
@@ -54,56 +58,75 @@ const CreateDelivery = () => {
     };
 
     const handleProvince = (value, option) => {
-        setProvinceid(option?.key);
+        setselectedProvince(option?.key);
         form.setFieldsValue({ 'district': undefined });
         form.setFieldsValue({ 'ward': undefined });
     }
 
     const handleDistrict = (value, option) => {
-        setDistrictid(option?.key)
+        setselectedDistrict(option?.key)
         form.setFieldsValue({ 'ward': undefined });
     }
 
     const handleWard = (value, option) => {
-        setWardid(option?.key)
+        setSelectedWard(option?.key)
     }
 
     const [form] = Form.useForm();
+
     const onReset = () => {
         form.resetFields();
     };
 
-
     useEffect(() => {
-        const getprovinces = async () => {
-            const resprovince = await fetch("https://vapi.vnappmob.com/api/province/")
-            const respro = await resprovince.json();
-            setProvinces(await respro);
-            return true;
+        dispatch(getUser(accessToken))
+        if (user) {
+            form.setFieldsValue({
+                'province': user[0]?.province,
+                'district': user[0]?.district,
+                'ward': user[0]?.wards,
+                'detail_address': user[0]?.address,
+            })
         }
-        getprovinces()
-    }, []);
-    useEffect(() => {
-        (async () => {
-            if (provinceid !== "") {
-                const resdistrict = await fetch(`https://vapi.vnappmob.com/api/province/district/${provinceid}`)
-                const resdis = await resdistrict.json()
-                setDistrictes(await resdis)
-                return true;
-            }
-        })();
-    }, [provinceid])
+    }, [accessToken])
 
     useEffect(() => {
-        (async () => {
-            if (districtid !== "") {
-                const reswards = await fetch(`https://vapi.vnappmob.com/api/province/ward/${districtid}`)
-                const resw = await reswards.json()
-                setWards(await resw)
-                return true;
-            }
-        })();
-    }, [districtid])
+        axios.get("https://provinces.open-api.vn/api/p/")
+            .then((response) => {
+                setProvince(response?.data)
+            })
+            .catch(error => {
+                console.log(error);
+            })
+        dispatch(getUser(accessToken))
+
+        
+    }, [])
+
+    useEffect(() => {
+        if (selectedProvince) {
+            axios.get(`https://provinces.open-api.vn/api/p/${selectedProvince}?depth=2`)
+                .then((response) => {
+                    setDistrict(response.data.districts)
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+            setSelectedWard(0)
+        }
+    }, [selectedProvince])
+
+    useEffect(() => {
+        if (selectedDistrict) {
+            axios.get(`https://provinces.open-api.vn/api/d/${selectedDistrict}?depth=2`)
+                .then((response) => {
+                    setWards(response.data.wards)
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        }
+    }, [selectedDistrict])
 
     const { Option } = Select;
     return (
@@ -117,7 +140,7 @@ const CreateDelivery = () => {
                     className='createdelivery_form'
                 >
                     <Form.Item
-                        label="Address"
+                        label="ADDRESS"
                         required
                         className='createdelivery_address'
                         style={{ marginBottom: '0px' }}
@@ -141,21 +164,21 @@ const CreateDelivery = () => {
                                 allowClear
                                 className='createdelivery_province'
                             >
-                                {provinces?.results
-                                    ? provinces?.results.map((province) => {
+                                {province
+                                    ? province.map((itemprovince) => {
                                         return (
                                             <Option
-                                                key={province?.province_id}
-                                                value={province?.province_name}
+                                                key={itemprovince?.code}
+                                                value={itemprovince?.name}
                                             >
-                                                {province?.province_name}
+                                                {itemprovince?.name}
                                             </Option>
                                         )
                                     })
                                     : null}
                             </Select>
                         </Form.Item>
-
+                        {console.log(district)}
                         <Form.Item
                             name="district"
                             rules={[
@@ -175,13 +198,13 @@ const CreateDelivery = () => {
                                 className='createdelivery_district'
                             >
                                 {
-                                    districtes?.results
-                                        ? districtes?.results.map((district) => (
+                                    district
+                                        ? district.map((itemdistrict) => (
                                             <Option
-                                                key={district?.district_id}
-                                                value={district?.district_name}
+                                                key={itemdistrict?.code}
+                                                value={itemdistrict?.name}
                                             >
-                                                {district?.district_name}
+                                                {itemdistrict?.name}
                                             </Option>
                                         ))
                                         : null
@@ -209,13 +232,13 @@ const CreateDelivery = () => {
                                 className='createdelivery_ward'
                             >
                                 {
-                                    wards?.results
-                                        ? wards?.results.map((ward) => (
+                                    wards
+                                        ? wards.map((ward) => (
                                             <Option
-                                                key={ward.ward_id}
-                                                value={ward.ward_name}
+                                                key={ward?.code}
+                                                value={ward?.name}
                                             >
-                                                {ward.ward_name}
+                                                {ward?.name}
                                             </Option>
                                         ))
                                         : null
@@ -229,7 +252,7 @@ const CreateDelivery = () => {
 
                     <Form.Item
                         name="detail_address"
-                        label="Detail address"
+                        label="DETAIL ADDRESS"
                         rules={[
                             {
                                 required: true, message: 'Please enter detail address'
@@ -239,7 +262,7 @@ const CreateDelivery = () => {
                     >
 
                         <Input
-                            style={{ height: '40px' }}
+                            style={{ height: '45px', backgroundColor: '#f3f4f6' }}
                         />
                     </Form.Item>
 

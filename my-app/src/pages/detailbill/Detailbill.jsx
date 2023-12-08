@@ -8,18 +8,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../../components/feature/user/userSlice';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom"
-import { deleteAllCart } from '../../components/feature/cart/cartSlice';
+import { deleteAllCart, getCart } from '../../components/feature/cart/cartSlice';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js'
 
 const Detailbill = () => {
     const accessToken = localStorage.getItem("accessToken")
     const { totalPriceCart } = useSelector(state => state.cart)
+    const { user } = useSelector(state => state.user)
     const navigate = useNavigate()
-    const dataOrder = JSON.parse(localStorage.getItem("dataOrder"))
     const dispatch = useDispatch()
 
     const initialOptions = {
-        clientId: "AaloxITGVIBmp89-HPQnRbTSCwvM3L-nbiYy9DYSwvC911BO9V3EE2fshj3-NxzhByaKotG72oXGSneb",
+        clientId: "AUeA4VW5yEVQ7motDiiXgJDLVSwFZkFUCkaPk9Q4YOEnUD22fe7676G1K-LKgGwEPrGHTdq9Ie_XvSaq",
         currency: "USD",
         intent: "capture",
     };
@@ -39,7 +39,7 @@ const Detailbill = () => {
                     },
                 }
             );
-            const order = response.data;
+            const order = response?.data;
             return order.id;
         } catch (error) {
             console.error('Error creating order:', error);
@@ -48,16 +48,18 @@ const Detailbill = () => {
     };
 
     const onApprove = (data) => {
+        console.log('onApprove');
         try {
             axios.post(
                 'http://localhost:8000/my-server/capture-paypal-order',
                 {
-                    fullname: dataOrder.fullname,
-                    email: dataOrder.email,
-                    address: dataOrder.detailaddress + " " + dataOrder.wards + " " + dataOrder.district + " " + dataOrder.province,
-                    phonenumber: dataOrder.phonenumber,
+                    firstname: user[0]?.firstname,
+                    lastname: user[0]?.lastname,
+                    email: user[0]?.email,
+                    address: user[0]?.address + " " + user[0]?.wards + " " + user[0]?.district + " " + user[0]?.province,
+                    phonenumber: user[0]?.phonenumber,
                     cost: totalPriceCart,
-                    orderID: data.orderID,
+                    orderID: data?.orderID,
                 },
                 {
                     headers: {
@@ -66,11 +68,14 @@ const Detailbill = () => {
                     },
                 }
             )
-                .then(response => response.data)
+                .then(response => response?.data)
                 .then(() => {
-                    dispatch(deleteAllCart({ accessToken }));
-                    navigate("/cartthanks")
-                    localStorage.removeItem("dataOrder")
+                    dispatch(deleteAllCart({ accessToken }))
+                        .then(() => {
+                            dispatch(getCart({ accessToken }))
+                            navigate("/cartthanks")
+                            localStorage.removeItem("user[0]")
+                        })
                 })
                 .catch(error => console.log(error))
         } catch (error) {
@@ -79,16 +84,17 @@ const Detailbill = () => {
         }
     };
 
-    useEffect(() => {
-        dispatch(getUser({ accessToken }))
-    }, [])
+    // useEffect(() => {
+    //     dispatch(getUser({ accessToken }))
+    // }, [])
 
     const handle_checkout = () => {
         axios.post("http://localhost:8000/invoice/checkout", {
-            fullname: dataOrder.fullname,
-            email: dataOrder.email,
-            address: dataOrder.detailaddress + " " + dataOrder.wards + " " + dataOrder.district + " " + dataOrder.province,
-            phonenumber: dataOrder.phonenumber,
+            firstname: user[0].firstname,
+            lastname: user[0].lastname,
+            email: user[0].email,
+            address: user[0].detailaddress + " " + user[0].wards + " " + user[0].district + " " + user[0].province,
+            phonenumber: user[0].phonenumber,
             totalprice: totalPriceCart
 
         }, {
@@ -99,7 +105,7 @@ const Detailbill = () => {
             .then(() => {
                 dispatch(deleteAllCart({ accessToken }));
                 navigate("/cartthanks")
-                localStorage.removeItem("dataOrder")
+                localStorage.removeItem("user[0]")
             })
             .catch(error => console.log(error))
     }
@@ -116,43 +122,50 @@ const Detailbill = () => {
                             <div className="detailbill__info-common">
                                 <p>
                                     <span className='info-common-before'>Customer Name:</span>
-                                    {dataOrder.fullname}
+                                    {user[0]?.firstname + " " + user[0]?.lastname}
                                 </p>
                             </div>
                             <div className="detailbill__info-common">
                                 <p>
                                     <span className='info-common-before'>Phone Number:</span>
-                                    {dataOrder.phonenumber}
+                                    {user[0]?.phonenumber}
                                 </p>
                             </div>
                             <div className="detailbill__info-common">
                                 <p>
                                     <span className='info-common-before'>Email:</span>
-                                    {dataOrder.email}
+                                    {user[0]?.email}
                                 </p>
                             </div>
                             <div className="detailbill__info-common">
                                 <p>
                                     <span className='info-common-before'>Receive Products At:</span>
                                     <span>
-                                        {dataOrder.detailaddress} {dataOrder.wards} {dataOrder.district} {dataOrder.province}
+                                        {user[0]?.detailaddress} {user[0]?.wards} {user[0]?.district} {user[0]?.province}
                                     </span>
                                 </p>
                             </div>
                             <div className="detailbill__info-common">
                                 <p>
                                     <span className='info-common-before'>Total Money</span>
-                                    {totalPriceCart.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                                    {totalPriceCart.toLocaleString('en-US').replace(/,/g, '.') + '$'}
                                 </p>
                             </div>
                         </div>
                     </div>
-                    <PayPalButtons
+                    {/* <PayPalButtons className='detailbill__paypalbtn'
                         createOrder={() => createOrder()}
                         onApprove={(data) => onApprove(data)}
-                    />
+                    /> */}
                 </Templatecart>
-                <Totalcart text__btn='CONTINUES' handle__checkout={handle_checkout} />
+                <Totalcart
+                    text__btn='CONTINUES'
+                    handle__checkout={handle_checkout}
+                    PayPalButtons={<PayPalButtons className='detailbill__paypalbtn'
+                        createOrder={() => createOrder()}
+                        onApprove={(data) => onApprove(data)}
+                    />}
+                />
             </PayPalScriptProvider>
         </>
     )

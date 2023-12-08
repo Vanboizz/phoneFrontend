@@ -28,13 +28,14 @@ const Purchase = () => {
             },
         })
             .then((data) => {
-                Setdatas(data.data.result)
+                Setdatas(data?.data?.result)
             })
             .catch((error) => {
                 console.log(error);
             })
         return response;
     }
+    console.log(datas);
 
     const deleteInvoice = async (idiv) => {
         const response = await axios.post('http://localhost:8000/invoice/detelecheckout', { idiv },
@@ -107,6 +108,7 @@ const Purchase = () => {
 
     return (
         <>
+        {/* <div>dasdsa</div> */}
             {
                 (statusSee === -1 ?
                     (<div className='purchase'>
@@ -158,15 +160,15 @@ const Purchase = () => {
                                             <p className="purchase__list-item-id">{data[0]?.idiv}</p>
 
                                             <div className="purchase__list-item-time">
-                                                {(new Date(data[0].ivday).getFullYear() + '-' + (new Date(data[0].ivday).getMonth() + 1) + '-' + new Date(data[0].ivday).getDate())}
+                                                {(new Date(data[0]?.ivday).getFullYear() + '-' + (new Date(data[0]?.ivday).getMonth() + 1) + '-' + new Date(data[0]?.ivday).getDate())}
                                                 
                                                 <br /> 
                                                 
-                                                {(new Date(data[0].ivday).getHours() + ":" + new Date(data[0].ivday).getMinutes() + ":" + new Date(data[0].ivday).getSeconds())}
+                                                {(new Date(data[0]?.ivday).getHours() + ":" + new Date(data[0]?.ivday).getMinutes() + ":" + new Date(data[0]?.ivday).getSeconds())}
                                             </div>
 
-                                            <div className="purchase__list-data-price">{(data[0].totalprice).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</div>
-                                            <div className={`purchase__list-item-status purchase__list-item-status-${data[0].statusiv}`}>{data[0].statusiv}</div>
+                                            <div className="purchase__list-data-price">{(data[0]?.totalprice).toLocaleString('en-US').replace(/,/g, '.') + '$'}</div>
+                                            <div className={`purchase__list-item-status purchase__list-item-status-${data[0]?.statusiv}`}>{data[0]?.statusiv}</div>
                                             <div className="purchase__list-item-btn">
                                                 <button
                                                     onClick={() => getStatusSee(i, data)}

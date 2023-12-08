@@ -20,21 +20,45 @@ const Login = () => {
     const dispatch = useDispatch()
     const accessToken = localStorage.getItem("accessToken")
 
-    useEffect(() => {
-        if (accessToken && user?.role != 'admin') {
-            navigate("/")
-        } else if (accessToken && user?.role === 'admin') {
-            navigate("/admin/productlist")
-        }
-        if (isError) {
-            toast.error(message)
-            setInputEmail("")
-            setInputPassword("")
-        }
-    }, [isError, user])
+
 
     const submitForm = (data) => {
         dispatch(loginUser(data))
+            .then((res) => {
+                if (res?.payload && res?.payload?.role === 'user') {
+                    navigate("/")
+                    toast.success(
+                        'Login Successfully',
+                        {
+                            position: 'top-right',
+                            autoClose: 3000,
+                            style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                        }
+                    );
+                }
+                else if (res?.payload && res?.payload?.role === 'admin') {
+                    navigate("/admin/dashboard")
+                    toast.success(
+                        'Login Successfully',
+                        {
+                            position: 'top-right',
+                            autoClose: 3000,
+                            style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                        }
+                    );
+                } else if (res?.payload === undefined) {
+                    toast.error(
+                        "Login failed",
+                        {
+                            position: 'top-right',
+                            autoClose: 3000,
+                            style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                        }
+                    );
+                    setInputEmail("")
+                    setInputPassword("")
+                }
+            })
     }
 
     return (

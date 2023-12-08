@@ -39,20 +39,22 @@ const ProductsModifier = () => {
         const { name, value } = e.target;
         setData({ ...data, [name]: value })
     }
-    useEffect(() => {
-        if (location.state !== null) {
-            localStorage.setItem('productdetail', JSON.stringify(location?.state?.product))
-            setData({ name: productloca.nameproducts, discount: productloca.discount, promotion: productloca.promotion, description: productloca.description })
-            setSelect(productloca.idcate)
 
-            productloca.image.forEach(element => {
-                preview.push(element.avt)
+
+    useEffect(() => {
+        if (location?.state !== null) {
+            localStorage.setItem('productdetail', JSON.stringify(location?.state?.product))
+            setData({ name: productloca?.nameproducts, discount: productloca?.discount, promotion: productloca?.promotion, description: productloca?.description })
+            setSelect(productloca?.idcate)
+
+            productloca?.image.forEach(element => {
+                preview?.push(element.avt)
                 setPreview([... new Set(preview)])
             });
 
-            setSize(productloca.size);
+            setSize(productloca?.size);
         }
-    }, [])
+    }, [location?.state])
 
     const handleAddUnit = (e) => {
         e.preventDefault()
@@ -90,20 +92,34 @@ const ProductsModifier = () => {
         return response;
 
     };
-    
+
 
     const handleAddProducts = async (e) => {
         e.preventDefault()
-        
+
         var flag = 0;
         size.forEach(sizeitem => {
-            if (sizeitem.color.length === 0) flag = 1;
+            if (sizeitem?.color?.length === 0) flag = 1;
         });
         if (flag === 1) {
-            toast.error("1 size must have at least 1 color")
+            toast.error(
+                '1 size must have at least 1 color',
+                {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                }
+            );
         }
         else if (preview.length === 0) {
-            toast.error("Must have at least 1 photo")
+            toast.error(
+                'Must have at least 1 photo',
+                {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                }
+            );
         }
         else if (location.state !== null) { // Update product
             const productlocal = JSON.parse(localStorage.getItem('productdetail'));
@@ -134,12 +150,15 @@ const ProductsModifier = () => {
                 }),
             }
             const response = await updateProducts(productupdate)
-            toast(response.data.message)
-            
-            setTimeout(() => {
-                navigate('/admin/productlist');
-            }, 2000)
-            
+            toast.success(
+                response.data.message,
+                {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                }
+            );
+            navigate('/admin/productlist');
         }
         else { // create product
             const product = {
@@ -155,11 +174,18 @@ const ProductsModifier = () => {
                 }),
                 images: preview,
             }
-            dispatch(addProducts({ product: product }))
-            toast("Add Products Is Succesfull")
-            setTimeout(() => {
+            dispatch(addProducts({ product: product })).then(() => {
+                toast.success(
+                    'Add Products Is Succesfull',
+                    {
+                        position: 'top-right',
+                        autoClose: 3000,
+                        style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                    }
+                );
                 navigate('/admin/productlist');
-            }, 2000)
+            })
+
         }
     }
 
@@ -229,7 +255,7 @@ const ProductsModifier = () => {
                                         <div key={index} className='sizes'>
 
                                             <p>{value.namesize}</p>
-                                            <p>{value.pricesize.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                                            <p>{value.pricesize.toLocaleString('en-US').replace(/,/g, '.') + '$'}</p>
                                             <div className='container-unit__namecolor'>
                                                 {
                                                     value.color.map((color, index) => (

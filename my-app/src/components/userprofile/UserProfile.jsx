@@ -12,16 +12,8 @@ import { PlusOutlined } from '@ant-design/icons'
 const UserProfile = () => {
 
     const dispatch = useDispatch()
-    const { user, accessToken } = useSelector(state => state.user)
-    console.log(user);
-    const [fullname, setFullName] = useState('')
-    const [firstname, setFirstName] = useState('')
-    const [lastname, setLastName] = useState('')
+    const { user, accessToken } = useSelector(state => state?.user)
     const [name, setName] = useState('')
-
-    const [email, setEmail] = useState('')
-    const [phonenumber, setPhonenumber] = useState('')
-
     const [dates, setDates] = useState([]);
 
     const [months, setMonths] = useState([]);
@@ -32,18 +24,16 @@ const UserProfile = () => {
     const [yearchoose, setYearChoose] = useState('');
 
     const [inputDate, setInputDate] = useState()
-    const [inputMonth, setInputMonth] = useState()
-    const [inputYear, setInputYear] = useState()
-
     const [gender, setGender] = useState()
 
     const {
         register,
         setValue,
         handleSubmit,
-        control
-    } = useForm()
+        control,
+        getValues,
 
+    } = useForm()
 
     const getDate = (d) => {
         var tempdates = []
@@ -52,9 +42,6 @@ const UserProfile = () => {
         }
         setDates(tempdates)
     }
-    useEffect(() => {
-        getDate(31)
-    }, [])
 
     const getMonth = (m) => {
         var tempmonth = []
@@ -104,6 +91,7 @@ const UserProfile = () => {
         return acceptedFormats.includes('.' + fileExtension.toLowerCase());
     };
     useEffect(() => {
+        getDate(31)
         const getYear = () => {
             const temp = new Date();
             const yearcurr = temp.getFullYear();
@@ -116,7 +104,44 @@ const UserProfile = () => {
         getMonth(12)
         getYear()
         setInputDate()
+
     }, [])
+
+    useEffect(() => {
+        if (user) {
+            setValue('firstname', user ? user[0]?.firstname : 0);
+            setValue('lastname', user ? user[0]?.lastname : 0);
+            setValue('email', user ? user[0]?.email : 0);
+            setValue('phonenumber', user ? user[0]?.phonenumber : 0);
+
+            setValue('date', user ? user[0]?.days : 0);
+            setValue('month', user ? user[0]?.months : 0);
+            setValue('year', user ? user[0]?.years : 0);
+            setValue('gender', user && user[0]?.gender !== null ? user[0]?.gender : null);
+            setFileList(user && user[0]?.avtuser
+                ? [
+                    {
+                        uid: '-1',
+                        name: 'image.png',
+                        status: 'done',
+                        url: user[0]?.avtuser
+                    }
+                ]
+                : []
+            )
+            setValue('avatar', user && user[0]?.avtuser
+                ? [
+                    {
+                        uid: '-1',
+                        name: 'image.png',
+                        status: 'done',
+                        thumbUrl: user[0]?.avtuser
+                    }
+                ]
+                : []
+            )
+        }
+    }, [user])
 
     const checkLeapYear = (y) => {
         return ((y % 4 === 0) && (y % 100 !== 0 || y % 400 === 0)) ? true : false
@@ -129,39 +154,58 @@ const UserProfile = () => {
         }
     }
 
-    // const updateUser = async () => {
-    //     const response = await axios.post(
-    //         "http://localhost:8000/auth/user/updateUser",
-    //         {
-    //             fullname: fullname,
-    //             email: email,
-    //             phonenumber: phonenumber,
-    //             gender: gender,
-    //             days: inputDate,
-    //             months: inputMonth,
-    //             years: inputYear
-    //         },
-    //         {
-    //             headers: {
-    //                 Authorization: "Bearer" + accessToken,
-    //             },
-    //         }
-    //     );
-    //     return response
-    // }
+    const updateUser = async (data) => {
+        console.log(data);
+
+        const response = await axios.post(
+            "http://localhost:8000/auth/user/updateUser",
+            {
+                firstName: data?.firstname,
+                lastName: data?.lastname,
+                avatar: data?.avatar[0]?.thumbUrl,
+                email: data?.email,
+                phonenumber: data?.phonenumber,
+                gender: data?.gender,
+                days: data?.date,
+                months: data?.month,
+                years: data?.year
+            },
+            {
+                headers: {
+                    Authorization: "Bearer " + accessToken,
+                },
+            }
+        );
+        return response
+    }
 
     const handleUpdateProfile = async (data) => {
         // e.preventDefault();
         console.log(data);
-        // if (inputDate === '0' || inputMonth === '0' || inputYear === '0')
-        //     toast.error("The date of birth has not been filled in")
-        // else {
-        //     toast("Successfully updated")
-        //     const res = await updateUser();
-        //     if (res.status === 200) {
-        //         dispatch(getUser(accessToken))
-        //     }
-        // }
+        if (data?.date === '0' || data?.month === '0' || data?.year === '0')
+            toast.error(
+                'The date of birth has not been filled in',
+                {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                }
+            );
+        else {
+            const res = await updateUser(data);
+            if (res.status === 200) {
+                dispatch(getUser(accessToken)).then((res) => {
+                    toast.success(
+                        'Successfully updated',
+                        {
+                            position: 'top-right',
+                            autoClose: 3000,
+                            style: { color: '$color-default', backgroundColor: '#DEF2ED' },
+                        }
+                    );
+                })
+            }
+        }
     }
     return (
         <div className='userprofile'>
@@ -174,7 +218,7 @@ const UserProfile = () => {
                     defaultValue={[]} // Giá trị mặc định của fileList
                     render={({ field }) => (
                         <>
-                            {/* <Upload
+                            <Upload
                                 accept='.png, .jpg'
                                 action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                                 listType="picture-circle"
@@ -204,8 +248,9 @@ const UserProfile = () => {
                                 }}
                                 className='wrapper-upload'
                             >
-                                {field?.value?.length >= 1 ? null : uploadButton}
-                            </Upload> */}
+                                {field?.value?.length >= 1 || fileList.length >= 1 ? null : uploadButton}
+
+                            </Upload>
 
                             <div className='row-one'>
                                 <div className='userprofile__form'>
@@ -262,7 +307,6 @@ const UserProfile = () => {
                             </div>
 
                             <div className="userprofile__form">
-
                                 <label className='userprofile__form-text'>GENDER</label>
 
                                 <div className='userprofile__form-choose'>
@@ -273,7 +317,6 @@ const UserProfile = () => {
                                             type="radio"
                                             value="Male"
                                             className='pick-up__input'
-                                            checked={user ? user[0]?.gender === "male" : false}
                                             onChange={e => setGender(e.target.value)}
                                         />
                                         <label htmlFor="html" className='pick-up__text'>Male</label>
@@ -286,8 +329,6 @@ const UserProfile = () => {
                                             {...register('gender')}
                                             value="Female"
                                             className='delivery__input'
-                                            
-                                            checked={user ? user[0]?.gender === "female" : false}
                                             onChange={(e) => setGender(e.target.value)}
                                         />
                                         <label htmlFor="html" className='delivery__text'>Female</label>
@@ -305,7 +346,6 @@ const UserProfile = () => {
                                         className='userprofile__form-birth-input'
                                         required
                                         {...register('date')}
-
                                     >
                                         <option value="0" placeholder=''>Date</option>
                                         {

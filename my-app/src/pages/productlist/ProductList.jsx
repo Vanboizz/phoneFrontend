@@ -85,7 +85,6 @@ const ProductList = () => {
                     <p className='productlist__detail-title-com'>Quantity</p>
                     <p className='productlist__detail-title-com'>Action</p>
                 </div>
-                {console.log(products.data)}
 
                 <div className='productlist__detail'>
                     {
@@ -108,7 +107,7 @@ const ProductList = () => {
                                                 data.size ? data.size.map((size, j) => (
                                                     <div className='productlist__detail-product-size' key={j}>
                                                         <p className='productlist__detail-title-common'>{size.namesize}</p>
-                                                        <p className='productlist__detail-title-common productlist__detail-title-price'>{size.pricesize.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                                                        <p className='productlist__detail-title-common productlist__detail-title-price'>{size.pricesize.toLocaleString('en-US').replace(/,/g, '.') + '$'}</p>
 
                                                         <div className='productlist__detail-title-namecolor'>
                                                             {

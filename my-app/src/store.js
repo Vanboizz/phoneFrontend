@@ -1,15 +1,19 @@
 import { configureStore } from "@reduxjs/toolkit";
-import productsReducer from "./components/feature/products/productsSlice";
-import userReducer from "./components/feature/user/userSlice";
-import cartReducer from "./components/feature/cart/cartSlice"
-import favoriteReducer from "./components/feature/favorite/favoriteSlice"
+import { productsSlice } from "./components/feature/products/productsSlice";
+import { userSlice } from "./components/feature/user/userSlice";
+import { cartSlice } from "./components/feature/cart/cartSlice"
+import { favoriteSlice } from "./components/feature/favorite/favoriteSlice"
+import statisticSlice from "./components/feature/statistic/statisticSlice";
+import chatSlice from "./components/feature/chat/chatSlice";
 
 const store = configureStore({
   reducer: {
-    products: productsReducer,
-    user: userReducer,
-    cart: cartReducer,
-    favorite: favoriteReducer
+    products: productsSlice.reducer,
+    user: userSlice.reducer,
+    cart: cartSlice.reducer,
+    favorite: favoriteSlice.reducer,
+    statistic: statisticSlice.reducer,
+    chat: chatSlice.reducer,
   },
 });
 

@@ -83,12 +83,19 @@
   cursor: pointer;
 }
 
-.header-manager .list-option__option .option__icon-home,
-.header-manager .list-option__option .option__icon-phone,
-.header-manager .list-option__option .option__icon-pen,
-.header-manager .list-option__option .option__icon-cart,
-.header-manager .list-option__option .option__icon-user,
-.header-manager .list-option__option .option__icon-seller {
+.header-manager .option__dashboard {
+  background-image: url("../../../public/dashboard.png");
+}
+
+.header-manager .option__product {
+  background-image: url("../../../public/box.png");
+}
+
+.header-manager .option__chat {
+  background-image: url("../../../public/chat.png");
+}
+
+.header-manager .list-option__option .option__icon {
   height: 25px;
   width: 25px;
   background-repeat: no-repeat;
@@ -184,4 +191,8 @@
   height: 23px;
   width: 23px;
   display: inline-block;
+}
+
+.header-manager :where(.css-dev-only-do-not-override-15rg2km).ant-btn-default:not(:disabled):hover {
+  color: white;
 }

@@ -58,6 +58,7 @@
 }
 
 .createdelivery_address .ant-select .ant-select-selector {
+    background-color: #f3f4f6;
     height: 40px;
 }
 

@@ -4,12 +4,14 @@ import { MdQuestionAnswer } from "react-icons/md"
 import dayjs from 'dayjs';
 import axios from 'axios';
 import ListReply from '../ListReply/ListReply';
+import { useSelector } from 'react-redux';
 
 const ListComment = (props) => {
     const { comment, accessToken, productsById } = props
     const [hidenFormReply, setHidenFormReply] = useState(false)
     const [reply, setReply] = useState("")
     const [listReply, setListReply] = useState([])
+    const {user} = useSelector(state => state?.user)
 
     const handleHidenFormReply = (e) => {
         e.preventDefault()
@@ -64,8 +66,8 @@ const ListComment = (props) => {
         <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                    <p style={{ backgroundColor: "#168d8d", color: "white", height: "32px", width: "32px", borderRadius: "50%", fontWeight: "bold", display: "flex", justifyContent: "center", alignItems: "center" }}>N</p>
-                    <h4>Nguyen Van Nam</h4>
+                    <img className='img-user' src={user ? user[0]?.avtuser : null} alt="" />
+                    <h4>{user ? user[0]?.firstname + ' ' + user[0]?.lastname  : null}</h4>
                 </div>
                 <div style={{ display: "flex", gap: "4px" }}>
                     <AiOutlineClockCircle />

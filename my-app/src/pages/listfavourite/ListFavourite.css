@@ -1,8 +1,20 @@
 .list-favourite {
-  margin: 94px 100px 0px 100px;
+  margin: 50px 100px 30px 100px;
   display: flex;
   flex-wrap: wrap;
   gap: 25px;
+  overflow: hidden;
+
+}
+
+.title__list-favourite {
+  margin-top: 94px;
+  text-transform: uppercase;
+  color: #1A94FF;
+  font-size: 32px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 .list-favourite .link {
