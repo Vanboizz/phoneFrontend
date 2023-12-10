@@ -1,7 +1,7 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import { getCart } from './components/feature/cart/cartSlice';
 
 import Home from './pages/home/Home';
@@ -32,6 +32,14 @@ export default function App() {
   const accessToken = localStorage.getItem('accessToken');
   const role = localStorage.getItem('role');
   const dispatch = useDispatch();
+  const currentPath = window.location.pathname;
+  const check = ['/admin/productsmodifier', '/admin/dashboard', '/admin/productlist'].includes(
+    currentPath
+  );
+
+  if (check && role === 'user') {
+    window.location.href = '/';
+  }
 
   useEffect(() => {
     dispatch(getCart({ accessToken }));

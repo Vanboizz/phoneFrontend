@@ -13,6 +13,9 @@ import { DownOutlined, UserOutlined } from '@ant-design/icons'
 
 const Header = (props) => {
   const { quantityCart } = useSelector((state) => state.cart);
+  const check = useSelector((state) => state.cart);
+  console.log(check);
+
   const { user } = useSelector((state) => state.user)
 
   const accessToken = localStorage.getItem("accessToken")
