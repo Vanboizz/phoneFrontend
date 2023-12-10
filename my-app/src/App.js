@@ -1,7 +1,7 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getCart } from './components/feature/cart/cartSlice';
 
 import Home from './pages/home/Home';
@@ -29,13 +29,13 @@ import ChatDetail from './pages/chatdetail/ChatDetail';
 import DashBoard from './pages/dashboard/DashBoard';
 
 export default function App() {
-  const { accessToken } = useSelector((state) => state.user);
+  const accessToken = localStorage.getItem('accessToken');
+  const role = localStorage.getItem('role');
   const dispatch = useDispatch();
+
   useEffect(() => {
-    if (accessToken) {
-      dispatch(getCart({ accessToken }));
-    }
-  }, [accessToken]);
+    dispatch(getCart({ accessToken }));
+  }, []);
 
   return (
     <>
@@ -59,22 +59,25 @@ export default function App() {
               path='/changepassword/:accessToken'
               element={<ChangePassword />}></Route>
             {/* Visitor */}
+
             <Route
               path='/'
               element={<Home />}></Route>
             <Route
               path='/category/:id'
               element={<Category />}></Route>
-            <Route
-              path='/cart'
-              element={<Cart />}></Route>
+
             <Route
               path='/productsdetail/:id'
               element={<ProductsDetail />}></Route>
+
             {/* user */}
             <Route
               path='/'
               element={<PrivateRoute />}>
+              <Route
+                path='/cart'
+                element={<Cart />}></Route>
               <Route
                 path='/profile'
                 element={<Profile />}></Route>
@@ -88,34 +91,30 @@ export default function App() {
                 path='/cartthanks'
                 element={<Cartthanks />}></Route>
               <Route
-                path='/profile'
-                element={<Profile />}></Route>
-              <Route
                 path='/listfavourite'
                 element={<ListFavourite />}></Route>
             </Route>
 
             {/* admin */}
-            <Route
-              path='/admin'
-              element={<PrivateRouteAdmin />}>
+            {accessToken && role === 'admin' && (
               <Route
-                path='/admin/productsmodifier'
-                element={<ProductsModifier />}
-              />
-              <Route
-                path='/admin/productlist'
-                element={<ProductList />}></Route>
-              <Route
-                path='/admin/dashboard'
-                element={<DashBoard />}></Route>
-            </Route>
-            <Route
-              path='/admin/productlist'
-              element={<ProductList />}></Route>
-            <Route
-              path='/admin/chatdetail'
-              element={<ChatDetail />}></Route>
+                path='/admin'
+                element={<PrivateRouteAdmin />}>
+                <Route
+                  path='/admin/productsmodifier'
+                  element={<ProductsModifier />}
+                />
+                <Route
+                  path='/admin/dashboard'
+                  element={<DashBoard />}></Route>
+                <Route
+                  path='/admin/productlist'
+                  element={<ProductList />}></Route>
+                <Route
+                  path='/admin/chatdetail'
+                  element={<ChatDetail />}></Route>
+              </Route>
+            )}
           </Routes>
         </div>
       </Router>

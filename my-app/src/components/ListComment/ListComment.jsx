@@ -11,7 +11,7 @@ const ListComment = (props) => {
     const [hidenFormReply, setHidenFormReply] = useState(false)
     const [reply, setReply] = useState("")
     const [listReply, setListReply] = useState([])
-    const {user} = useSelector(state => state?.user)
+    const { user } = useSelector(state => state?.user)
 
     const handleHidenFormReply = (e) => {
         e.preventDefault()
@@ -67,7 +67,7 @@ const ListComment = (props) => {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
                     <img className='img-user' src={user ? user[0]?.avtuser : null} alt="" />
-                    <h4>{user ? user[0]?.firstname + ' ' + user[0]?.lastname  : null}</h4>
+                    <h4>{user ? user[0]?.firstname + ' ' + user[0]?.lastname : null}</h4>
                 </div>
                 <div style={{ display: "flex", gap: "4px" }}>
                     <AiOutlineClockCircle />

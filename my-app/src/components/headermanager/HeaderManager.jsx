@@ -53,7 +53,7 @@ const HeaderManager = (props) => {
   return (
     <header className='header-manager'>
       <div className='container'>
-        <div className="logo">
+        <div className="logo" onClick={() => navigate('/')}>
         </div>
         <p className='title'>Seller Channel</p>
       </div>

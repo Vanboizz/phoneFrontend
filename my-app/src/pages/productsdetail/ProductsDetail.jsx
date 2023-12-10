@@ -540,15 +540,18 @@ const ProductsDetail = () => {
                         </div>
                         <div>
                         </div>
-                        <div className='format-button'>
-                            <div >
-                                <button onClick={() => handleAddToCart(1)}>BUY NOW</button>
+                        {
+                            localStorage.getItem("role") !== "admin" &&
+                            <div className='format-button'>
+                                <div >
+                                    <button onClick={() => handleAddToCart(1)}>BUY NOW</button>
+                                </div>
+                                <button className='cart' onClick={() => handleAddToCart(2)}>
+                                    <FaCartPlus style={{ fontSize: "1.2rem" }} />
+                                    <span className='btnadd'>ADD TO CART</span>
+                                </button>
                             </div>
-                            <button className='cart' onClick={() => handleAddToCart(2)}>
-                                <FaCartPlus style={{ fontSize: "1.2rem" }} />
-                                <span className='btnadd'>ADD TO CART</span>
-                            </button>
-                        </div>
+                        }
                         <div className='promotion'>
                             <div className='promotion-title'>
                                 EXTRA OFFER
