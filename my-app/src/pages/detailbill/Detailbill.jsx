@@ -8,12 +8,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../../components/feature/user/userSlice';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom"
-import { deleteAllCart, getCart } from '../../components/feature/cart/cartSlice';
+import { deleteAllCart, getCart, totalCart, productInCart } from '../../components/feature/cart/cartSlice';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js'
 
 const Detailbill = () => {
     const accessToken = localStorage.getItem("accessToken")
-    const { totalPriceCart } = useSelector(state => state.cart)
+    const { totalPriceCart, quantityCart } = useSelector(state => state.cart)
     const { user } = useSelector(state => state.user)
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -74,6 +74,8 @@ const Detailbill = () => {
                         .then(() => {
                             dispatch(getCart({ accessToken }))
                             navigate("/cartthanks")
+                            dispatch(totalCart(0))
+                            dispatch(productInCart([]))
                             localStorage.removeItem("user[0]")
                         })
                 })
@@ -83,10 +85,6 @@ const Detailbill = () => {
             throw error;
         }
     };
-
-    // useEffect(() => {
-    //     dispatch(getUser({ accessToken }))
-    // }, [])
 
     const handle_checkout = () => {
         axios.post("http://localhost:8000/invoice/checkout", {
@@ -104,6 +102,8 @@ const Detailbill = () => {
         })
             .then(() => {
                 dispatch(deleteAllCart({ accessToken }));
+                dispatch(totalCart(0))
+                dispatch(productInCart([]))
                 navigate("/cartthanks")
                 localStorage.removeItem("user[0]")
             })

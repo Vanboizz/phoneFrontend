@@ -16,11 +16,7 @@ const Login = () => {
     const [inputPassword, setInputPassword] = useState("")
     const [typePassword, setTypePassword] = useState("password")
     const { register, handleSubmit } = useForm()
-    const { user, isError, message } = useSelector(state => state.user)
     const dispatch = useDispatch()
-    const accessToken = localStorage.getItem("accessToken")
-
-
 
     const submitForm = (data) => {
         dispatch(loginUser(data))
@@ -35,6 +31,7 @@ const Login = () => {
                             style: { color: '$color-default', backgroundColor: '#DEF2ED' },
                         }
                     );
+                    localStorage.setItem("role", res?.payload?.role)
                 }
                 else if (res?.payload && res?.payload?.role === 'admin') {
                     navigate("/admin/dashboard")
@@ -46,6 +43,8 @@ const Login = () => {
                             style: { color: '$color-default', backgroundColor: '#DEF2ED' },
                         }
                     );
+                    localStorage.setItem("role", res?.payload?.role)
+
                 } else if (res?.payload === undefined) {
                     toast.error(
                         "Login failed",

@@ -17,6 +17,7 @@ import { HiChat } from 'react-icons/hi';
 import PopupChat from '../../components/popupchat/PopupChat'
 
 import { Button } from 'antd';
+import HeaderManager from '../../components/headermanager/HeaderManager'
 
 const Home = () => {
     const products = useSelector((state) => state?.products)
@@ -25,6 +26,7 @@ const Home = () => {
     const [inputhome, setInputHome] = useState('')
     const [isPopupChat, setIsPopupChat] = useState(false)
     const navigate = useNavigate()
+    const role = localStorage.getItem('role');
     var profilter = [];
 
     useEffect(() => {
@@ -47,7 +49,10 @@ const Home = () => {
     return (
         <>
             <div style={{ marginTop: "32px" }}>
-                <Header parentCallback={setInput} />
+                {
+                    role === "admin" ? <HeaderManager /> :
+                        <Header parentCallback={setInput} />
+                }
                 <Slider />
                 <div className='home'>
                     <div className='product-list-title'>
@@ -121,8 +126,8 @@ const Home = () => {
 
                                                 </SwiperSlide>
                                             )
-                                        }) 
-                                        : null
+                                        })
+                                    : null
                             }
                         </Swiper>
                         {

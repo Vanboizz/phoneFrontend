@@ -1,7 +1,7 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import userService from "./userService";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import userService from './userService';
 
-const accessToken = localStorage.getItem("accessToken");
+const accessToken = localStorage.getItem('accessToken');
 
 const initialState = {
   user: null,
@@ -11,11 +11,11 @@ const initialState = {
   success: false,
   success2: false,
   isLoading: false,
-  message: "",
+  message: '',
 };
 
 export const registerUser = createAsyncThunk(
-  "/register",
+  '/register',
   async ({ firstname, lastname, avatar, phonenumber, email, password }, thunkAPI) => {
     try {
       return userService.registerUser({
@@ -24,7 +24,7 @@ export const registerUser = createAsyncThunk(
         avatar,
         phonenumber,
         email,
-        password
+        password,
       });
     } catch (error) {
       const message =
@@ -36,38 +36,32 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-export const loginUser = createAsyncThunk(
-  "/login",
-  async ({ email, password }, thunkAPI) => {
-    try {
-      return userService.loginUser({ email, password });
-    } catch (error) {
-      const message =
-        (error.respone && error.respone.data && error.respone.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
+export const loginUser = createAsyncThunk('/login', async ({ email, password }, thunkAPI) => {
+  try {
+    return userService.loginUser({ email, password });
+  } catch (error) {
+    const message =
+      (error.respone && error.respone.data && error.respone.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
   }
-);
+});
 
-export const forgotPassword = createAsyncThunk(
-  "/forgotpassword",
-  async ({ email }, thunkAPI) => {
-    try {
-      return userService.forgotPassword({ email });
-    } catch (error) {
-      const message =
-        (error.respone && error.respone.data && error.respone.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
+export const forgotPassword = createAsyncThunk('/forgotpassword', async ({ email }, thunkAPI) => {
+  try {
+    return userService.forgotPassword({ email });
+  } catch (error) {
+    const message =
+      (error.respone && error.respone.data && error.respone.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
   }
-);
+});
 
 export const changePassword = createAsyncThunk(
-  "/changepassword/:accessToken",
+  '/changepassword/:accessToken',
   async ({ password, retypeNewPassword }, thunkAPI) => {
     try {
       return userService.changePassword({ password, retypeNewPassword });
@@ -81,41 +75,44 @@ export const changePassword = createAsyncThunk(
   }
 );
 
-export const getUser = createAsyncThunk(
-  "/getuser",
-  async (accessToken, thunkAPI) => {
-    try {
-      return userService.getUser(accessToken);
-    } catch (error) {
-      const message =
-        (error.respone && error.respone.data && error.respone.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
+export const getUser = createAsyncThunk('/getuser', async (accessToken, thunkAPI) => {
+  try {
+    return userService.getUser(accessToken);
+  } catch (error) {
+    const message =
+      (error.respone && error.respone.data && error.respone.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
   }
-);
+});
 
-export const getUsers = createAsyncThunk(
-  "/getusers",
-  async (accessToken, thunkAPI) => {
-    try {
-      return userService.getUsers(accessToken);
-    } catch (error) {
-      const message =
-        (error.respone && error.respone.data && error.respone.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
+export const getUsers = createAsyncThunk('/getusers', async (accessToken, thunkAPI) => {
+  try {
+    return userService.getUsers(accessToken);
+  } catch (error) {
+    const message =
+      (error.respone && error.respone.data && error.respone.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
   }
-);
+});
 
 export const updateUser = createAsyncThunk(
-  "/updateuser",
+  '/updateuser',
   async ({ fullname, email, phonenumber, gender, days, months, years, accessToken }, thunkAPI) => {
     try {
-      return userService.updateUser({ fullname, email, phonenumber, gender, days, months, years, accessToken });
+      return userService.updateUser({
+        fullname,
+        email,
+        phonenumber,
+        gender,
+        days,
+        months,
+        years,
+        accessToken,
+      });
     } catch (error) {
       const message =
         (error.respone && error.respone.data && error.respone.data.message) ||
@@ -127,12 +124,11 @@ export const updateUser = createAsyncThunk(
 );
 
 export const updateDetailAddress = createAsyncThunk(
-  "/updateDetailAddress",
+  '/updateDetailAddress',
   async (data, thunkAPI) => {
     try {
       return userService.updateDetailAddress(data);
-    }
-    catch (error) {
+    } catch (error) {
       const message =
         (error.respone && error.respone.data && error.respone.data.message) ||
         error.message ||
@@ -143,7 +139,7 @@ export const updateDetailAddress = createAsyncThunk(
 );
 
 export const createNewPassword = createAsyncThunk(
-  "/createnewpassword",
+  '/createnewpassword',
   async ({ curpass, newpass, accessToken }, thunkAPI) => {
     try {
       return userService.createNewPassword({ curpass, newpass, accessToken });
@@ -158,21 +154,22 @@ export const createNewPassword = createAsyncThunk(
 );
 
 export const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {
     reset: (state) => {
       state.isError = false;
       state.success = false;
       state.isLoading = false;
-      state.message = "";
+      state.message = '';
     },
     logout: (state) => {
-      localStorage.removeItem("accessToken");
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('role');
       state.isError = false;
       state.success = false;
       state.isLoading = false;
-      state.message = "";
+      state.message = '';
     },
   },
   extraReducers: (builder) => {
@@ -184,12 +181,12 @@ export const userSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.success = true;
         state.isLoading = false;
-        state.message = "Register is successfully";
+        state.message = 'Register is successfully';
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.isError = true;
         state.isLoading = false;
-        state.message = "Register is failed";
+        state.message = 'Register is failed';
       })
       //login
       .addCase(loginUser.pending, (state) => {
@@ -204,7 +201,7 @@ export const userSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = "Occupied Error";
+        state.message = 'Occupied Error';
       })
       //forgot password
       .addCase(forgotPassword.pending, (state) => {
@@ -214,12 +211,12 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.success = true;
         state.user = action.payload;
-        state.message = "Please check your email";
+        state.message = 'Please check your email';
       })
       .addCase(forgotPassword.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = "Invalid Email";
+        state.message = 'Invalid Email';
       })
       //change password
       .addCase(changePassword.pending, (state) => {
@@ -237,7 +234,6 @@ export const userSlice = createSlice({
       //get user
       .addCase(getUser.pending, (state) => {
         state.isLoading = true;
-
       })
       .addCase(getUser.fulfilled, (state, action) => {
         state.success = true;
@@ -279,7 +275,7 @@ export const userSlice = createSlice({
         state.success = false;
         state.success2 = false;
         state.isError = true;
-      })
+      });
   },
 });
 
