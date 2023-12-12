@@ -31,6 +31,7 @@
     padding: 20px 30px;
     height: 82vh;
     overflow-y: auto;
+    
 }
 
 .chat .input-message {
@@ -63,11 +64,8 @@
     transition: ease 0.3s;
 }
 
-/* .chat .input-message .input-message__img:hover {
-    color: #2e9eff;
-    transition: ease 0.3s;
-} */
 
-.input-message__img:hover {
-    color: red;
+.input-message__img img:hover {
+    opacity: 0.5;
+    transition: ease 0.3s;
 }

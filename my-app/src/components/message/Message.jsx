@@ -2,20 +2,23 @@ import React from "react"
 import "../message/Message.css"
 import { useSelector } from "react-redux"
 
-const Message = ({message}) => { 
+const Message = ({ message }) => {
     const { userChat } = useSelector(state => state.chat)
-    console.log(message ? message: null);
     return (
         <div className="message">
             <div className="messageInfo">
-                <img src="https://www.w3schools.com/howto/img_avatar.png" alt="" />
-                <span>just now</span>
+                <img src={userChat ? userChat?.avtuser : null} alt="" />
             </div>
             <div className="messageContent">
-                <p>hello</p>
+                <p className="messageContent-text">{message ? message?.text : null}</p>
+                {
+                    message?.img
+                        ? <img className="messageContent-img" src={message ? message?.img : null} alt="" />
+                        : null
+                }
             </div>
         </div>
     )
-} 
+}
 
 export default Message

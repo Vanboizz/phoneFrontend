@@ -20,6 +20,10 @@
     color: white;
 }
 
+.sidebar .sidebar__info p:hover {
+    cursor: default;
+}
+
 .sidebar .sidebar__info-user {
     display: flex;
     align-items: center;
@@ -51,6 +55,8 @@
     flex-direction: column;
     flex-grow: 1;
     overflow: auto;
+    padding: 7px;
+    gap: 7px;
 }
 
 .sidebar .item__chat:hover {
@@ -64,6 +70,7 @@
     padding: 15px 15px;
     gap: 10px;
     align-items: center;
+    border-radius: 6px;
 }
 
 .sidebar .list__chat .item__chat img {
@@ -77,4 +84,12 @@
     display: flex;
     flex-direction: column;
     gap: 3px;
+}
+
+.item__chat .last-message:hover {
+    cursor: default;
+}
+
+.list__chat .item__chat-active {
+    background-color: #c8e2f8;
 }

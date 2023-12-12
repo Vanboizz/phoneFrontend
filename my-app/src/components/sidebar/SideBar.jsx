@@ -11,6 +11,7 @@ import { changeUserChat } from '../feature/chat/chatSlice';
 const SideBar = () => {
 
     const { user, listUser } = useSelector((state) => state.user)
+    const { chatId } = useSelector(state => state.chat)
     const dispatch = useDispatch()
     const [userName, setUserName] = useState('')
     const [chats, setChats] = useState([])
@@ -39,39 +40,38 @@ const SideBar = () => {
     const handleSelect = async (userChoose) => {
 
         // Check whether the group (chats in firestore) exist or not, if not create
-        if (user) {
+        if (user && userChoose) {
             const combinedId =
                 user[0]?.idusers > userChoose?.idusers
                     ? user[0]?.idusers.toString() + userChoose?.idusers.toString()
                     : userChoose?.idusers.toString() + user[0]?.idusers.toString()
+
             dispatch(changeUserChat({ combinedId, userChat: userChoose }))
             try {
                 const res = await getDoc(doc(db, "chats", combinedId))
 
                 if (!res.exists()) {
                     // create a chat in chats collection
-                    console.log('go');
                     await setDoc(doc(db, 'chats', combinedId), { messages: [] })
 
                     // create user chats
-                    console.log('1');
                     await updateDoc(doc(db, 'adminChats', user[0]?.idusers.toString()), {
                         [combinedId + ".userInfo"]: {
                             idusers: userChoose?.idusers.toString(),
-                            displayName: userChoose?.firstname + ' ' + userChoose?.lastname,
+                            displayName: userChoose?.lastname,
                             photoURL: userChoose?.avtuser
                         },
                         [combinedId + ".date"]: serverTimestamp(),
                     })
 
-                    await updateDoc(doc(db, 'adminChats', userChoose?.idusers.toString()), {
-                        [combinedId + ".userInfo"]: {
-                            idusers: user[0]?.idusers.toString(),
-                            displayName: user[0]?.firstname + ' ' + user[0]?.lastname,
-                            photoURL: user[0]?.avtuser
-                        },
-                        [combinedId + ".date"]: serverTimestamp(),
-                    })
+                    // await updateDoc(doc(db, 'adminChats', userChoose?.idusers.toString()), {
+                    //     [combinedId + ".userInfo"]: {
+                    //         idusers: user[0]?.idusers.toString(),
+                    //         displayName: user[0]?.firstname + ' ' + user[0]?.lastname,
+                    //         photoURL: user[0]?.avtuser
+                    //     },
+                    //     [combinedId + ".date"]: serverTimestamp(),
+                    // })
                 }
                 else { // hiển thị đoạn chat
 
@@ -98,7 +98,6 @@ const SideBar = () => {
             user[0]?.idusers && getChats()
         }
     }, [user ? user[0]?.idusers : null])
-
     useEffect(() => {
         if (accessToken) {
             dispatch(getUser(accessToken))
@@ -137,11 +136,10 @@ const SideBar = () => {
                         return (
                             <div
                                 key={index}
-                                className="item__chat"
+                                className={combinedId === chatId ? "item__chat item__chat-active" : "item__chat"}
                                 onClick={() => handleSelect(itemUser)}
                             >
                                 <img src={itemUser ? itemUser?.avtuser : null} alt="" />
-                                {/* <img src={chat ? chat[1]?.userInfo?.photoURL : null} alt="" /> */}
 
                                 <div className="info__friend">
                                     <p
@@ -150,11 +148,11 @@ const SideBar = () => {
                                         {itemUser?.lastname}
                                     </p>
 
-                                    <span
+                                    <p
                                         style={{ fontSize: 14 }}
                                         className='last-message'>
-                                        {chat ? chat[1]?.userInfo?.lastMessage?.text : null}
-                                    </span>
+                                        {chat ? chat[1]?.lastMessage?.text : null}
+                                    </p>
                                 </div>
                             </div>
                         )
