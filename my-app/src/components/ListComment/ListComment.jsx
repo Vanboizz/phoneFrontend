@@ -52,6 +52,7 @@ const ListComment = (props) => {
             try {
                 const response = await axios.get(`http://localhost:8000/comment/getComment/${productsById.data.idproducts}`);
                 setListReply(response.data.data);
+                // console.log(response.data.data);
             } catch (error) {
                 console.log(error);
             }
@@ -97,7 +98,7 @@ const ListComment = (props) => {
                 <form action="" style={{ margin: "12px 0" }} onSubmit={handleSubmitReply}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <div>
-                            <p style={{ backgroundColor: "#168d8d", color: "white", height: "32px", width: "32px", borderRadius: "50%", fontWeight: "bold", display: "flex", justifyContent: "center", alignItems: "center" }}>N</p>
+                            <img className='img-user' src={user ? user[0]?.avtuser : null} alt="" />
                         </div>
                         <div>
                             <textarea

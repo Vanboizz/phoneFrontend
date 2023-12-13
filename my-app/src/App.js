@@ -31,7 +31,6 @@ import DashBoard from './pages/dashboard/DashBoard';
 export default function App() {
   const accessToken = localStorage.getItem('accessToken');
   const role = localStorage.getItem('role');
-  console.log(role);
   const dispatch = useDispatch();
   const currentPath = window.location.pathname;
   const check = ['/admin/productsmodifier', '/admin/dashboard', '/admin/productlist'].includes(

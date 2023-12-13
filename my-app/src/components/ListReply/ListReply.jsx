@@ -14,8 +14,8 @@ const ListReply = (props) => {
                 width: "calc(100% - 25px)"
             }}>
                 <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                    <p style={{ backgroundColor: "#1a94ff", color: "white", height: "32px", width: "32px", borderRadius: "50%", fontWeight: "bold", display: "flex", justifyContent: "center", alignItems: "center" }}>N</p>
-                    <h4>Nguyen Van Nam</h4>
+                    <img className='img-user' src={value.avtuser} alt="" />
+                    <h4>{value.firstname + ' ' + value.lastname}</h4>
                 </div>
                 <div style={{ display: "flex", gap: "4px" }}>
                     <AiOutlineClockCircle />
