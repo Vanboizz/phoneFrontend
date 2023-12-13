@@ -34,7 +34,7 @@ const Login = () => {
                     localStorage.setItem("role", res?.payload?.role)
                 }
                 else if (res?.payload && res?.payload?.role === 'admin') {
-                    navigate("/admin/dashboard")
+                    navigate("/")
                     toast.success(
                         'Login Successfully',
                         {
