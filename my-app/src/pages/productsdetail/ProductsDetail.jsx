@@ -223,7 +223,6 @@ const ProductsDetail = () => {
                         starRating: selectedStar
                     }
                 });
-                console.log(response.data.data);
                 setListEvaluate(response.data.data);
             } catch (error) {
                 console.log(error);
