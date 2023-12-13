@@ -17,8 +17,9 @@ const SideBar = () => {
     const [chats, setChats] = useState([])
 
     const accessToken = localStorage.getItem('accessToken')
-    const searchUsers = () => {
-        console.log('?');
+
+    const searchUsers = (e) => {
+        setUserName(e?.target?.value)
     }
 
     const handleSearch = async () => {
@@ -113,21 +114,21 @@ const SideBar = () => {
 
     return (
         <div className='sidebar'>
-            <div className='sidebar__info'>
+            {/* <div className='sidebar__info'>
                 <p >ChatBox</p>
                 <div className="sidebar__info-user">
                     <img src={user ? user[0]?.avtuser : ''} alt="" />
                     <p>{user ? user[0]?.lastname : ''}</p>
                 </div>
-            </div>
+            </div> */}
 
             <div className='sidebar__search'>
-                <input className='search-name' type="text" placeholder='Find a user' onKeyDown={handleKey} onChange={() => searchUsers()} />
+                <input className='search-name' type="text" placeholder='Find a user' onKeyDown={handleKey} onChange={(e) => searchUsers(e)} />
             </div>
 
             <div className='list__chat'>
                 {
-                    listUser.filter(item => item.role === "user").map((itemUser, index) => {
+                    listUser.filter(item => userName === "" ? item.role === "user" : (item.role === "user" && item.lastname === userName)).map((itemUser, index) => {
                         const combinedId =
                             user[0]?.idusers > itemUser?.idusers
                                 ? user[0]?.idusers.toString() + itemUser?.idusers.toString()
