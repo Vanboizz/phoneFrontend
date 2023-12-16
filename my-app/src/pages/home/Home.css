@@ -203,3 +203,26 @@
 .home .product-list a {
   text-decoration: none;
 }
+
+.chat-user {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #1a94ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+.chat-user_notice {
+  position: absolute;
+  top: -7px;
+  right: -5px;
+  height: 20px;
+  width: 20px;
+  color: red;
+}

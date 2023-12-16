@@ -61,6 +61,13 @@ const HeaderManager = (props) => {
       <ul className="list-option">
 
         <li className='list-option__item'>
+          <a className='list-option__option' onClick={() => navigate("/")}>
+            <div className="option__icon-home option__home"></div>
+            <p>Home</p>
+          </a>
+        </li>
+
+        <li className='list-option__item'>
           <a className='list-option__option' onClick={() => navigate('/admin/chatdetail')}>
             <div className="option__icon option__chat"></div>
             <p>Chat</p>

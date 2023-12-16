@@ -23,6 +23,7 @@ import { getUser } from '../../components/feature/user/userSlice';
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'; // Import plugin
 import ListComment from '../../components/ListComment/ListComment';
+import HeaderManager from '../../components/headermanager/HeaderManager';
 dayjs.extend(relativeTime);
 
 
@@ -123,6 +124,7 @@ const ProductsDetail = () => {
     const [comment, setComment] = useState("")
     const [listComment, setListComment] = useState([])
     const { cart } = useSelector(state => state.cart)
+    const role = localStorage.getItem('role');
 
     const handleAddToCart = async (number) => {
         if (!accessToken) {
@@ -376,7 +378,10 @@ const ProductsDetail = () => {
 
     return (
         <>
-            <Header />
+            {
+                role === "admin" ? <HeaderManager /> :
+                    <Header />
+            }
             <div className='product-detail'>
                 <div className='format-child'>
                     <div>

@@ -15,8 +15,7 @@ const Header = (props) => {
   const { quantityCart } = useSelector((state) => state.cart);
   const check = useSelector((state) => state.cart);
 
-  const { user } = useSelector((state) => state.user)
-
+  const { user, listUser } = useSelector((state) => state.user)
   const accessToken = localStorage.getItem("accessToken")
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -93,14 +92,14 @@ const Header = (props) => {
 
       <ul className="list-option">
         <li className='list-option__item'>
-          <a className='list-option__option' href='/admin/register'>
+          <a className='list-option__option' onClick={() => navigate("/admin/register")}>
             <div className="option__icon-seller option__seller"></div>
             <p>Seller Channel</p>
           </a>
         </li>
 
         <li className='list-option__item'>
-          <a className='list-option__option' href='/'>
+          <a className='list-option__option' onClick={() => navigate("/")}>
             <div className="option__icon-home option__home"></div>
             <p>Home</p>
           </a>
@@ -139,13 +138,13 @@ const Header = (props) => {
                           src={user ? user[0]?.avtuser : null}
                           className='avatar_user'
                         />
-                        {user && user?.length > 0 ? user[0]?.lastname : "Login"}
+                        <span className='dropdown-name'>{user && user?.length > 0 ? user[0]?.lastname : "Login"}</span>
                         <DownOutlined />
                       </Button>
                     </Dropdown>
                   </>
                 }
-              </div>
+            </div>
             </li>
 
             :

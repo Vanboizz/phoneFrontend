@@ -53,6 +53,7 @@ const Register = () => {
         }
         data.email = data.email.toLowerCase();
         dispatch(registerUser(data)).then(async (res) => {
+            console.log(res);
             if (res?.payload?.success) {
                 toast.success(
                     'Register successfully',

@@ -1,5 +1,25 @@
 import axios from "axios";
 // Gọi api thông qua axios
+
+
+const loginUser = async ({ email, password }) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const response = await axios.post(
+    "http://localhost:8000/auth/user/login",
+    {
+      email: email,
+      password: password,
+    },
+    config
+  );
+  localStorage.setItem("accessToken", response.data.accessToken);
+  return response.data;
+};
+
 //Register
 const registerUser = async ({ firstname, lastname, avatar, phonenumber, email, password }) => {
   const config = {
@@ -19,24 +39,7 @@ const registerUser = async ({ firstname, lastname, avatar, phonenumber, email, p
     },
     config
   );
-  return response.data;
-};
-
-const loginUser = async ({ email, password }) => {
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-  const response = await axios.post(
-    "http://localhost:8000/auth/user/login",
-    {
-      email: email,
-      password: password,
-    },
-    config
-  );
-  localStorage.setItem("accessToken", response.data.accessToken);
+  console.log(response);
   return response.data;
 };
 

@@ -1,7 +1,7 @@
 .chat {
     display: flex;
     flex-direction: column;
-    /* height: 90vh; */
+    height: 88vh;
     flex-grow: 1;
 }
 
@@ -25,12 +25,13 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    height: 92%;
 }
 
 .chat .list-message {
     padding: 20px 30px;
-    height: 27%;
-    overflow-y: auto; 
+    overflow: scroll;
+    height: 80vh;
 }
 
 .chat .input-message {
@@ -39,7 +40,7 @@
     background-color: white;
     border-top: 1px solid #cacaca;
     align-items: center;
-    height: 3%;
+    height: 10%;
 }
 
 .chat .input-message input {
@@ -67,4 +68,5 @@
 .input-message__img img:hover {
     opacity: 0.5;
     transition: ease 0.3s;
+    cursor: pointer;
 }

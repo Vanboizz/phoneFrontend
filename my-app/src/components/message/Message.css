@@ -1,6 +1,3 @@
-
-
-
 .message {
     display: flex;
     gap: 20px;
@@ -8,7 +5,11 @@
     flex-direction: row-reverse;
 }
 
-
+.message-user {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 15px;
+}
 
 .message .messageInfo img {
     width: 35px;
@@ -21,14 +22,13 @@
     flex-direction: column;
     align-items: end;
     gap: 8px;
+    max-width: 60%;
 }
 
 .message .messageContent .messageContent-text {
-    width: max-content;
-    padding: 10px 30px;
+    padding: 10px 15px;
     background-color: white;
     border-radius: 20px 0px 20px 20px;
 }
 
-.message .messageContent .messageContent-img {
-}
+.message .messageContent .messageContent-img {}

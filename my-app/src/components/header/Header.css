@@ -122,6 +122,13 @@ header .list-option .dropdown-user svg {
   font-size: 17px;
 }
 
+header .dropdown-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90px;
+}
+
 header .list-option__item-login {
   display: flex;
   flex-direction: column;

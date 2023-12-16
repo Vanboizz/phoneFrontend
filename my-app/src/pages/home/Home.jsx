@@ -15,43 +15,137 @@ import Footer from "../../components/footer/Footer"
 import axios from 'axios'
 import { HiChat } from 'react-icons/hi';
 import PopupChat from '../../components/popupchat/PopupChat'
-
+import { getDoc, doc, setDoc, updateDoc, serverTimestamp, onSnapshot, getDocs } from "firebase/firestore";
+import { db } from "../../firebase";
 import { Button } from 'antd';
 import HeaderManager from '../../components/headermanager/HeaderManager'
+import { getUsers } from '../../components/feature/user/userSlice'
+import { RiErrorWarningFill } from "react-icons/ri";
 
 const Home = () => {
     const products = useSelector((state) => state?.products)
-    const dispatch = useDispatch()
+    const { user, listUser } = useSelector((state) => state.user)
     const [category, setCategory] = useState([])
     const [inputhome, setInputHome] = useState('')
     const [isPopupChat, setIsPopupChat] = useState(false)
+    const [accountAdmin, setAccountAdmin] = useState({})
+    const [combinedId, setCombinedId] = useState()
+    const [chats, setChats] = useState([])
+    const [flagU, setFlagU] = useState()
+
+    const dispatch = useDispatch()
+    const accessToken = localStorage.getItem("accessToken")
+
     const navigate = useNavigate()
     const role = localStorage.getItem('role');
     var profilter = [];
 
     useEffect(() => {
         dispatch(getProducts())
+        dispatch(getUsers(accessToken))
+
         axios.get("http://localhost:8000/product/getcategory")
             .then(res => {
                 setCategory(res.data)
             })
             .catch(error => console.log(error))
+
     }, [])
+    useEffect(() => {
+        if (accountAdmin) {
+            const getChats = () => {
+                const unsub = onSnapshot(doc(db, "adminChats", accountAdmin?.idusers.toString()), (doc) => {
+                    setChats(doc.data())
+                });
+
+                return () => {
+                    unsub();
+                }
+            }
+            accountAdmin?.idusers && getChats()
+        }
+    }, [accountAdmin ? accountAdmin?.idusers : null])
+
+    useEffect(() => {
+        const chatEntry = chats ? Object.entries(chats).find(chat => chat[0] === combinedId) : null;
+        setFlagU(chatEntry ? chatEntry[1].flagUser : null);
+    }, [chats])
+
+    console.log(flagU ? flagU : null);
+
+    useEffect(() => {
+        if (listUser) {
+            const admin = listUser?.find(user => user?.role === 'admin')
+            setAccountAdmin(admin)
+        }
+    }, [listUser])
+
+    useEffect(() => {
+        if (user && accountAdmin?.idusers && user[0]?.role === 'user') {
+            setCombinedId(accountAdmin?.idusers > user[0]?.idusers
+                ? accountAdmin?.idusers.toString() + user[0]?.idusers.toString()
+                : user[0]?.idusers.toString() + accountAdmin?.idusers.toString())
+        }
+    }, [user, accountAdmin])
 
     const setInput = (childdata) => {
         setInputHome(childdata)
     }
 
-    const handlePopupChat = () => {
+    const handlePopupChat = async () => {
         setIsPopupChat(!isPopupChat)
+        // Thực hiện đưa code vào đây
+        try {
+            const res = await getDoc(doc(db, "chats", combinedId))
+            if (!res.exists()) {
+                console.log('create');
+                // create a chat in chats collection
+                await setDoc(doc(db, 'chats', combinedId), { messages: [] })
+
+                // create user chats
+                await updateDoc(doc(db, 'adminChats', accountAdmin?.idusers.toString()), {
+                    [combinedId + ".userInfo"]: {
+                        idusers: user[0]?.idusers.toString(),
+                        displayName: user[0]?.lastname,
+                        photoURL: user[0]?.avtuser
+                    },
+                    [combinedId + ".date"]: serverTimestamp(),
+                })
+            }
+            else if (flagU) {
+                await updateDoc(doc(db, "adminChats", accountAdmin?.idusers.toString()), {
+                    [combinedId + ".flagUser"]: false
+                });
+                setFlagU(!flagU)
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
+
+    useEffect(() => {
+        if (isPopupChat) {
+            console.log('?');
+            const checkNew = async () => {
+                try {
+                    await updateDoc(doc(db, "adminChats", accountAdmin?.idusers.toString()), {
+                        [combinedId + ".flagUser"]: false
+                    });
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            checkNew()
+        }
+    }, [isPopupChat, chats])
 
     return (
         <>
             <div style={{ marginTop: "32px" }}>
                 {
-                    role === "admin" ? <HeaderManager /> :
-                        <Header parentCallback={setInput} />
+                    role === "admin"
+                        ? <HeaderManager />
+                        : <Header parentCallback={setInput} />
                 }
                 <Slider />
                 <div className='home'>
@@ -135,7 +229,10 @@ const Home = () => {
                                 ?
                                 <div className='product-list-container'>
 
-                                    <img src="https://media.itsnicethat.com/original_images/giphy-2021-gifs-and-clips-animation-itsnicethat-02.gif" alt="" className='product-list-container__image' />
+                                    <img
+                                        src="https://media.itsnicethat.com/original_images/giphy-2021-gifs-and-clips-animation-itsnicethat-02.gif"
+                                        alt="" className='product-list-container__image'
+                                    />
 
                                     <h1 className='product-list-container__empty'>NO PRODUCT FOUND</h1>
                                 </div>
@@ -146,12 +243,25 @@ const Home = () => {
                 <Footer />
             </div>
 
-            {isPopupChat ? <PopupChat setIsPopupChat={setIsPopupChat} /> : <div onClick={handlePopupChat} style={{
-                width: "48px", height: "48px", borderRadius: "50%", backgroundColor: "#1a94ff", display: "flex", justifyContent
-                    : "center", alignItems: "center", cursor: "pointer", position: "fixed", bottom: "20px", right: "20px"
-            }}>
-                <HiChat style={{ color: "white", fontSize: "32px" }} />
-            </div>}
+            {
+                role === 'user'
+                    ? isPopupChat
+                        // chat
+                        ? <PopupChat setIsPopupChat={setIsPopupChat} combinedId={combinedId} accountAdmin={accountAdmin} />
+                        : <>
+                            <div onClick={handlePopupChat}
+                                className='chat-user'
+                            >
+                                {
+                                    flagU
+                                        ? <RiErrorWarningFill className='chat-user_notice' />
+                                        : null
+                                }
+                                <HiChat style={{ color: "white", fontSize: "32px" }} />
+                            </div>
+                        </>
+                    : null
+            }
         </>
     )
 }

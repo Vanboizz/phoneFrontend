@@ -10,6 +10,7 @@ import Footer from "../../components/footer/Footer"
 import axios from 'axios'
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa'
 import { Button } from 'antd';
+import HeaderManager from '../../components/headermanager/HeaderManager';
 
 const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -20,6 +21,7 @@ const Category = () => {
     const [category, setCategory] = useState([])
     const [More, setMore] = useState(false)
     const [categorytemp, setCategorytemp] = useState([])
+    const role = localStorage.getItem('role');
 
     useEffect(() => {
         axios.get(`http://localhost:8000/product/getcategory/${window.location.href.substring(
@@ -53,7 +55,10 @@ const Category = () => {
     }
     return (
         <>
-            <Header />
+            {
+                role === "admin" ? <HeaderManager /> :
+                    <Header />
+            }
             <div className='category'>
                 {
                     categorytemp.length !== 0 ?

@@ -2,20 +2,41 @@ import React, { useEffect, useRef, useState } from 'react'
 import { IoMdClose } from "react-icons/io"
 import { IoIosSend } from "react-icons/io";
 import "../popupchat/PopupChat.css"
+import { db, storage } from '../../firebase';
+import { v4 as uuid } from 'uuid'
+import { Image } from 'antd';
+import { Timestamp, arrayUnion, doc, serverTimestamp, updateDoc, onSnapshot } from 'firebase/firestore';
+import { useSelector } from 'react-redux';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { toast } from 'react-toastify';
+
 
 const PopupChat = (props) => {
+    const { user } = useSelector((state) => state.user)
     const { setIsPopupChat } = props
     const messageContainerRef = useRef(null)
-    const [chat, setChat] = useState("")
     const [messages, setMessages] = useState([]);
+    const [img, setImg] = useState(null)
+    const [text, setText] = useState("")
 
-    const handleCloseModalChat = () => {
-        setIsPopupChat(false)
-    }
+    useEffect(() => {
+        if (props?.combinedId) {
+            const unsub = onSnapshot(doc(db, "chats", props?.combinedId), (doc) => {
+                doc.exists() && setMessages(doc.data()?.messages)
+            });
+            return () => {
+                unsub()
+            }
+        }
+    }, [props?.combinedId])
 
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
+
+    const handleCloseModalChat = () => {
+        setIsPopupChat(false)
+    }
 
     const scrollToBottom = () => {
         const container = messageContainerRef.current;
@@ -26,20 +47,76 @@ const PopupChat = (props) => {
 
     const handleSubmitForm = (e) => {
         e.preventDefault();
-        setChat('');
+        handleSend();
         scrollToBottom();
     }
 
+    const handleSend = async () => {
+        if (user) {
+            if (img) {
+                const storageRef = ref(storage, uuid());
+                const uploadTask = uploadBytesResumable(storageRef, img);
+
+                uploadTask.on(
+                    (error) => {
+                        console.log(error);
+                    },
+                    () => {
+                        getDownloadURL(uploadTask.snapshot.ref)
+                            .then(async (downloadURL) => {
+                                await updateDoc(doc(db, 'chats', props?.combinedId), {
+                                    messages: arrayUnion({
+                                        id: uuid(),
+                                        text,
+                                        senderId: user[0]?.idusers,
+                                        date: Timestamp.now(),
+                                        img: downloadURL,
+                                    })
+                                })
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            })
+
+                    }
+                );
+            } else if (text !== '') {
+                await updateDoc(doc(db, "chats", props?.combinedId), {
+                    messages: arrayUnion({
+                        id: uuid(),
+                        text,
+                        senderId: user[0]?.idusers,
+                        date: Timestamp.now(),
+                    })
+                })
+            } else {
+                toast.warn('Please enter a message', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    style: { backgroundColor: '#D7F1FD' },
+                });
+            }
+
+            await updateDoc(doc(db, "adminChats", props?.accountAdmin?.idusers.toString()), {
+                [props?.combinedId + ".lastMessage"]: {
+                    text,
+                },
+                [props?.combinedId + ".date"]: serverTimestamp(),
+                [props?.combinedId + ".flagAdmin"]: true,
+            });
+            setText('')
+            setImg(null)
+        }
+    }
     return (
-        <div style={{ position: "fixed", bottom: "20px", right: "20px", zIndex: "99999" }}>
+        <div style={{ position: "fixed", bottom: "20px", right: "20px", zIndex: "99999", backgroundColor: 'white', borderRadius: '8px' }}>
             <div style={{ width: "350px", height: "480px", boxShadow: "0 0 20px rgba(0, 0, 0, 0.5)", borderRadius: "8px" }}>
-                <div style={{ width: "350px", height: "50px", backgroundColor: "#1a94ff", borderRadius: "8px 8px 0 0" }}>
+                <div style={{ width: "350px", height: "60px", backgroundColor: "#1a94ff", borderRadius: "8px 8px 0 0" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: "0" }}>
-                        <div style={{ display: "flex", gap: "4px", alignItems: "center", paddingLeft: "8px" }}>
-                            <div style={{ backgroundColor: "blue", width: "32px", height: "32px", borderRadius: "50%" }}></div>
+                        <div style={{ display: "flex", gap: "6px", alignItems: "center", paddingLeft: "15px" }}>
+                            <img style={{ width: "32px", height: "32px", borderRadius: "50%" }} src={props?.accountAdmin ? props?.accountAdmin?.avtuser : null}></img>
                             <div style={{ color: "#fff" }}>
-                                <h4>Elliot Egharevba</h4>
-                                <h5>Stream Speciallist</h5>
+                                <h4>{props?.accountAdmin?.lastname}</h4>
                             </div>
                         </div>
                         <div style={{ padding: "16px", cursor: "pointer" }} onClick={handleCloseModalChat}>
@@ -47,60 +124,97 @@ const PopupChat = (props) => {
                         </div>
                     </div>
                     <div ref={messageContainerRef} style={{ overflowY: "scroll", overflowX: "hidden", height: "360px" }} className='custom-scroll'>
-                        <div style={{ display: "flex", alignItems: "flex-end", padding: "8px" }}>
-                            <div>
-                                <img style={{ width: "32px", height: "32px", borderRadius: "50%" }} src="https://scontent.xx.fbcdn.net/v/t39.30808-1/365565269_3603515913266585_7906588074020528425_n.jpg?stp=dst-jpg_p100x100&_nc_cat=109&ccb=1-7&_nc_sid=5fac6f&_nc_ohc=wDT4wgye6EIAX9UYdEG&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=00_AfBQo6iTGC5s8V3DmPjKBf0ZLVN7plpQGqKVsOAyjyEBoA&oe=652B5C90" alt="" />
-                            </div>
-                            <div style={{ flex: "1", marginLeft: "8px" }}>
-                                <p style={{ backgroundColor: "#F1F4F7", maxWidth: "28%", wordWrap: "break-word", padding: "8px", borderRadius: "12px" }}>
-                                    Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                                </p>
-                            </div>
-                        </div>
-                        <div style={{ display: "flex", alignItems: "flex-end", padding: "8px" }}>
-                            <div style={{ flex: "1" }}></div>
-                            <div style={{ maxWidth: "72%", wordWrap: "break-word", padding: "8px", borderRadius: "12px", backgroundColor: "#1a94ff", color: "white" }}>
-                                Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                            </div>
-                        </div>
-                        <div style={{ display: "flex", alignItems: "flex-end", padding: "8px" }}>
-                            <div>
-                                <img style={{ width: "32px", height: "32px", borderRadius: "50%" }} src="https://scontent.xx.fbcdn.net/v/t39.30808-1/365565269_3603515913266585_7906588074020528425_n.jpg?stp=dst-jpg_p100x100&_nc_cat=109&ccb=1-7&_nc_sid=5fac6f&_nc_ohc=wDT4wgye6EIAX9UYdEG&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=00_AfBQo6iTGC5s8V3DmPjKBf0ZLVN7plpQGqKVsOAyjyEBoA&oe=652B5C90" alt="" />
-                            </div>
-                            <div style={{ flex: "1", marginLeft: "8px" }}>
-                                <p style={{ backgroundColor: "#F1F4F7", maxWidth: "28%", wordWrap: "break-word", padding: "8px", borderRadius: "12px" }}>
-                                    Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                                </p>
-                            </div>
-                        </div>
-                        <div style={{ display: "flex", alignItems: "flex-end", padding: "8px" }}>
-                            <div style={{ flex: "1" }}></div>
-                            <div style={{ maxWidth: "72%", wordWrap: "break-word", padding: "8px", borderRadius: "12px", backgroundColor: "#1a94ff", color: "white" }}>
-                                Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                            </div>
-                        </div>
-                        <div style={{ display: "flex", alignItems: "flex-end", padding: "8px" }}>
-                            <div>
-                                <img style={{ width: "32px", height: "32px", borderRadius: "50%" }} src="https://scontent.xx.fbcdn.net/v/t39.30808-1/365565269_3603515913266585_7906588074020528425_n.jpg?stp=dst-jpg_p100x100&_nc_cat=109&ccb=1-7&_nc_sid=5fac6f&_nc_ohc=wDT4wgye6EIAX9UYdEG&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=00_AfBQo6iTGC5s8V3DmPjKBf0ZLVN7plpQGqKVsOAyjyEBoA&oe=652B5C90" alt="" />
-                            </div>
-                            <div style={{ flex: "1", marginLeft: "8px" }}>
-                                <p style={{ backgroundColor: "#F1F4F7", maxWidth: "28%", wordWrap: "break-word", padding: "8px", borderRadius: "12px" }}>
-                                    Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                                </p>
-                            </div>
-                        </div>
-                        <div style={{ display: "flex", alignItems: "flex-end", padding: "8px" }}>
-                            <div style={{ flex: "1" }}></div>
-                            <div style={{ maxWidth: "72%", wordWrap: "break-word", padding: "8px", borderRadius: "12px", backgroundColor: "#1a94ff", color: "white" }}>
-                                Aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                            </div>
-                        </div>
+                        {
+                            messages
+                                ? messages?.map((message, index) => (
+                                    message?.senderId === user[0]?.idusers
+                                        // phải
+                                        ? (
+                                            <div key={index} style={{ display: "flex", alignItems: "flex-end", padding: "8px", flexDirection: 'column', gap: '5px' }}>
+                                                <div style={{ flex: "1" }}></div>
+                                                {
+                                                    message?.text !== ''
+                                                        ? (
+                                                            <div style={{ maxWidth: "72%", wordWrap: "break-word", padding: "8px", borderRadius: "12px", backgroundColor: "#1a94ff", color: "white" }}>
+                                                                {message?.text}
+                                                            </div>
+                                                        )
+                                                        : null
+                                                }
+                                                {
+                                                    message?.img
+                                                        ?
+                                                        <Image
+                                                            width={200}
+                                                            src={message?.img ? message?.img : null}
+                                                            style={{ marginTop: '10px' }}
+                                                        />
+                                                        : null
+                                                }
+                                            </div>
+                                        )
+                                        // trái
+                                        : (
+                                            <div key={index} style={{ display: "flex", alignItems: "flex-end", padding: "8px", alignItems: 'start' }}>
+                                                <div>
+                                                    <img style={{ width: "32px", height: "32px", borderRadius: "50%" }} src={props?.accountAdmin?.avtuser} alt="" />
+                                                </div>
+                                                <div style={{ flex: "1", marginLeft: "8px"}}>
+                                                    {
+                                                        message?.text
+                                                            ? <p style={{ backgroundColor: "#F1F4F7", width: 'fit-content', maxWidth: '70%', wordWrap: "break-word", padding: "8px", borderRadius: "12px" }}>
+                                                                {message.text}
+                                                            </p>
+                                                            : null
+                                                    }
+                                                    {
+                                                        message?.img
+                                                            ?
+                                                            <Image
+                                                                width={200}
+                                                                src={message?.img ? message?.img : null}
+                                                                style={{ marginTop: '10px' }}
+                                                            />
+                                                            : null
+                                                    }
+                                                </div>
+                                            </div>
+                                        )
+                                ))
+                                : null
+                        }
+
                     </div>
-                    <form onSubmit={handleSubmitForm} style={{ position: "absolute", bottom: "0", left: "0", width: "100%" }}>
-                        <div style={{ display: "flex", alignItems: "center", padding: "8px" }}>
-                            <div style={{ background: "#fff", width: "100%", padding: "8px", borderRadius: "8px", border: "1px solid #D3D3D3", display: "flex" }}>
-                                <input value={chat} onChange={(e) => setChat(e.target.value)} style={{ border: "none", outline: "none", flex: "1", marginLeft: "4px" }} type="text" placeholder='Enter a message' />
-                                <button style={{ border: "none", backgroundColor: "transparent", cursor: "pointer" }}>
+                    <form
+                        onSubmit={handleSubmitForm}
+                        style={{ position: "absolute", bottom: "0", left: "0", width: "100%" }}
+                    >
+                        <div
+                            style={{ display: "flex", alignItems: "center", padding: "8px" }}>
+                            <div
+                                style={{ background: "#fff", width: "100%", padding: "8px", borderRadius: "8px", border: "1px solid #D3D3D3", display: "flex", alignItems: 'center', gap: '7px' }}>
+                                <input
+                                    value={text}
+                                    onChange={(e) => setText(e.target.value)}
+                                    style={{ border: "none", outline: "none", flex: "1", marginLeft: "4px" }}
+                                    type="text"
+                                    placeholder='Enter a message'
+                                />
+
+                                <input
+                                    className='input-img'
+                                    type="file" id='file'
+                                    style={{ display: "none" }}
+                                    onChange={e => setImg(e.target.files[0])} />
+
+                                <label className='input-message__img' style={{ width: "20px", height: "20px" }} htmlFor="file">
+                                    <img style={{ width: "20px", height: "20px" }} src="/uploadimage.png" alt="" />
+                                </label>
+
+
+                                <button
+                                    style={{ border: "none", backgroundColor: "transparent", cursor: "pointer" }}
+                                >
                                     <IoIosSend style={{ fontSize: "24px", color: "#1a94ff" }} />
                                 </button>
                             </div>

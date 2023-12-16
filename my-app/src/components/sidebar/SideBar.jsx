@@ -16,6 +16,7 @@ const SideBar = () => {
     const [userName, setUserName] = useState('')
     const [chats, setChats] = useState([])
 
+
     const accessToken = localStorage.getItem('accessToken')
 
     const searchUsers = (e) => {
@@ -39,7 +40,7 @@ const SideBar = () => {
     // chats: sẽ tập hợp nhiều đoạn chat của từng cặp.
 
     const handleSelect = async (userChoose) => {
-
+        console.log('?');
         // Check whether the group (chats in firestore) exist or not, if not create
         if (user && userChoose) {
             const combinedId =
@@ -64,18 +65,6 @@ const SideBar = () => {
                         },
                         [combinedId + ".date"]: serverTimestamp(),
                     })
-
-                    // await updateDoc(doc(db, 'adminChats', userChoose?.idusers.toString()), {
-                    //     [combinedId + ".userInfo"]: {
-                    //         idusers: user[0]?.idusers.toString(),
-                    //         displayName: user[0]?.firstname + ' ' + user[0]?.lastname,
-                    //         photoURL: user[0]?.avtuser
-                    //     },
-                    //     [combinedId + ".date"]: serverTimestamp(),
-                    // })
-                }
-                else { // hiển thị đoạn chat
-
                 }
             } catch (error) {
                 console.log(error);
@@ -85,6 +74,17 @@ const SideBar = () => {
         // create user chats
     }
 
+    const handleClass = (combinedId, itemUser) => {
+
+        let className = 'item__chat '
+
+        if (combinedId === chatId)
+            className += "item__chat-active";
+        else if (itemUser[1]?.flagAdmin)
+            className += "item__chat-new"
+
+        return className;
+    }
     useEffect(() => {
         if (user) {
             const getChats = () => {
@@ -99,10 +99,26 @@ const SideBar = () => {
             user[0]?.idusers && getChats()
         }
     }, [user ? user[0]?.idusers : null])
+
+    useEffect(() => {
+        const checkNew = async () => {
+            try {
+                console.log(chatId);
+                await updateDoc(doc(db, "adminChats", user[0]?.idusers.toString()), {
+                    [chatId + ".flagAdmin"]: false
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        checkNew()
+    }, [chatId, chats])
+
     useEffect(() => {
         if (accessToken) {
             dispatch(getUser(accessToken))
             dispatch(getUsers(accessToken))
+
         }
     }, [])
 
@@ -125,43 +141,63 @@ const SideBar = () => {
             <div className='sidebar__search'>
                 <input className='search-name' type="text" placeholder='Find a user' onKeyDown={handleKey} onChange={(e) => searchUsers(e)} />
             </div>
-
+            {/* item.lastname?.toLowerCase().includes(userName.toLowerCase()) */}
             <div className='list__chat'>
                 {
-                    listUser.filter(item => userName === "" ? item.role === "user" : (item.role === "user" && item.lastname === userName)).map((itemUser, index) => {
-                        const combinedId =
-                            user[0]?.idusers > itemUser?.idusers
-                                ? user[0]?.idusers.toString() + itemUser?.idusers.toString()
-                                : itemUser?.idusers.toString() + user[0]?.idusers.toString()
-                        const chat = Object.entries(chats)?.find(chat => chat[0] === combinedId)
-                        return (
-                            <div
-                                key={index}
-                                className={combinedId === chatId ? "item__chat item__chat-active" : "item__chat"}
-                                onClick={() => handleSelect(itemUser)}
-                            >
-                                <img src={itemUser ? itemUser?.avtuser : null} alt="" />
 
-                                <div className="info__friend">
-                                    <p
-                                        style={{ fontWeight: 600 }}
-                                        className='name-friend'>
-                                        {itemUser?.lastname}
-                                    </p>
+                    Object.entries(chats)
+                        ?.filter(item => userName === "" ? true : (item[1]?.userInfo?.displayName?.toLowerCase().includes(userName.toLowerCase())))
+                        ?.sort((a, b) => b[1]?.date - a[1]?.date)
+                        ?.map((itemUser, index) => {
+                            const combinedId =
+                                user[0]?.idusers > itemUser[1]?.userInfo?.idusers
+                                    ? user[0]?.idusers.toString() + itemUser[1]?.userInfo?.idusers.toString()
+                                    : itemUser[1]?.userInfo?.idusers.toString() + user[0]?.idusers.toString()
+                            // const chat = Object.entries(chats)?.find(chat => chat[0] === combinedId)
+                            const chat = listUser?.find(u => u?.idusers.toString() === itemUser[1]?.userInfo?.idusers.toString())
+                            return (
+                                <div
+                                    key={index}
+                                    className={handleClass(combinedId, itemUser)}
+                                    onClick={() => handleSelect(chat)}
+                                >
+                                    <img src={chat ? chat?.avtuser : null} alt="" />
 
-                                    <p
-                                        style={{ fontSize: 14 }}
-                                        className='last-message'>
-                                        {chat ? chat[1]?.lastMessage?.text : null}
-                                    </p>
+                                    <div className="info__friend">
+                                        <p
+                                            style={{ fontWeight: 600 }}
+                                            className='name-friend'>
+                                            {chat?.lastname}
+                                        </p>
+
+                                        <p
+                                            style={{ fontSize: 14 }}
+                                            className='last-message'>
+                                            {itemUser[1]?.userInfo ? itemUser[1]?.lastMessage?.text : null}
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                        )
-                    })
+                            )
+                        })
+
                 }
+
+                {/* {
+                    Object.entries(chats).map(item => console.log(item[1]?.userInfo?.displayName))
+
+                } */}
             </div>
-        </div>
+        </div >
     )
 }
 
 export default SideBar
+
+// className={combinedId === chatId
+//     ? Object.entries(chats)?.find(chat => chat[0] === chatId)
+//         ? Object.entries(chats)?.find(chat => chat[0] === chatId)[1]?.flagAdmin
+//             ? "item__chat item__chat-active item__chat-new"
+//             : "item__chat item__chat-active"
+//         : "item__chat item__chat-active"
+//     : "item__chat"
+// }

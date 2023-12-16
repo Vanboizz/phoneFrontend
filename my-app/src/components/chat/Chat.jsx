@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { node } from 'prop-types';
 import { v4 as uuid } from 'uuid'
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { toast } from 'react-toastify';
 
 const Chat = () => {
     const [messages, setMessages] = useState([])
@@ -51,7 +52,7 @@ const Chat = () => {
 
                     }
                 );
-            } else {
+            } else if (text !== '') {
                 await updateDoc(doc(db, "chats", chatId), {
                     messages: arrayUnion({
                         id: uuid(),
@@ -60,6 +61,12 @@ const Chat = () => {
                         date: Timestamp.now(),
                     })
                 })
+            } else {
+                toast.warn('Please enter a message', {
+                    position: 'top-right',
+                    autoClose: 3000,
+                    style: { backgroundColor: '#D7F1FD' },
+                });
             }
 
             await updateDoc(doc(db, "adminChats", user[0]?.idusers.toString()), {
@@ -67,21 +74,17 @@ const Chat = () => {
                     text,
                 },
                 [chatId + ".date"]: serverTimestamp(),
+                [chatId + ".flagUser"]: true
             });
-
-            // await updateDoc(doc, (db, "userChats", userChat?.idusers), {
-            //     [chatId + ".lastMessage"]: {
-            //         text
-            //     },
-            //     [chatId + ".date"]: serverTimestamp(),
-            // })
             setText('')
             setImg(null)
         }
-
     }
     useEffect(() => {
+
         if (chatId) {
+            setText('')
+            setImg(null)
             const unsub = onSnapshot(doc(db, "chats", chatId), (doc) => {
                 doc.exists() && setMessages(doc.data()?.messages)
             });
@@ -89,15 +92,15 @@ const Chat = () => {
                 unsub()
             }
         }
+
     }, [chatId])
-    // console.log(messages ? messages : null);
     return (
         <div className='chat'>
 
             <div className='chat__with'>
                 <img src={userChat ? userChat?.avtuser : null} alt="" />
                 <div className="chat__with-right">
-                    <p style={{ fontWeight: 600, fontSize: 18 }}>{`Chat với ${userChat ? userChat?.lastname : null}`}</p>
+                    <p style={{ fontWeight: 600, fontSize: 18 }}>{`Chat with ${userChat ? userChat?.lastname : null}`}</p>
                 </div>
             </div>
 
@@ -106,22 +109,27 @@ const Chat = () => {
                 <div className="list-message">
                     {
                         messages
-                            ? messages?.map((m, index) => (
-                                <Message message={m} key={index} />
-                            ))
+                            ? messages?.map((m, index) => {
+                                return (
+                                    m?.senderId === user[0].idusers
+                                        ? <Message message={m} key={index} flag='admin' />
+                                        : <Message message={m} key={index} flag='user' />
+                                )
+                            })
                             : null
                     }
                 </div>
-
-                <div className="input-message">
+                <div
+                    className="input-message"
+                >
                     <input
                         onChange={e => setText(e.target.value)}
+                        required={true}
                         type="text"
                         value={text}
-                        placeholder={userChat ? `Gửi tin nhắn đến ${userChat ? userChat?.lastname : null}` : `Gửi tin nhắn đến ..`}
+                        placeholder={userChat ? `Send message to ${userChat ? userChat?.lastname : null}` : `Send message to ..`}
                         onKeyDown={handleKey}
                     />
-
 
                     <input
                         className='input-img'
@@ -133,7 +141,8 @@ const Chat = () => {
                         <img style={{ width: "20px", height: "20px" }} src="/uploadimage.png" alt="" />
                     </label>
 
-                    <AiOutlineSend onClick={() => handleSend()} className='icon__send' />
+
+                    <AiOutlineSend className='icon__send' onClick={() => handleSend()} />
 
                 </div>
 
