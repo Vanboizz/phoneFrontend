@@ -272,22 +272,22 @@ const ProductsDetail = () => {
     const renderStars = (averageValue) => {
         const stars = [];
         for (let i = 0; i < 5; i++) {
-            if (averageValue >= i + 0.5) {
-                stars.push(
-                    <FaStar
-                        key={i}
-                        style={{ color: "#ffbf00", fontSize: "14px" }}
-                    />
-                );
-            } else {
-                stars.push(
-                    <FaStar
-                        key={i}
-                        fill='rgba(145,158,171,.522)'
-                        style={{ fontSize: "14px" }}
-                    />
-                );
-            }
+            let starPercentage = Math.max(0, Math.min(100, (averageValue - i) * 100));
+            stars.push(
+                <div key={i} style={{ position: 'relative', display: 'inline-block', fontSize: '20px' }}>
+                    <FaStar fill='rgba(145,158,171,.522)' />
+                    <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: `${starPercentage}%`,
+                        overflow: 'hidden',
+                        height: '100%',
+                    }}>
+                        <FaStar style={{ color: "#ffbf00" }} />
+                    </div>
+                </div>
+            )
         }
         return stars;
     };

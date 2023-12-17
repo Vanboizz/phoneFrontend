@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getProducts } from '../../components/feature/products/productsSlice'
 import Slider from '../../components/slider/Slider'
-import { FaStar, FaPlusCircle } from 'react-icons/fa'
+import { FaStar, FaPlusCircle, FaStarHalf } from 'react-icons/fa'
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/grid";
@@ -148,27 +148,25 @@ const Home = () => {
         }
     }, [isPopupChat, chats])
 
-
     const renderStars = (averageValue) => {
-        console.log(averageValue);
         const stars = [];
         for (let i = 0; i < 5; i++) {
-            if (averageValue >= i + 0.5) {
-                stars.push(
-                    <FaStar
-                        key={i}
-                        style={{ color: "#ffbf00", fontSize: "14px" }}
-                    />
-                );
-            } else {
-                stars.push(
-                    <FaStar
-                        key={i}
-                        fill='rgba(145,158,171,.522)'
-                        style={{ fontSize: "14px" }}
-                    />
-                );
-            }
+            let starPercentage = Math.max(0, Math.min(100, (averageValue - i) * 100));
+            stars.push(
+                <div key={i} style={{ position: 'relative', display: 'inline-block', fontSize: '20px' }}>
+                    <FaStar fill='rgba(145,158,171,.522)' />
+                    <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: `${starPercentage}%`,
+                        overflow: 'hidden',
+                        height: '100%',
+                    }}>
+                        <FaStar style={{ color: "#ffbf00" }} />
+                    </div>
+                </div>
+            )
         }
         return stars;
     };
@@ -241,15 +239,17 @@ const Home = () => {
                                                                 <div>
                                                                     {
                                                                         rating.filter((item) => parseInt(item.idproducts) === value.idproducts).map((rate) => (
-                                                                            <div style={{ display: "flex", gap: "0.8rem", height: "24px" }}>
+                                                                            <div style={{ display: "flex", gap: "0.4rem", alignItems: "center" }}>
                                                                                 {renderStars(rate.averageRating)}
                                                                             </div>
                                                                         ))
                                                                     }
                                                                 </div>
-                                                                <button>
-                                                                    <FaPlusCircle className='circle' />
-                                                                </button>
+                                                                <div>
+                                                                    <button>
+                                                                        <FaPlusCircle className='circle' size={24} />
+                                                                    </button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </Link>
