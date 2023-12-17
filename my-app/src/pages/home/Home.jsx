@@ -40,6 +40,8 @@ const Home = () => {
     const role = localStorage.getItem('role');
     var profilter = [];
 
+    const [rating, setRating] = useState([])
+
     useEffect(() => {
         dispatch(getProducts())
         dispatch(getUsers(accessToken))
@@ -50,7 +52,14 @@ const Home = () => {
             })
             .catch(error => console.log(error))
 
+        axios.get("http://localhost:8000/evaluate/getAllEvaluate")
+            .then(res => {
+                setRating(res.data.data)
+            }).catch(error => console.log(error))
+
     }, [])
+
+
     useEffect(() => {
         if (accountAdmin) {
             const getChats = () => {
@@ -139,6 +148,31 @@ const Home = () => {
         }
     }, [isPopupChat, chats])
 
+
+    const renderStars = (averageValue) => {
+        console.log(averageValue);
+        const stars = [];
+        for (let i = 0; i < 5; i++) {
+            if (averageValue >= i + 0.5) {
+                stars.push(
+                    <FaStar
+                        key={i}
+                        style={{ color: "#ffbf00", fontSize: "14px" }}
+                    />
+                );
+            } else {
+                stars.push(
+                    <FaStar
+                        key={i}
+                        fill='rgba(145,158,171,.522)'
+                        style={{ fontSize: "14px" }}
+                    />
+                );
+            }
+        }
+        return stars;
+    };
+
     return (
         <>
             <div style={{ marginTop: "32px" }}>
@@ -205,11 +239,13 @@ const Home = () => {
                                                             </div>
                                                             <div className='icon'>
                                                                 <div>
-                                                                    <FaStar className='star' />
-                                                                    <FaStar className='star' />
-                                                                    <FaStar className='star' />
-                                                                    <FaStar className='star' />
-                                                                    <FaStar className='star' />
+                                                                    {
+                                                                        rating.filter((item) => parseInt(item.idproducts) === value.idproducts).map((rate) => (
+                                                                            <div style={{ display: "flex", gap: "0.8rem", height: "24px" }}>
+                                                                                {renderStars(rate.averageRating)}
+                                                                            </div>
+                                                                        ))
+                                                                    }
                                                                 </div>
                                                                 <button>
                                                                     <FaPlusCircle className='circle' />

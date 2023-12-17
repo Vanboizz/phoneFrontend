@@ -104,25 +104,23 @@ export default function App() {
             </Route>
 
             {/* admin */}
-            {accessToken && role === 'admin' && (
+            <Route
+              path='/admin'
+              element={<PrivateRouteAdmin />}>
               <Route
-                path='/admin'
-                element={<PrivateRouteAdmin />}>
-                <Route
-                  path='/admin/productsmodifier'
-                  element={<ProductsModifier />}
-                />
-                <Route
-                  path='/admin/dashboard'
-                  element={<DashBoard />}></Route>
-                <Route
-                  path='/admin/productlist'
-                  element={<ProductList />}></Route>
-                <Route
-                  path='/admin/chatdetail'
-                  element={<ChatDetail />}></Route>
-              </Route>
-            )}
+                path='/admin/productsmodifier'
+                element={<ProductsModifier />}
+              />
+              <Route
+                path='/admin/dashboard'
+                element={<DashBoard />}></Route>
+              <Route
+                path='/admin/productlist'
+                element={<ProductList />}></Route>
+              <Route
+                path='/admin/chatdetail'
+                element={<ChatDetail />}></Route>
+            </Route>
           </Routes>
         </div>
       </Router>
