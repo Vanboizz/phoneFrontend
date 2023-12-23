@@ -7,7 +7,7 @@ import { v4 as uuid } from 'uuid'
 import { Image } from 'antd';
 import { Timestamp, arrayUnion, doc, serverTimestamp, updateDoc, onSnapshot } from 'firebase/firestore';
 import { useSelector } from 'react-redux';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage';
 import { toast } from 'react-toastify';
 
 
@@ -53,20 +53,18 @@ const PopupChat = (props) => {
 
     const handleSend = async () => {
         if (user) {
+            const id = uuid();
             if (img) {
-                const storageRef = ref(storage, uuid());
-                const uploadTask = uploadBytesResumable(storageRef, img);
+                const storageRef = ref(storage, id);
+                console.log(storageRef);
 
-                uploadTask.on(
-                    (error) => {
-                        console.log(error);
-                    },
-                    () => {
-                        getDownloadURL(uploadTask.snapshot.ref)
-                            .then(async (downloadURL) => {
-                                await updateDoc(doc(db, 'chats', props?.combinedId), {
+                uploadBytes(storageRef, img)
+                    .then((res) => {
+                        getDownloadURL(storageRef)
+                            .then((downloadURL) => {
+                                updateDoc(doc(db, 'chats', props?.combinedId), {
                                     messages: arrayUnion({
-                                        id: uuid(),
+                                        id: id,
                                         text,
                                         senderId: user[0]?.idusers,
                                         date: Timestamp.now(),
@@ -77,13 +75,12 @@ const PopupChat = (props) => {
                             .catch((error) => {
                                 console.log(error);
                             })
+                    })
 
-                    }
-                );
             } else if (text !== '') {
                 await updateDoc(doc(db, "chats", props?.combinedId), {
                     messages: arrayUnion({
-                        id: uuid(),
+                        id: id,
                         text,
                         senderId: user[0]?.idusers,
                         date: Timestamp.now(),
@@ -159,7 +156,7 @@ const PopupChat = (props) => {
                                                 <div>
                                                     <img style={{ width: "32px", height: "32px", borderRadius: "50%" }} src={props?.accountAdmin?.avtuser} alt="" />
                                                 </div>
-                                                <div style={{ flex: "1", marginLeft: "8px"}}>
+                                                <div style={{ flex: "1", marginLeft: "8px" }}>
                                                     {
                                                         message?.text
                                                             ? <p style={{ backgroundColor: "#F1F4F7", width: 'fit-content', maxWidth: '70%', wordWrap: "break-word", padding: "8px", borderRadius: "12px" }}>

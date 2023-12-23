@@ -7,7 +7,7 @@ import { db, storage } from '../../firebase';
 import { useSelector } from 'react-redux';
 import { node } from 'prop-types';
 import { v4 as uuid } from 'uuid'
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage';
 import { toast } from 'react-toastify';
 
 const Chat = () => {
@@ -23,22 +23,16 @@ const Chat = () => {
 
     const handleSend = async () => {
         if (user) {
+            const id = uuid();
             if (img) {
-                console.log('img');
-                const storageRef = ref(storage, uuid());
-                const uploadTask = uploadBytesResumable(storageRef, img);
-
-                uploadTask.on(
-                    (error) => {
-                        console.log(error);
-                    },
-                    () => {
-                        console.log('abc');
-                        getDownloadURL(uploadTask.snapshot.ref)
-                            .then(async (downloadURL) => {
-                                await updateDoc(doc(db, 'chats', chatId), {
+                const storageRef = ref(storage, id);
+                uploadBytes(storageRef, img)
+                    .then((res) => {
+                        getDownloadURL(storageRef)
+                            .then((downloadURL) => {
+                                updateDoc(doc(db, 'chats', chatId), {
                                     messages: arrayUnion({
-                                        id: uuid(),
+                                        id: id,
                                         text,
                                         senderId: user[0]?.idusers,
                                         date: Timestamp.now(),
@@ -49,13 +43,12 @@ const Chat = () => {
                             .catch((error) => {
                                 console.log(error);
                             })
+                    })
 
-                    }
-                );
             } else if (text !== '') {
                 await updateDoc(doc(db, "chats", chatId), {
                     messages: arrayUnion({
-                        id: uuid(),
+                        id: id,
                         text,
                         senderId: user[0]?.idusers,
                         date: Timestamp.now(),

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getProducts } from '../../components/feature/products/productsSlice'
 import Slider from '../../components/slider/Slider'
-import { FaStar, FaPlusCircle } from 'react-icons/fa'
+import { FaStar, FaPlusCircle, FaStarHalf } from 'react-icons/fa'
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/grid";
@@ -39,58 +39,8 @@ const Home = () => {
     const navigate = useNavigate()
     const role = localStorage.getItem('role');
     var profilter = [];
-    const [statisticsOfReview, setStatisticsOfReview] = useState([])
-    console.log(statisticsOfReview);
 
-    const calculateAverage = (list, property, number) => {
-        let total = 0;
-
-        for (let i = 0; i < list.length; i++) {
-            total += list[i][property][number];
-        }
-        console.log(total);
-        return total / list.length;
-    };
-
-    const averageRating = calculateAverage(statisticsOfReview, 'starnumber', 'number');
-
-    const getStatisticsOfReview = async () => {
-        try {
-            const response = await axios.get(`http://localhost:8000/evaluate/getAllEvaluate`);
-            setStatisticsOfReview(response.data.data);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    useEffect(() => { 
-        getStatisticsOfReview()
-    }, [])
-
-    const renderStars = (averageValue) => {
-        console.log(averageValue);
-        
-        const stars = [];
-        for (let i = 0; i < 5; i++) {
-            if (averageValue >= i + 0.5) {
-                stars.push(
-                    <FaStar
-                        key={i}
-                        style={{ color: "#ffbf00", fontSize: "14px" }}
-                    />
-                );
-            } else {
-                stars.push(
-                    <FaStar
-                        key={i}
-                        fill='rgba(145,158,171,.522)'
-                        style={{ fontSize: "14px" }}
-                    />
-                );
-            }
-        }
-        return stars;
-    };
+    const [rating, setRating] = useState([])
 
     useEffect(() => {
         dispatch(getProducts())
@@ -102,7 +52,14 @@ const Home = () => {
             })
             .catch(error => console.log(error))
 
+        axios.get("http://localhost:8000/evaluate/getAllEvaluate")
+            .then(res => {
+                setRating(res.data.data)
+            }).catch(error => console.log(error))
+
     }, [])
+
+
     useEffect(() => {
         if (accountAdmin) {
             const getChats = () => {
@@ -122,6 +79,8 @@ const Home = () => {
         const chatEntry = chats ? Object.entries(chats).find(chat => chat[0] === combinedId) : null;
         setFlagU(chatEntry ? chatEntry[1].flagUser : null);
     }, [chats])
+
+
     useEffect(() => {
         if (listUser) {
             const admin = listUser?.find(user => user?.role === 'admin')
@@ -174,7 +133,6 @@ const Home = () => {
 
     useEffect(() => {
         if (isPopupChat) {
-            console.log('?');
             const checkNew = async () => {
                 try {
                     await updateDoc(doc(db, "adminChats", accountAdmin?.idusers.toString()), {
@@ -187,6 +145,29 @@ const Home = () => {
             checkNew()
         }
     }, [isPopupChat, chats])
+
+    const renderStars = (averageValue) => {
+        const stars = [];
+        for (let i = 0; i < 5; i++) {
+            let starPercentage = Math.max(0, Math.min(100, (averageValue - i) * 100));
+            stars.push(
+                <div key={i} style={{ position: 'relative', display: 'inline-block', fontSize: '20px' }}>
+                    <FaStar fill='rgba(145,158,171,.522)' />
+                    <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: `${starPercentage}%`,
+                        overflow: 'hidden',
+                        height: '100%',
+                    }}>
+                        <FaStar style={{ color: "#ffbf00" }} />
+                    </div>
+                </div>
+            )
+        }
+        return stars;
+    };
 
     return (
         <>
@@ -254,19 +235,35 @@ const Home = () => {
                                                             </div>
                                                             <div className='icon'>
                                                                 <div>
-                                                                    {/* <FaStar className='star' />
-                                                                    <FaStar className='star' />
-                                                                    <FaStar className='star' />
-                                                                    <FaStar className='star' />
-                                                                    <FaStar className='star' /> */}
+                                                                    {
+                                                                        rating.find((rate) => rate?.idproducts === value?.idproducts.toString())
+                                                                            ? rating.filter((item) => parseInt(item.idproducts) === value.idproducts).map((rate) => (
+                                                                                <div style={{ display: "flex", gap: "0.4rem", alignItems: "center" }}>
+                                                                                    {renderStars(rate.averageRating)}
+                                                                                </div>
+                                                                            ))
+                                                                            :
+                                                                            <div div style={{ display: "flex", gap: "0.4rem", alignItems: "center", width: '100px', height: '45px' }}>
+                                                                                {
+                                                                                    <div style={{ display: 'flex', gap: '5px', position: 'relative', fontSize: '20px' }}>
 
-                                                                    <div style={{ display: "flex", gap: "0.8rem", height: "24px" }}>
-                                                                        {renderStars(averageRating)}
-                                                                    </div>
+                                                                                        {
+                                                                                            Array.from({ length: 5 }, (_, index) => (
+                                                                                                <FaStar key={index} fill='rgba(145,158,171,.522)' style={{}} />
+                                                                                            ))
+                                                                                        }
+                                                                                    </div>
+
+                                                                                }
+                                                                            </div>
+
+                                                                    }
                                                                 </div>
-                                                                <button>
-                                                                    <FaPlusCircle className='circle' />
-                                                                </button>
+                                                                <div>
+                                                                    <button>
+                                                                        <FaPlusCircle className='circle' size={24} />
+                                                                    </button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </Link>
@@ -294,7 +291,7 @@ const Home = () => {
                     </div>
                 </div>
                 <Footer />
-            </div>
+            </div >
 
             {
                 role === 'user'

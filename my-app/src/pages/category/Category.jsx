@@ -22,7 +22,31 @@ const Category = () => {
     const [More, setMore] = useState(false)
     const [categorytemp, setCategorytemp] = useState([])
     const role = localStorage.getItem('role');
+    const [rating, setRating] = useState([])
 
+    const renderStars = (averageValue) => {
+        const stars = [];
+        for (let i = 0; i < 5; i++) {
+            let starPercentage = Math.max(0, Math.min(100, (averageValue - i) * 100));
+            stars.push(
+                <div key={i} style={{ position: 'relative', display: 'inline-block', fontSize: '20px' }}>
+                    <FaStar fill='rgba(145,158,171,.522)' />
+                    <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: `${starPercentage}%`,
+                        overflow: 'hidden',
+                        height: '100%',
+                    }}>
+                        <FaStar style={{ color: "#ffbf00" }} />
+                    </div>
+                </div>
+            )
+        }
+        return stars;
+    };
+    
     useEffect(() => {
         axios.get(`http://localhost:8000/product/getcategory/${window.location.href.substring(
             window.location.href.lastIndexOf("/") + 1
@@ -32,6 +56,11 @@ const Category = () => {
                 setCategorytemp(res.data)
             })
             .catch(error => console.log(error))
+
+        axios.get("http://localhost:8000/evaluate/getAllEvaluate")
+            .then(res => {
+                setRating(res.data.data)
+            }).catch(error => console.log(error))
     }, [])
 
     const handleLH = () => {
@@ -111,17 +140,30 @@ const Category = () => {
                                         <div className='promotion' style={{ color: "#000" }}>
                                             {value.promotion}
                                         </div>
-                                        <div className='icon'>
-                                            <div>
-                                                <FaStar className='star' />
-                                                <FaStar className='star' />
-                                                <FaStar className='star' />
-                                                <FaStar className='star' />
-                                                <FaStar className='star' />
-                                            </div>
-                                            <button>
-                                                <FaPlusCircle className='circle' />
-                                            </button>
+                                        <div>
+                                            {
+                                                rating.find((rate) => rate?.idproducts === value?.idproducts.toString())
+                                                    ? rating.filter((item) => parseInt(item.idproducts) === value.idproducts).map((rate) => (
+                                                        <div style={{ display: "flex", gap: "0.4rem", alignItems: "center" }}>
+                                                            {renderStars(rate.averageRating)}
+                                                        </div>
+                                                    ))
+                                                    :
+                                                    <div div style={{ display: "flex", gap: "0.4rem", alignItems: "center", width: '100px', height: '45px' }}>
+                                                        {
+                                                            <div style={{ display: 'flex', gap: '5px', position: 'relative', fontSize: '20px' }}>
+
+                                                                {
+                                                                    Array.from({ length: 5 }, (_, index) => (
+                                                                        <FaStar key={index} fill='rgba(145,158,171,.522)' style={{}} />
+                                                                    ))
+                                                                }
+                                                            </div>
+
+                                                        }
+                                                    </div>
+
+                                            }
                                         </div>
                                     </div>
                                 </Link>

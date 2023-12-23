@@ -195,7 +195,11 @@ const ProductsDetail = () => {
             );
         }
         else {
-            toast("Please log in")
+            toast.error('You need to log in to do this', {
+                position: 'top-right',
+                autoClose: 3000,
+                style: { color: '#bf0d0d', backgroundColor: '#D7F1FD' },
+            });
         }
     }
 
@@ -215,7 +219,14 @@ const ProductsDetail = () => {
 
     const handleOpenModal = (e) => {
         e.stopPropagation()
-        setIsModal(true)
+        if (user)
+            setIsModal(true)
+        else
+            toast.error('You need to log in to do this', {
+                position: 'top-right',
+                autoClose: 3000,
+                style: { color: '#bf0d0d', backgroundColor: '#D7F1FD' },
+            });
     }
 
     const getListEvaluate = async () => {
@@ -268,8 +279,21 @@ const ProductsDetail = () => {
     const averageRating = calculateAverage(statisticsOfReview, 'starnumber', 'number');
 
     console.log(averageRating);
-    
+
     console.log(statisticsOfReview);
+
+    // const handleComment = (e) => {
+    //     e.preventDefault()
+    //     if (user)
+    //         setComment(e.target.value)
+    //     // else
+    //     //     toast.error('You need to log in to do this', {
+    //     //         position: 'top-right',
+    //     //         autoClose: 3000,
+    //     //         style: { color: '#bf0d0d', backgroundColor: '#D7F1FD' },
+    //     //     });
+
+    // }
 
     const averagePerformance = calculateAverage(statisticsOfReview, 'performance', 'number');
     const averageBatteryLife = calculateAverage(statisticsOfReview, 'batterylife', 'number');
@@ -278,22 +302,22 @@ const ProductsDetail = () => {
     const renderStars = (averageValue) => {
         const stars = [];
         for (let i = 0; i < 5; i++) {
-            if (averageValue >= i + 0.5) {
-                stars.push(
-                    <FaStar
-                        key={i}
-                        style={{ color: "#ffbf00", fontSize: "14px" }}
-                    />
-                );
-            } else {
-                stars.push(
-                    <FaStar
-                        key={i}
-                        fill='rgba(145,158,171,.522)'
-                        style={{ fontSize: "14px" }}
-                    />
-                );
-            }
+            let starPercentage = Math.max(0, Math.min(100, (averageValue - i) * 100));
+            stars.push(
+                <div key={i} style={{ position: 'relative', display: 'inline-block', fontSize: '20px' }}>
+                    <FaStar fill='rgba(145,158,171,.522)' />
+                    <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: `${starPercentage}%`,
+                        overflow: 'hidden',
+                        height: '100%',
+                    }}>
+                        <FaStar style={{ color: "#ffbf00" }} />
+                    </div>
+                </div>
+            )
         }
         return stars;
     };
@@ -395,13 +419,15 @@ const ProductsDetail = () => {
                     </div>
                     <div className='icon'>
                         {
-                            isHeart ?
-                                <button onClick={handleDeleteFavorite}>
-                                    <AiFillHeart className='fill-heart' />
-                                </button> :
-                                <button onClick={handleAddFavorite}>
-                                    <AiOutlineHeart className='outline-heart' />
-                                </button>
+                            user && user[0]?.role !== 'admin'
+                                ? isHeart ?
+                                    <button onClick={handleDeleteFavorite}>
+                                        <AiFillHeart className='fill-heart' />
+                                    </button> :
+                                    <button onClick={handleAddFavorite}>
+                                        <AiOutlineHeart className='outline-heart' />
+                                    </button>
+                                : null
                         }
                     </div>
                 </div>
@@ -676,7 +702,7 @@ const ProductsDetail = () => {
                                     </div>
 
                                     <p style={{ textDecoration: "underline", color: "#1a94ff", fontWeight: "bold" }}>{statisticsOfReview.length} reviews</p>
-                                    
+
                                 </div>
                                 <div className='box-star'>
                                     {
@@ -733,23 +759,34 @@ const ProductsDetail = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className='button-review-container'>
-                                <p style={{ margin: "0.4rem 0" }}>How do you rate this product?</p>
-                                <div >
-                                    <button
-                                        style={{
-                                            backgroundColor: "#1a94ff",
-                                            border: "none", borderRadius: "5px",
-                                            padding: "10px 30px",
-                                            color: "white",
-                                            fontWeight: "bold",
-                                            margin: "10px auto",
-                                            cursor: "pointer"
-                                        }} onClick={handleOpenModal}>
-                                        Evaluate now
-                                    </button>
-                                </div>
-                            </div>
+
+
+                            {
+                                user[0]?.role !== 'admin'
+                                    ? (
+                                        <div className='button-review-container'>
+                                            <div>
+                                                <p style={{ margin: "0.4rem 0" }}>How do you rate this product?</p>
+                                                <button
+                                                    style={{
+                                                        backgroundColor: "#1a94ff",
+                                                        border: "none", borderRadius: "5px",
+                                                        padding: "10px 30px",
+                                                        color: "white",
+                                                        fontWeight: "bold",
+                                                        margin: "10px auto",
+                                                        cursor: "pointer"
+                                                    }} onClick={handleOpenModal}>
+                                                    Evaluate now
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    )
+                                    : null
+                            }
+
+
                             <div>
                                 <h3>Sort by</h3>
                                 <ul style={{ display: "flex", gap: "10px", margin: "10px 0" }}>
@@ -796,7 +833,10 @@ const ProductsDetail = () => {
                                                 borderBottom: "1px solid rgba(145,158,171,.239)", marginBottom: "15px", paddingBottom: "15px"
                                             }}>
                                                 <div style={{ display: "flex", gap: "8px" }}>
-                                                    <img style={{height: '32px', width: '32px', borderRadius: '50%'}} src={evaluate ? evaluate?.avtuser : null} alt="" />
+                                                    {
+                                                        console.log(evaluate)
+                                                    }
+                                                    <img style={{ height: '32px', width: '32px', borderRadius: '50%' }} src={evaluate ? evaluate?.avtuser : null} alt="" />
                                                     <div>
                                                         <div style={{ display: "flex", gap: "8px" }}>
                                                             <span style={{ fontWeight: "bold" }}>{evaluate?.lastname}</span>

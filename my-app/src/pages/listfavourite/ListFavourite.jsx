@@ -8,16 +8,46 @@ import { Link } from 'react-router-dom'
 import { FaStar, FaPlusCircle } from 'react-icons/fa'
 import { Button } from 'antd';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa'
+import axios from 'axios'
 
 const ListFavourite = () => {
     const favorites = useSelector((state) => state.favorite)
     const accessToken = localStorage.getItem("accessToken")
     const dispatch = useDispatch()
     const [More, setMore] = useState(false)
+    const [rating, setRating] = useState([])
 
     useEffect(() => {
         dispatch(getListFavorite({ accessToken }))
+
+        axios.get("http://localhost:8000/evaluate/getAllEvaluate")
+            .then(res => {
+                setRating(res.data.data)
+            }).catch(error => console.log(error))
     }, [])
+
+    const renderStars = (averageValue) => {
+        const stars = [];
+        for (let i = 0; i < 5; i++) {
+            let starPercentage = Math.max(0, Math.min(100, (averageValue - i) * 100));
+            stars.push(
+                <div key={i} style={{ position: 'relative', display: 'inline-block', fontSize: '20px' }}>
+                    <FaStar fill='rgba(145,158,171,.522)' />
+                    <div style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: `${starPercentage}%`,
+                        overflow: 'hidden',
+                        height: '100%',
+                    }}>
+                        <FaStar style={{ color: "#ffbf00" }} />
+                    </div>
+                </div>
+            )
+        }
+        return stars;
+    };
 
     return (
         <div style={{ marginTop: "32px" }}>
@@ -51,20 +81,33 @@ const ListFavourite = () => {
                                     <p>{(value?.size[0]?.pricesize - ((value?.size[0]?.pricesize * value?.discount) / 100)).toLocaleString('en-US').replace(/,/g, '.') + '$'}&nbsp;</p>
                                     <p>{(value?.size[0]?.pricesize).toLocaleString('en-US').replace(/,/g, '.') + '$'}&nbsp;</p>
                                 </div>
-                                <div className='promotion' style={{ color: "#000" }}>
+                                <div className='promotion' style={{ color: "#000" , marginBottom: '5px'}}>
                                     {value.promotion}
                                 </div>
-                                <div className='icon'>
-                                    <div>
-                                        <FaStar className='star' />
-                                        <FaStar className='star' />
-                                        <FaStar className='star' />
-                                        <FaStar className='star' />
-                                        <FaStar className='star' />
-                                    </div>
-                                    <button>
-                                        <FaPlusCircle className='circle' />
-                                    </button>
+                                <div>
+                                    {
+                                        rating.find((rate) => rate?.idproducts === value?.idproducts.toString())
+                                            ? rating.filter((item) => parseInt(item.idproducts) === value.idproducts).map((rate) => (
+                                                <div style={{ display: "flex", gap: "0.4rem", alignItems: "center" }}>
+                                                    {renderStars(rate.averageRating)}
+                                                </div>
+                                            ))
+                                            :
+                                            <div div style={{ display: "flex", gap: "0.4rem", alignItems: "center", width: '100px', height: '45px' }}>
+                                                {
+                                                    <div style={{ display: 'flex', gap: '5px', position: 'relative', fontSize: '20px' }}>
+
+                                                        {
+                                                            Array.from({ length: 5 }, (_, index) => (
+                                                                <FaStar key={index} fill='rgba(145,158,171,.522)' style={{}} />
+                                                            ))
+                                                        }
+                                                    </div>
+
+                                                }
+                                            </div>
+
+                                    }
                                 </div>
                             </div>
                         </Link>
