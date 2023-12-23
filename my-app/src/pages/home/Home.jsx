@@ -39,6 +39,58 @@ const Home = () => {
     const navigate = useNavigate()
     const role = localStorage.getItem('role');
     var profilter = [];
+    const [statisticsOfReview, setStatisticsOfReview] = useState([])
+    console.log(statisticsOfReview);
+
+    const calculateAverage = (list, property, number) => {
+        let total = 0;
+
+        for (let i = 0; i < list.length; i++) {
+            total += list[i][property][number];
+        }
+        console.log(total);
+        return total / list.length;
+    };
+
+    const averageRating = calculateAverage(statisticsOfReview, 'starnumber', 'number');
+
+    const getStatisticsOfReview = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8000/evaluate/getAllEvaluate`);
+            setStatisticsOfReview(response.data.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => { 
+        getStatisticsOfReview()
+    }, [])
+
+    const renderStars = (averageValue) => {
+        console.log(averageValue);
+        
+        const stars = [];
+        for (let i = 0; i < 5; i++) {
+            if (averageValue >= i + 0.5) {
+                stars.push(
+                    <FaStar
+                        key={i}
+                        style={{ color: "#ffbf00", fontSize: "14px" }}
+                    />
+                );
+            } else {
+                stars.push(
+                    <FaStar
+                        key={i}
+                        fill='rgba(145,158,171,.522)'
+                        style={{ fontSize: "14px" }}
+                    />
+                );
+            }
+        }
+        return stars;
+    };
 
     useEffect(() => {
         dispatch(getProducts())
@@ -70,9 +122,6 @@ const Home = () => {
         const chatEntry = chats ? Object.entries(chats).find(chat => chat[0] === combinedId) : null;
         setFlagU(chatEntry ? chatEntry[1].flagUser : null);
     }, [chats])
-
-    console.log(flagU ? flagU : null);
-
     useEffect(() => {
         if (listUser) {
             const admin = listUser?.find(user => user?.role === 'admin')
@@ -205,11 +254,15 @@ const Home = () => {
                                                             </div>
                                                             <div className='icon'>
                                                                 <div>
+                                                                    {/* <FaStar className='star' />
                                                                     <FaStar className='star' />
                                                                     <FaStar className='star' />
                                                                     <FaStar className='star' />
-                                                                    <FaStar className='star' />
-                                                                    <FaStar className='star' />
+                                                                    <FaStar className='star' /> */}
+
+                                                                    <div style={{ display: "flex", gap: "0.8rem", height: "24px" }}>
+                                                                        {renderStars(averageRating)}
+                                                                    </div>
                                                                 </div>
                                                                 <button>
                                                                     <FaPlusCircle className='circle' />

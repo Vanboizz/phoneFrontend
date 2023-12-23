@@ -119,6 +119,7 @@ const ProductsDetail = () => {
     const [isModal, setIsModal] = useState(false)
     const { user } = useSelector(state => state?.user)
     const [listEvaluate, setListEvaluate] = useState([])
+    console.log(listEvaluate);
     const [statisticsOfReview, setStatisticsOfReview] = useState([])
     const [selectedStar, setSelectedStar] = useState(null)
     const [comment, setComment] = useState("")
@@ -265,6 +266,11 @@ const ProductsDetail = () => {
     };
 
     const averageRating = calculateAverage(statisticsOfReview, 'starnumber', 'number');
+
+    console.log(averageRating);
+    
+    console.log(statisticsOfReview);
+
     const averagePerformance = calculateAverage(statisticsOfReview, 'performance', 'number');
     const averageBatteryLife = calculateAverage(statisticsOfReview, 'batterylife', 'number');
     const averageCameraQuantity = calculateAverage(statisticsOfReview, 'cameraquantity', 'number');
@@ -662,11 +668,15 @@ const ProductsDetail = () => {
                         listEvaluate.length > 0 || selectedStar !== null ? <div>
                             <div className='box-review'>
                                 <div className='box-score'>
+
                                     <p style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{averageRating.toFixed(2)}/5</p>
+
                                     <div style={{ display: "flex", gap: "0.8rem", height: "24px" }}>
                                         {renderStars(averageRating)}
                                     </div>
+
                                     <p style={{ textDecoration: "underline", color: "#1a94ff", fontWeight: "bold" }}>{statisticsOfReview.length} reviews</p>
+                                    
                                 </div>
                                 <div className='box-star'>
                                     {
@@ -786,10 +796,10 @@ const ProductsDetail = () => {
                                                 borderBottom: "1px solid rgba(145,158,171,.239)", marginBottom: "15px", paddingBottom: "15px"
                                             }}>
                                                 <div style={{ display: "flex", gap: "8px" }}>
-                                                    <p style={{ backgroundColor: "#303014", color: "#fff", fontWeight: "bold", borderRadius: "50%", height: "32px", width: "32px", display: "flex", alignItems: "center", justifyContent: "center" }}>N</p>
+                                                    <img style={{height: '32px', width: '32px', borderRadius: '50%'}} src={evaluate ? evaluate?.avtuser : null} alt="" />
                                                     <div>
                                                         <div style={{ display: "flex", gap: "8px" }}>
-                                                            <span style={{ fontWeight: "bold" }}>Tan000</span>
+                                                            <span style={{ fontWeight: "bold" }}>{evaluate?.lastname}</span>
                                                             <div style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "12px" }}>
                                                                 <p>
                                                                     <AiOutlineClockCircle />

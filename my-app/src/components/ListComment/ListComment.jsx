@@ -67,8 +67,8 @@ const ListComment = (props) => {
         <div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                    <img className='img-user' src={user ? user[0]?.avtuser : null} alt="" />
-                    <h4>{user ? user[0]?.firstname + ' ' + user[0]?.lastname : null}</h4>
+                    <img className='img-user' src={comment ? comment?.avtuser : null} alt="" />
+                    <h4>{comment ? comment?.firstname + ' ' + comment?.lastname : null}</h4>
                 </div>
                 <div style={{ display: "flex", gap: "4px" }}>
                     <AiOutlineClockCircle />

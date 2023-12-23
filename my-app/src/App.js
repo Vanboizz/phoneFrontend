@@ -33,7 +33,7 @@ export default function App() {
   const role = localStorage.getItem('role');
   const dispatch = useDispatch();
   const currentPath = window.location.pathname;
-  const check = ['/admin/productsmodifier', '/admin/dashboard', '/admin/productlist'].includes(
+  const check = ['/admin/productsmodifier', '/admin/dashboard', '/admin/productlist', '/admin/chatdetail'].includes(
     currentPath
   );
 
@@ -56,10 +56,15 @@ export default function App() {
             />
             <Route
               path='/login'
-              element={<Login />}></Route>
+              element={<Login />}>
+
+            </Route>
+
             <Route
               path='/register'
-              element={<Register />}></Route>
+              element={<Register />}>
+            </Route>
+
             <Route
               path='/forgotpassword'
               element={<ForgotPassword />}></Route>
@@ -82,7 +87,8 @@ export default function App() {
             {/* user */}
             <Route
               path='/'
-              element={<PrivateRoute />}>
+              element={<PrivateRoute />}
+            >
               <Route
                 path='/cart'
                 element={<Cart />}></Route>
@@ -104,25 +110,23 @@ export default function App() {
             </Route>
 
             {/* admin */}
-            {accessToken && role === 'admin' && (
+            <Route
+              path='/admin'
+              element={<PrivateRouteAdmin />}>
               <Route
-                path='/admin'
-                element={<PrivateRouteAdmin />}>
-                <Route
-                  path='/admin/productsmodifier'
-                  element={<ProductsModifier />}
-                />
-                <Route
-                  path='/admin/dashboard'
-                  element={<DashBoard />}></Route>
-                <Route
-                  path='/admin/productlist'
-                  element={<ProductList />}></Route>
-                <Route
-                  path='/admin/chatdetail'
-                  element={<ChatDetail />}></Route>
-              </Route>
-            )}
+                path='/admin/productsmodifier'
+                element={<ProductsModifier />}
+              />
+              <Route
+                path='/admin/dashboard'
+                element={<DashBoard />}></Route>
+              <Route
+                path='/admin/productlist'
+                element={<ProductList />}></Route>
+              <Route
+                path='/admin/chatdetail'
+                element={<ChatDetail />}></Route>
+            </Route>
           </Routes>
         </div>
       </Router>

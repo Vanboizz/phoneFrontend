@@ -145,40 +145,42 @@ const SideBar = () => {
             <div className='list__chat'>
                 {
 
-                    Object.entries(chats)
-                        ?.filter(item => userName === "" ? true : (item[1]?.userInfo?.displayName?.toLowerCase().includes(userName.toLowerCase())))
-                        ?.sort((a, b) => b[1]?.date - a[1]?.date)
-                        ?.map((itemUser, index) => {
-                            const combinedId =
-                                user[0]?.idusers > itemUser[1]?.userInfo?.idusers
-                                    ? user[0]?.idusers.toString() + itemUser[1]?.userInfo?.idusers.toString()
-                                    : itemUser[1]?.userInfo?.idusers.toString() + user[0]?.idusers.toString()
-                            // const chat = Object.entries(chats)?.find(chat => chat[0] === combinedId)
-                            const chat = listUser?.find(u => u?.idusers.toString() === itemUser[1]?.userInfo?.idusers.toString())
-                            return (
-                                <div
-                                    key={index}
-                                    className={handleClass(combinedId, itemUser)}
-                                    onClick={() => handleSelect(chat)}
-                                >
-                                    <img src={chat ? chat?.avtuser : null} alt="" />
+                    chats
+                        ? (Object.entries(chats)
+                            ?.filter(item => userName === "" ? true : (item[1]?.userInfo?.displayName?.toLowerCase().includes(userName.toLowerCase())))
+                            ?.sort((a, b) => b[1]?.date - a[1]?.date)
+                            ?.map((itemUser, index) => {
+                                const combinedId =
+                                    user[0]?.idusers > itemUser[1]?.userInfo?.idusers
+                                        ? user[0]?.idusers.toString() + itemUser[1]?.userInfo?.idusers.toString()
+                                        : itemUser[1]?.userInfo?.idusers.toString() + user[0]?.idusers.toString()
+                                // const chat = Object.entries(chats)?.find(chat => chat[0] === combinedId)
+                                const chat = listUser?.find(u => u?.idusers.toString() === itemUser[1]?.userInfo?.idusers.toString())
+                                return (
+                                    <div
+                                        key={index}
+                                        className={handleClass(combinedId, itemUser)}
+                                        onClick={() => handleSelect(chat)}
+                                    >
+                                        <img src={chat ? chat?.avtuser : null} alt="" />
 
-                                    <div className="info__friend">
-                                        <p
-                                            style={{ fontWeight: 600 }}
-                                            className='name-friend'>
-                                            {chat?.lastname}
-                                        </p>
+                                        <div className="info__friend">
+                                            <p
+                                                style={{ fontWeight: 600 }}
+                                                className='name-friend'>
+                                                {chat?.lastname}
+                                            </p>
 
-                                        <p
-                                            style={{ fontSize: 14 }}
-                                            className='last-message'>
-                                            {itemUser[1]?.userInfo ? itemUser[1]?.lastMessage?.text : null}
-                                        </p>
+                                            <p
+                                                style={{ fontSize: 14 }}
+                                                className='last-message'>
+                                                {itemUser[1]?.userInfo ? itemUser[1]?.lastMessage?.text : null}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                            )
-                        })
+                                )
+                            }))
+                        : null
 
                 }
 

@@ -39,7 +39,6 @@ const registerUser = async ({ firstname, lastname, avatar, phonenumber, email, p
     },
     config
   );
-  console.log(response);
   return response.data;
 };
 
