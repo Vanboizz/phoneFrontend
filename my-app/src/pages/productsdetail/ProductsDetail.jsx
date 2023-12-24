@@ -836,7 +836,7 @@ const ProductsDetail = () => {
                                                     {
                                                         console.log(evaluate)
                                                     }
-                                                    <img style={{ height: '32px', width: '32px', borderRadius: '50%' }} src={evaluate ? evaluate?.avtuser : null} alt="" />
+                                                    <img style={{ height: '32px', width: '32px', borderRadius: '50%' }} src={evaluate ? evaluate?.images : null} alt="" />
                                                     <div>
                                                         <div style={{ display: "flex", gap: "8px" }}>
                                                             <span style={{ fontWeight: "bold" }}>{evaluate?.lastname}</span>
