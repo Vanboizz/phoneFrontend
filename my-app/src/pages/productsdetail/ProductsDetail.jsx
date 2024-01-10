@@ -19,7 +19,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { addFavorite, deleteFavorite } from '../../components/feature/favorite/favoriteSlice';
 import { getProducts, getProductsById } from '../../components/feature/products/productsSlice';
 import ModalReview from '../../components/modalreview/ModalReview';
-import { getUser } from '../../components/feature/user/userSlice';
+import { getUser, getUsers } from '../../components/feature/user/userSlice';
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'; // Import plugin
 import ListComment from '../../components/ListComment/ListComment';
@@ -119,14 +119,13 @@ const ProductsDetail = () => {
     const [isModal, setIsModal] = useState(false)
     const { user } = useSelector(state => state?.user)
     const [listEvaluate, setListEvaluate] = useState([])
-    console.log(listEvaluate);
     const [statisticsOfReview, setStatisticsOfReview] = useState([])
     const [selectedStar, setSelectedStar] = useState(null)
     const [comment, setComment] = useState("")
     const [listComment, setListComment] = useState([])
     const { cart } = useSelector(state => state.cart)
     const role = localStorage.getItem('role');
-
+    const { listUser } = useSelector(state => state.user)
     const handleAddToCart = async (number) => {
         if (!accessToken) {
             navigate("/login")
@@ -208,7 +207,7 @@ const ProductsDetail = () => {
         dispatch(deleteFavorite({ accessToken, idproducts: productsById.data?.idproducts }))
         setIsHeart(false)
         toast.success(
-            'You have deleted your favorite product',
+            'You have delete the product to your favorites list',
             {
                 position: 'top-right',
                 autoClose: 3000,
@@ -244,6 +243,14 @@ const ProductsDetail = () => {
         }
     };
 
+
+
+    useEffect(() => {
+        dispatch(getUsers(accessToken))
+            .then(res => console.log(res))
+    }, [])
+
+
     const getStatisticsOfReview = async () => {
         if (productsById && productsById.data) {
             try {
@@ -277,11 +284,6 @@ const ProductsDetail = () => {
     };
 
     const averageRating = calculateAverage(statisticsOfReview, 'starnumber', 'number');
-
-    console.log(averageRating);
-
-    console.log(statisticsOfReview);
-
     // const handleComment = (e) => {
     //     e.preventDefault()
     //     if (user)
@@ -833,10 +835,15 @@ const ProductsDetail = () => {
                                                 borderBottom: "1px solid rgba(145,158,171,.239)", marginBottom: "15px", paddingBottom: "15px"
                                             }}>
                                                 <div style={{ display: "flex", gap: "8px" }}>
-                                                    {
+                                                    {/* {
                                                         console.log(evaluate)
-                                                    }
-                                                    <img style={{ height: '32px', width: '32px', borderRadius: '50%' }} src={evaluate ? evaluate?.images : null} alt="" />
+                                                    } */}
+                                                    <img
+                                                        style={{ height: '32px', width: '32px', borderRadius: '50%' }}
+                                                        src={evaluate ? listUser.filter((item) => item?.idusers === evaluate?.idusers)[0]?.avtuser : null}
+                                                        alt=""
+                                                    />
+
                                                     <div>
                                                         <div style={{ display: "flex", gap: "8px" }}>
                                                             <span style={{ fontWeight: "bold" }}>{evaluate?.lastname}</span>
